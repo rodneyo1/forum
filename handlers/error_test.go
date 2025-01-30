@@ -83,3 +83,22 @@ func TestNotFoundHandler_StatusCode404(t *testing.T) {
 		t.Errorf("Expected status code %d, got %d", http.StatusNotFound, w.Code)
 	}
 }
+
+func TestFoundHandler_ParseTemplate(t *testing.T) {
+	w := httptest.NewRecorder()
+	NotFoundHandler(w)
+
+	if w.Code != http.StatusNotFound {
+		t.Errorf("Expected status code %d, got %d", http.StatusNotFound, w.Code)
+	}
+
+	expectedContentType := "text/html; charset=utf-8"
+	if contentType := w.Header().Get("Content-Type"); contentType != expectedContentType {
+		t.Errorf("Expected Content-Type %s, got %s", expectedContentType, contentType)
+	}
+
+	body := w.Body.String()
+	if !strings.Contains(body, "Not Found!") {
+		t.Errorf("Expected response body to contain 'Not Found!', but it doesn't")
+	}
+}
