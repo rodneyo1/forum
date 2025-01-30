@@ -1,7 +1,7 @@
 # forum
 
 ## description
-changelog test 2
+changelog test 3
 This is a project about creating a web forum that allows:
 
 - communication between users
