@@ -181,8 +181,8 @@ func TestInternalServerErrorHandler_SetIssueToNotFound(t *testing.T) {
 	w := httptest.NewRecorder()
 	InternalServerErrorHandler(w)
 
-	if hitch.Issue != "Not Found!" {
-		t.Errorf("Expected hitch.Issue to be 'Not Found!', but got '%s'", hitch.Issue)
+	if hitch.Issue != "Internal Server Error!" {
+		t.Errorf("Expected hitch.Issue to be 'Internal Server Error!', but got '%s'", hitch.Issue)
 	}
 }
 
