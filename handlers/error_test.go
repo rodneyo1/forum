@@ -321,3 +321,14 @@ func TestGetTemplatePath_SpecialCharacters(t *testing.T) {
 		t.Errorf("Expected path %s, but got %s", expected, result)
 	}
 }
+
+func TestGetTemplatePath_EmptyFileName(t *testing.T) {
+	_, err := GetTemplatePath("")
+	if err == nil {
+		t.Error("Expected an error for empty file name, but got nil")
+	}
+	expectedErrMsg := "template file name cannot be empty"
+	if err.Error() != expectedErrMsg {
+		t.Errorf("Expected error message '%s', but got '%s'", expectedErrMsg, err.Error())
+	}
+}

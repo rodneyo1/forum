@@ -110,6 +110,11 @@ func NotFoundHandler(w http.ResponseWriter) {
 }
 
 func GetTemplatePath(templateFile string) (string, error) {
+	// catch empty template files
+	if templateFile == "" {
+		return "", fmt.Errorf("template file name cannot be empty")
+	}
+
 	// Get the current working directory
 	wd, err := os.Getwd()
 	if err != nil {
