@@ -6,7 +6,7 @@ import (
 )
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("templates/login.html")
+	tmpl, err := template.ParseFiles("web/templates/login.html")
 	if err != nil {
 		http.Error(w, "Failed to load Login template", http.StatusInternalServerError)
 		return
@@ -19,7 +19,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func SuccessHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("templates/success.html")
+	tmpl, err := template.ParseFiles("web/templates/success.html")
 	if err != nil {
 		http.Error(w, "Failed to load Success template", http.StatusInternalServerError)
 		return

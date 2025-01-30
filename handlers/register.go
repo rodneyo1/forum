@@ -6,7 +6,7 @@ import (
 )
 
 func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("templates/register.html")
+	tmpl, err := template.ParseFiles("web/templates/register.html")
 	if err != nil {
 		http.Error(w, "Unable to parse registration template", http.StatusInternalServerError)
 		return
