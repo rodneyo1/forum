@@ -163,8 +163,8 @@ func TestInternalServerErrorHandler_ParseTemplate(t *testing.T) {
 	}
 
 	body := w.Body.String()
-	if !strings.Contains(body, "Not Found!") {
-		t.Errorf("Expected response body to contain 'Not Found!', but it doesn't")
+	if !strings.Contains(body, "Internal Server Error!") {
+		t.Errorf("Expected response body to contain 'Internal Server Error!', but it doesn't")
 	}
 }
 
