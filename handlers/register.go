@@ -13,7 +13,7 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := tmpl.Execute(w, r); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		InternalServerErrorHandler(w)
 		return
 	}
 }

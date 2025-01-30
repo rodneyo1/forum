@@ -13,7 +13,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := tmpl.Execute(w, r); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		InternalServerErrorHandler(w)
 		return
 	}
 }
@@ -26,7 +26,7 @@ func SuccessHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := tmpl.Execute(w, r); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		InternalServerErrorHandler(w)
 		return
 	}
 }
