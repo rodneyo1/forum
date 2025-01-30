@@ -13,14 +13,18 @@ var hitch models.WebError
 // Serves Bad Request error page
 func BadRequestHandler(w http.ResponseWriter) {
 	w.WriteHeader(http.StatusBadRequest)
-	tmpl, err := template.ParseFiles("web/templates/error.html")
+	tmpl, err := template.ParseFiles("../web/templates/error.html")
 	if err != nil {
+		log.Println("Template parsing failed:", err)
 		http.Error(w, "Could not load template, error page unavailable", http.StatusInternalServerError)
 		return
 	}
 	// Set parameters of error
 	hitch.Code = http.StatusBadRequest
 	hitch.Issue = "Bad Request!"
+
+	// Set the Content-Type header for the response
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	// Execute bad request template, handle emerging errors
 	err = tmpl.Execute(w, hitch)
