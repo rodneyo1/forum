@@ -277,3 +277,47 @@ func TestGetTemplatePath_NotFound(t *testing.T) {
 		t.Errorf("Expected error message '%s', but got '%s'", expectedErrMsg, err.Error())
 	}
 }
+
+func TestGetTemplatePath_SpecialCharacters(t *testing.T) {
+	// Create a temporary directory structure
+	tempDir, err := os.MkdirTemp("", "test")
+	if err != nil {
+		t.Fatalf("Failed to create temp dir: %v", err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	// Create a mock project structure
+	webDir := filepath.Join(tempDir, "web")
+	templatesDir := filepath.Join(webDir, "templates")
+	err = os.MkdirAll(templatesDir, 0o755)
+	if err != nil {
+		t.Fatalf("Failed to create directories: %v", err)
+	}
+
+	// Create a template file with special characters
+	specialFileName := "test@#$%^&*.html"
+	specialFilePath := filepath.Join(templatesDir, specialFileName)
+	_, err = os.Create(specialFilePath)
+	if err != nil {
+		t.Fatalf("Failed to create test file: %v", err)
+	}
+
+	// Change working directory to the temp directory
+	originalWd, _ := os.Getwd()
+	err = os.Chdir(tempDir)
+	if err != nil {
+		t.Fatalf("Failed to change working directory: %v", err)
+	}
+	defer os.Chdir(originalWd)
+
+	// Test GetTemplatePath with the special character file name
+	result, err := GetTemplatePath(specialFileName)
+	if err != nil {
+		t.Errorf("GetTemplatePath returned an error: %v", err)
+	}
+
+	expected := filepath.Join(tempDir, "web", "templates", specialFileName)
+	if result != expected {
+		t.Errorf("Expected path %s, but got %s", expected, result)
+	}
+}
