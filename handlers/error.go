@@ -37,7 +37,7 @@ func BadRequestHandler(w http.ResponseWriter) {
 // Serves Internal Server Error page
 func InternalServerErrorHandler(w http.ResponseWriter) {
 	w.WriteHeader(http.StatusInternalServerError)
-	tmpl, err := template.ParseFiles("web/templates/error.html")
+	tmpl, err := template.ParseFiles("../web/templates/error.html")
 	if err != nil {
 		http.Error(w, "Could not load template, error page unavailable", http.StatusInternalServerError)
 		return
@@ -46,6 +46,9 @@ func InternalServerErrorHandler(w http.ResponseWriter) {
 	// Set parameters of error
 	hitch.Code = http.StatusInternalServerError
 	hitch.Issue = "Internal Server Error!"
+
+	// Set the Content-Type header for the response
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	// Execute internal server error template, handle emerging errors
 	err = tmpl.Execute(w, hitch)
@@ -58,13 +61,17 @@ func InternalServerErrorHandler(w http.ResponseWriter) {
 // Serves Not Found error page
 func NotFoundHandler(w http.ResponseWriter) {
 	w.WriteHeader(http.StatusNotFound)
-	tmpl, err := template.ParseFiles("web/templates/error.html")
+	tmpl, err := template.ParseFiles("../web/templates/error.html")
 	if err != nil {
 		http.Error(w, "Could not load template, error page unavailable", http.StatusInternalServerError)
 		return
 	}
+	// Set parameters of error
 	hitch.Code = http.StatusNotFound
 	hitch.Issue = "Not Found!"
+
+	// Set the Content-Type header for the response
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	// Execute not found error template, handle emerging errors
 	err = tmpl.Execute(w, hitch)
