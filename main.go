@@ -16,6 +16,7 @@ func main() {
 	http.HandleFunc("/register", handlers.RegistrationHandler)
 
 	log.Println("Server started on port 8080")
+
 	// Start the server, handle emerging errors
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
