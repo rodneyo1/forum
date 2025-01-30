@@ -102,3 +102,12 @@ func TestFoundHandler_ParseTemplate(t *testing.T) {
 		t.Errorf("Expected response body to contain 'Not Found!', but it doesn't")
 	}
 }
+
+func TestFoundHandler_SetCodeTo404(t *testing.T) {
+	w := httptest.NewRecorder()
+	NotFoundHandler(w)
+
+	if hitch.Code != http.StatusNotFound {
+		t.Errorf("Expected hitch.Code to be %d, but got %d", http.StatusNotFound, hitch.Code)
+	}
+}
