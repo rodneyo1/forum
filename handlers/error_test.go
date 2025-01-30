@@ -111,3 +111,12 @@ func TestFoundHandler_SetCodeTo404(t *testing.T) {
 		t.Errorf("Expected hitch.Code to be %d, but got %d", http.StatusNotFound, hitch.Code)
 	}
 }
+
+func TestFoundHandler_SetIssueToNotFound(t *testing.T) {
+	w := httptest.NewRecorder()
+	NotFoundHandler(w)
+
+	if hitch.Issue != "Not Found!" {
+		t.Errorf("Expected hitch.Issue to be 'Not Found!', but got '%s'", hitch.Issue)
+	}
+}
