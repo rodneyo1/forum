@@ -15,6 +15,7 @@ func main() {
 	http.HandleFunc("/success", handlers.SuccessHandler)
 	http.HandleFunc("/register", handlers.RegistrationHandler)
 
+	log.Println("Server started on port 8080")
 	// Start the server, handle emerging errors
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
@@ -22,5 +23,4 @@ func main() {
 		return
 	}
 
-	log.Println("Server started on port 8080")
 }
