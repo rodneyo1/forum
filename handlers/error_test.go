@@ -170,7 +170,7 @@ func TestInternalServerErrorHandler_ParseTemplate(t *testing.T) {
 
 func TestInternalServerErrorHandler_SetCodeTo500(t *testing.T) {
 	w := httptest.NewRecorder()
-	NotFoundHandler(w)
+	InternalServerErrorHandler(w)
 
 	if hitch.Code != http.StatusInternalServerError {
 		t.Errorf("Expected hitch.Code to be %d, but got %d", http.StatusInternalServerError, hitch.Code)
