@@ -3,8 +3,11 @@ package handlers
 import (
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"strings"
 	"testing"
+
+	"forum/models"
 )
 
 func TestBadRequestHandler_StatusCode400(t *testing.T) {
@@ -50,5 +53,24 @@ func TestBadRequestHandler_SetIssueToBadRequest(t *testing.T) {
 
 	if hitch.Issue != "Bad Request!" {
 		t.Errorf("Expected hitch.Issue to be 'Bad Request!', but got '%s'", hitch.Issue)
+	}
+}
+
+func TestBadRequestHandler_ParseTemplateWithHitchData(t *testing.T) {
+	w := httptest.NewRecorder()
+	BadRequestHandler(w)
+
+	if w.Code != http.StatusBadRequest {
+		t.Errorf("Expected status code %d, got %d", http.StatusBadRequest, w.Code)
+	}
+
+	expectedHitch := models.WebError{
+		Code:  http.StatusBadRequest,
+		Issue: "Bad Request!",
+	}
+
+	body := w.Body.String()
+	if !strings.Contains(body, strconv.Itoa(expectedHitch.Code)) || !strings.Contains(body, expectedHitch.Issue) {
+		t.Errorf("Expected response body to contain %d and %s", expectedHitch.Code, expectedHitch.Issue)
 	}
 }
