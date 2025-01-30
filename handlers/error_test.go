@@ -120,3 +120,22 @@ func TestFoundHandler_SetIssueToNotFound(t *testing.T) {
 		t.Errorf("Expected hitch.Issue to be 'Not Found!', but got '%s'", hitch.Issue)
 	}
 }
+
+func TestFoundHandler_ParseTemplateWithHitchData(t *testing.T) {
+	w := httptest.NewRecorder()
+	NotFoundHandler(w)
+
+	if w.Code != http.StatusNotFound {
+		t.Errorf("Expected status code %d, got %d", http.StatusNotFound, w.Code)
+	}
+
+	expectedHitch := models.WebError{
+		Code:  http.StatusNotFound,
+		Issue: "Not Found!",
+	}
+
+	body := w.Body.String()
+	if !strings.Contains(body, strconv.Itoa(expectedHitch.Code)) || !strings.Contains(body, expectedHitch.Issue) {
+		t.Errorf("Expected response body to contain %d and %s", expectedHitch.Code, expectedHitch.Issue)
+	}
+}
