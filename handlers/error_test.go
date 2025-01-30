@@ -34,3 +34,12 @@ func TestBadRequestHandler_ParseTemplate(t *testing.T) {
 		t.Errorf("Expected response body to contain 'Bad Request!', but it doesn't")
 	}
 }
+
+func TestBadRequestHandler_SetStatusCode(t *testing.T) {
+	w := httptest.NewRecorder()
+	BadRequestHandler(w)
+
+	if hitch.Code != http.StatusBadRequest {
+		t.Errorf("Expected hitch.Code to be %d, but got %d", http.StatusBadRequest, hitch.Code)
+	}
+}
