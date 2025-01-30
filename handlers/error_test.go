@@ -3,6 +3,8 @@ package handlers
 import (
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"testing"
@@ -202,5 +204,45 @@ func TestInternalServerErrorHandler_ParseTemplateWithHitchData(t *testing.T) {
 	body := w.Body.String()
 	if !strings.Contains(body, strconv.Itoa(expectedHitch.Code)) || !strings.Contains(body, expectedHitch.Issue) {
 		t.Errorf("Expected response body to contain %d and %s", expectedHitch.Code, expectedHitch.Issue)
+	}
+}
+
+func TestGetTemplatePath_FoundInCurrentDirectory(t *testing.T) {
+	// Create a temporary directory structure
+	tempDir, err := os.MkdirTemp("", "test")
+	if err != nil {
+		t.Fatalf("Failed to create temp directory: %v", err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	// Create the template file
+	templateDir := filepath.Join(tempDir, "web", "templates")
+	err = os.MkdirAll(templateDir, 0o755)
+	if err != nil {
+		t.Fatalf("Failed to create template directory: %v", err)
+	}
+	templateFile := "test.html"
+	_, err = os.Create(filepath.Join(templateDir, templateFile))
+	if err != nil {
+		t.Fatalf("Failed to create template file: %v", err)
+	}
+
+	// Change the current working directory
+	oldWd, _ := os.Getwd()
+	err = os.Chdir(tempDir)
+	if err != nil {
+		t.Fatalf("Failed to change working directory: %v", err)
+	}
+	defer os.Chdir(oldWd)
+
+	// Call the function
+	path, err := GetTemplatePath(templateFile)
+	// Check the result
+	if err != nil {
+		t.Errorf("Expected no error, got: %v", err)
+	}
+	expectedPath := filepath.Join(tempDir, "web", "templates", templateFile)
+	if path != expectedPath {
+		t.Errorf("Expected path %s, got %s", expectedPath, path)
 	}
 }
