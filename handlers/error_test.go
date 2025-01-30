@@ -246,3 +246,34 @@ func TestGetTemplatePath_FoundInCurrentDirectory(t *testing.T) {
 		t.Errorf("Expected path %s, got %s", expectedPath, path)
 	}
 }
+
+func TestGetTemplatePath_NotFound(t *testing.T) {
+	// Create a temporary directory structure
+	tempDir, err := os.MkdirTemp("", "test")
+	if err != nil {
+		t.Fatalf("Failed to create temp directory: %v", err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	// Change the working directory to the temp directory
+	originalWd, _ := os.Getwd()
+	err = os.Chdir(tempDir)
+	if err != nil {
+		t.Fatalf("Failed to change working directory: %v", err)
+	}
+	defer os.Chdir(originalWd)
+
+	// Call GetTemplatePath with a non-existent template file
+	_, err = GetTemplatePath("non_existent_template.html")
+
+	// Check if an error is returned
+	if err == nil {
+		t.Error("Expected an error, but got nil")
+	}
+
+	// Check if the error message is correct
+	expectedErrMsg := "template file not found: non_existent_template.html"
+	if err.Error() != expectedErrMsg {
+		t.Errorf("Expected error message '%s', but got '%s'", expectedErrMsg, err.Error())
+	}
+}
