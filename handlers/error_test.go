@@ -397,3 +397,47 @@ func TestGetTemplatePath_SymbolicLinks(t *testing.T) {
 		t.Errorf("Expected path %s, got %s", expectedPath, path)
 	}
 }
+
+func TestGetTemplatePath_MultipleMatches(t *testing.T) {
+	// Create a temporary directory structure
+	tempDir, err := os.MkdirTemp("", "test")
+	if err != nil {
+		t.Fatalf("Failed to create temp dir: %v", err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	// Create multiple directories with the same template file
+	dirs := []string{
+		filepath.Join(tempDir, "project1", "web", "templates"),
+		filepath.Join(tempDir, "project2", "web", "templates"),
+	}
+
+	for _, dir := range dirs {
+		err := os.MkdirAll(dir, 0o755)
+		if err != nil {
+			t.Fatalf("Failed to create directory: %v", err)
+		}
+		err = os.WriteFile(filepath.Join(dir, "test.html"), []byte("test content"), 0o644)
+		if err != nil {
+			t.Fatalf("Failed to create test file: %v", err)
+		}
+	}
+
+	// Change the working directory to the deepest subdirectory
+	err = os.Chdir(filepath.Join(tempDir, "project2", "web", "templates"))
+	if err != nil {
+		t.Fatalf("Failed to change working directory: %v", err)
+	}
+
+	// Call the function
+	result, err := GetTemplatePath("test.html")
+	// Check the result
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+
+	expected := filepath.Join(tempDir, "project2", "web", "templates", "test.html")
+	if result != expected {
+		t.Errorf("Expected path %s, but got %s", expected, result)
+	}
+}
