@@ -139,3 +139,68 @@ func TestFoundHandler_ParseTemplateWithHitchData(t *testing.T) {
 		t.Errorf("Expected response body to contain %d and %s", expectedHitch.Code, expectedHitch.Issue)
 	}
 }
+
+func TestInternalServerErrorHandler_StatusCode500(t *testing.T) {
+	w := httptest.NewRecorder()
+	InternalServerErrorHandler(w)
+
+	if w.Code != http.StatusInternalServerError {
+		t.Errorf("Expected status code %d, got %d", http.StatusInternalServerError, w.Code)
+	}
+}
+
+func TestInternalServerErrorHandler_ParseTemplate(t *testing.T) {
+	w := httptest.NewRecorder()
+	InternalServerErrorHandler(w)
+
+	if w.Code != http.StatusInternalServerError {
+		t.Errorf("Expected status code %d, got %d", http.StatusInternalServerError, w.Code)
+	}
+
+	expectedContentType := "text/html; charset=utf-8"
+	if contentType := w.Header().Get("Content-Type"); contentType != expectedContentType {
+		t.Errorf("Expected Content-Type %s, got %s", expectedContentType, contentType)
+	}
+
+	body := w.Body.String()
+	if !strings.Contains(body, "Not Found!") {
+		t.Errorf("Expected response body to contain 'Not Found!', but it doesn't")
+	}
+}
+
+func TestInternalServerErrorHandler_SetCodeTo500(t *testing.T) {
+	w := httptest.NewRecorder()
+	NotFoundHandler(w)
+
+	if hitch.Code != http.StatusInternalServerError {
+		t.Errorf("Expected hitch.Code to be %d, but got %d", http.StatusInternalServerError, hitch.Code)
+	}
+}
+
+func TestInternalServerErrorHandler_SetIssueToNotFound(t *testing.T) {
+	w := httptest.NewRecorder()
+	InternalServerErrorHandler(w)
+
+	if hitch.Issue != "Not Found!" {
+		t.Errorf("Expected hitch.Issue to be 'Not Found!', but got '%s'", hitch.Issue)
+	}
+}
+
+func TestInternalServerErrorHandler_ParseTemplateWithHitchData(t *testing.T) {
+	w := httptest.NewRecorder()
+	InternalServerErrorHandler(w)
+
+	if w.Code != http.StatusInternalServerError {
+		t.Errorf("Expected status code %d, got %d", http.StatusInternalServerError, w.Code)
+	}
+
+	expectedHitch := models.WebError{
+		Code:  http.StatusInternalServerError,
+		Issue: "Internal Server Error!",
+	}
+
+	body := w.Body.String()
+	if !strings.Contains(body, strconv.Itoa(expectedHitch.Code)) || !strings.Contains(body, expectedHitch.Issue) {
+		t.Errorf("Expected response body to contain %d and %s", expectedHitch.Code, expectedHitch.Issue)
+	}
+}
