@@ -360,3 +360,40 @@ func TestGetTemplatePath_DirectoryNotExist(t *testing.T) {
 		t.Errorf("Expected error message '%s', but got '%s'", expectedErrMsg, err.Error())
 	}
 }
+
+func TestGetTemplatePath_SymbolicLinks(t *testing.T) {
+	// Create a temporary directory structure
+	tempDir, err := os.MkdirTemp("", "test")
+	if err != nil {
+		t.Fatalf("Failed to create temp dir: %v", err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	// Create a symbolic link
+	linkDir := filepath.Join(tempDir, "link")
+	targetDir := filepath.Join(tempDir, "target")
+	os.Mkdir(targetDir, 0o755)
+	os.Symlink(targetDir, linkDir)
+
+	// Create the template file
+	templateDir := filepath.Join(targetDir, "web", "templates")
+	os.MkdirAll(templateDir, 0o755)
+	templateFile := filepath.Join(templateDir, "test.html")
+	os.WriteFile(templateFile, []byte("test"), 0o644)
+
+	// Change working directory to the symlink
+	oldWd, _ := os.Getwd()
+	os.Chdir(linkDir)
+	defer os.Chdir(oldWd)
+
+	// Test GetTemplatePath
+	path, err := GetTemplatePath("test.html")
+	if err != nil {
+		t.Errorf("GetTemplatePath failed: %v", err)
+	}
+
+	expectedPath := filepath.Join(targetDir, "web", "templates", "test.html")
+	if path != expectedPath {
+		t.Errorf("Expected path %s, got %s", expectedPath, path)
+	}
+}
