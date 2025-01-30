@@ -35,11 +35,20 @@ func TestBadRequestHandler_ParseTemplate(t *testing.T) {
 	}
 }
 
-func TestBadRequestHandler_SetStatusCode(t *testing.T) {
+func TestBadRequestHandler_SetCodeTo400(t *testing.T) {
 	w := httptest.NewRecorder()
 	BadRequestHandler(w)
 
 	if hitch.Code != http.StatusBadRequest {
 		t.Errorf("Expected hitch.Code to be %d, but got %d", http.StatusBadRequest, hitch.Code)
+	}
+}
+
+func TestBadRequestHandler_SetIssueToBadRequest(t *testing.T) {
+	w := httptest.NewRecorder()
+	BadRequestHandler(w)
+
+	if hitch.Issue != "Bad Request!" {
+		t.Errorf("Expected hitch.Issue to be 'Bad Request!', but got '%s'", hitch.Issue)
 	}
 }
