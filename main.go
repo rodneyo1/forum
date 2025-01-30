@@ -13,7 +13,6 @@ func main() {
 	// http.HandleFunc("/", handlers.IndexHandler)
 	http.HandleFunc("/login", handlers.LoginHandler)
 	http.HandleFunc("/success", handlers.SuccessHandler)
-	http.HandleFunc("/error", handlers.ErrorHandler)
 	http.HandleFunc("/register", handlers.RegistrationHandler)
 
 	// Start the server, handle emerging errors
