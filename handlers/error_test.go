@@ -74,3 +74,12 @@ func TestBadRequestHandler_ParseTemplateWithHitchData(t *testing.T) {
 		t.Errorf("Expected response body to contain %d and %s", expectedHitch.Code, expectedHitch.Issue)
 	}
 }
+
+func TestNotFoundHandler_StatusCode404(t *testing.T) {
+	w := httptest.NewRecorder()
+	NotFoundHandler(w)
+
+	if w.Code != http.StatusNotFound {
+		t.Errorf("Expected status code %d, got %d", http.StatusNotFound, w.Code)
+	}
+}
