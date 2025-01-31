@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+<body>
+    <div class="registration-container">
+        <h1>Register</h1>
+        <form method="GET" action="/success">
+            <p>first Name</p><input type="text" id="first_name" placeholder="first name" name="first_name" required>
+            <p>last Name</p><input type="text" id="last_name" placeholder="last name" name="last_name" required>
+            <p>email</p><input type="text" id="email" placeholder="example@email.com" name="email"required>
+            <p>username</p><input type="text" id="username" placeholder="username" name="username" required>
+            <p>password</p><input type="password" id="password" placeholder="password" name="password" required>
+            <p>confirm Password</p><input type="password" id="confirm_password" placeholder="confirm password" name="confirm_password" required>
+            <p>profile picture</p><textarea type="text" id="bio" placeholder="about me" name="bio" required></textarea>
+            <button type="submit">Register</button>
+        </form>
+        
+        <p>or</p>
+
+        <a href="/google-signin">
+            <button>continue with google</button>
+        </a>
+
+        <p>have an account? <a href="/login">register</a></p>
+    </div>
+</body>
+</html>
