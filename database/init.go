@@ -46,9 +46,11 @@ func createTables(db *sql.DB) error {
 		COMMENTS_TABLE_INDEX_user_id,
 		COMMENTS_TABLE_INDEX_post_id,
 		LIKES_TABLE_CREATE,
+		LIKES_TABLE_INDEX_user_id,
 		LIKES_TABLE_INDEX_post_id,
 		LIKES_TABLE_INDEX_comment_id,
 		DISLIKES_TABLE_CREATE,
+		DISLIKES_TABLE_INDEX_user_id,
 		DISLIKES_TABLE_INDEX_post_id,
 		DISLIKES_TABLE_INDEX_comment_id,
 	}
