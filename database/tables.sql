@@ -5,7 +5,7 @@ CREATE TABLE users (
     password STRING NOT NULL,
     bio STRING,
     image STRING,
-    session_id STRING
+    session_id STRING,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX idx_users_username ON users (username);
