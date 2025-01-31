@@ -20,7 +20,7 @@ func main() {
 	http.HandleFunc("/static/", handlers.StaticHandler)
 	// http.HandleFunc("/", handlers.IndexHandler)
 	http.HandleFunc("/login", handlers.LoginHandler)
-	http.HandleFunc("/success", handlers.SuccessHandler)
+	http.HandleFunc("/success", handlers.ForgotPasswordHandler)
 	http.HandleFunc("/register", handlers.RegistrationHandler)
 
 	// Inform user initialization of server
