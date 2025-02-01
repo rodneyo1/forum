@@ -26,6 +26,11 @@ func Init(dbname string) error {
 		return err
 	}
 
+	err = InitCategories()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

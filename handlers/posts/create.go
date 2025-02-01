@@ -1,4 +1,4 @@
-package posts_test
+package posts
 
 import (
 	"fmt"
@@ -7,37 +7,30 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 
 	"forum/database"
 	"forum/utils"
 )
 
+// TODO - Fetch the user id from the logged in user, e.g from r.Context
+// Mock user ID for now
+var userID int = 1
+
 // Handler for serving the form and handling form submission
 func PostCreate(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
+		// Fetch categories from the database
+		categories, err := database.FetchCategories()
+		if err != nil {
+			http.Error(w, "Failed to fetch categories", http.StatusInternalServerError)
+			return
+		}
+
 		// Serve the form for creating a post
-		tmpl := template.Must(template.New("form").Parse(`
-			<!DOCTYPE html>
-			<html>
-			<head>
-				<title>Create Post</title>
-			</head>
-			<body>
-				<h1>Create a New Post</h1>
-				<form method="POST" action="/posts/create" enctype="multipart/form-data">
-					<label for="title">Title:</label><br>
-					<input type="text" id="title" name="title" required><br><br>
-					<label for="content">Content:</label><br>
-					<textarea id="content" name="content" required></textarea><br><br>
-					<label for="media">Upload Image (PNG or JPG, max 20MB):</label><br>
-					<input type="file" id="media" name="media" accept=".png,.jpg,.jpeg" required><br><br>
-					<input type="submit" value="Submit">
-				</form>
-			</body>
-			</html>
-		`))
-		tmpl.Execute(w, nil)
+		tmpl := template.Must(template.ParseFiles("./web/templates/posts_create.html"))
+		tmpl.Execute(w, categories)
 
 	case http.MethodPost:
 		if err := r.ParseMultipartForm(20 << 20); err != nil { // 20MB max
@@ -45,11 +38,12 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// extract the form values
+		// Extract the form values
 		title := r.FormValue("title")
 		content := r.FormValue("content")
+		categoryIDs := r.Form["categories"] // Get selected category IDs
 
-		// handle the uploaded file
+		// Handle the uploaded file
 		file, handler, err := r.FormFile("media")
 		if err != nil {
 			http.Error(w, "Failed to retrieve the file", http.StatusBadRequest)
@@ -57,7 +51,7 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 		}
 		defer file.Close()
 
-		// validate the file extension type and size
+		// Validate the file extension type and size
 		allowedTypes := map[string]bool{
 			"image/png":  true,
 			"image/jpeg": true,
@@ -75,7 +69,7 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// determine the file extension based on the MIME type
+		// Determine the file extension based on the MIME type
 		var ext string
 		switch fileType {
 		case "image/png":
@@ -84,11 +78,10 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 			ext = ".jpg"
 		}
 
-		// construct the full filename
+		// Construct the full filename
 		filename := randomFileName + ext
 
-		// save the file to the media folder
-		// try create the media directory if it does not exist
+		// Save the file to the media folder
 		mediaFolder := "media"
 		if err := os.MkdirAll(mediaFolder, os.ModePerm); err != nil {
 			http.Error(w, "Failed to create media folder", http.StatusInternalServerError)
@@ -103,20 +96,31 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 		}
 		defer outFile.Close()
 
-		// copy the file content to the new file
+		// Copy the file content to the new file
 		if _, err := io.Copy(outFile, file); err != nil {
 			http.Error(w, "Failed to save the file", http.StatusInternalServerError)
 			return
 		}
 
-		// mock user ID for now
-		userID := 1
+		// Convert category IDs from strings to integers
+		var categoryIDsInt []int
+		for _, idStr := range categoryIDs {
+			id, err := strconv.Atoi(idStr)
+			if err != nil {
+				http.Error(w, "Invalid category ID", http.StatusBadRequest)
+				return
+			}
+			categoryIDsInt = append(categoryIDsInt, id)
+		}
 
-		tableName := "posts" // table name
-		columns := []string{"user_id", "title", "content", "media"} // columns to insert
-		values := []interface{}{userID, title, content, filename} // values to insert
+		// Validate that the selected categories exist in the database
+		if err := database.ValidateCategories(categoryIDsInt); err != nil {
+			http.Error(w, fmt.Sprintf("Invalid category: %v", err), http.StatusBadRequest)
+			return
+		}
 
-		postID, err := database.Create(tableName, columns, values)
+		// Create the post with categories
+		postID, err := database.CreatePostWithCategories(userID, title, content, filename, categoryIDsInt)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("Failed to create post: %v", err), http.StatusInternalServerError)
 			return

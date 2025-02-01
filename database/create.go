@@ -6,35 +6,69 @@ import (
 )
 
 // Create inserts data into the specified table using provided field names and values.
-func Create(tableName string, columns []string, values []interface{}) (int64, error) {
-	var identifier int64 = -1
-	var err error
-
-	// the number of columns must match the number of values
-	if len(columns) != len(values) {
-		return identifier, fmt.Errorf("number of columns (%d) does not match number of values (%d)", len(columns), len(values))
+func CreatePostWithCategories(userID int, title, content, media string, categoryIDs []int) (int64, error) {
+	// Start a transaction
+	tx, err := db.Begin()
+	if err != nil {
+		return 0, fmt.Errorf("failed to begin transaction: %w", err)
 	}
 
-	// prepare the SQL query
-	// using the "?" ensures that we avoid sql injection
-	placeholders := make([]string, len(values))
-	for i := range values {
-		placeholders[i] = "?"
+	// defer a rollback in case of failure
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+		}
+	}()
+
+	postValues := []interface{}{userID, title, content, media}
+
+	// prepare the SQL query for the post
+	postPlaceholders := make([]string, len(postValues))
+	for i := range postValues {
+		postPlaceholders[i] = "?"
 	}
 
-	query := fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s)",
-		tableName,
-		strings.Join(columns, ", "),
-		strings.Join(placeholders, ", "),
+	postQuery := fmt.Sprintf("INSERT INTO posts (user_id, title, content, media) VALUES (%s)",
+		strings.Join(postPlaceholders, ", "),
 	)
 
-	// execute the query
-	result, err := db.Exec(query, values...)
+	// execute the post query
+	postResult, err := tx.Exec(postQuery, postValues...)
 	if err != nil {
-		return identifier, err
+		return 0, fmt.Errorf("failed to create post: %w", err)
 	}
 
-	// get the last inserted ID
-	identifier, err = result.LastInsertId()
-	return identifier, err
+	// get the last inserted post ID
+	postID, err := postResult.LastInsertId()
+	if err != nil {
+		return 0, fmt.Errorf("failed to retrieve post ID: %w", err)
+	}
+
+	// insert post categories
+	for _, categoryID := range categoryIDs {
+		categoryValues := []interface{}{postID, categoryID}
+
+		// prepare the SQL query for the category
+		categoryPlaceholders := make([]string, len(categoryValues))
+		for i := range categoryValues {
+			categoryPlaceholders[i] = "?"
+		}
+
+		categoryQuery := fmt.Sprintf("INSERT INTO post_categories (post_id, category_id) VALUES (%s)",
+			strings.Join(categoryPlaceholders, ", "),
+		)
+
+		// execute the category query
+		_, err := tx.Exec(categoryQuery, categoryValues...)
+		if err != nil {
+			return 0, fmt.Errorf("failed to associate category with post: %w", err)
+		}
+	}
+
+	// commit the transaction
+	if err := tx.Commit(); err != nil {
+		return 0, fmt.Errorf("failed to commit transaction: %w", err)
+	}
+
+	return postID, nil
 }
