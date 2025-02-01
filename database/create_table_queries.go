@@ -8,7 +8,7 @@ const (
 		password STRING NOT NULL,
 		bio STRING,
 		image STRING,
-		session_id STRING
+		session_id STRING,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	);`
 	USERS_TABLE_INDEX_username = `CREATE INDEX IF NOT EXISTS idx_users_username ON users (username);`
@@ -71,6 +71,7 @@ const (
 		FOREIGN KEY (comment_id) REFERENCES comments(id),
 		CHECK (post_id IS NOT NULL OR comment_id IS NOT NULL)
 	);`
+	LIKES_TABLE_INDEX_user_id = `CREATE INDEX idx_likes_user_id ON likes (user_id);`
 	LIKES_TABLE_INDEX_post_id = `CREATE INDEX IF NOT EXISTS idx_likes_post_id ON likes (post_id);`
 	LIKES_TABLE_INDEX_comment_id = `CREATE INDEX IF NOT EXISTS idx_likes_comment_id ON likes (comment_id);`
 	
@@ -84,6 +85,7 @@ const (
 		FOREIGN KEY (comment_id) REFERENCES comments(id),
 		CHECK (post_id IS NOT NULL OR comment_id IS NOT NULL)
 	);`
+	DISLIKES_TABLE_INDEX_user_id = `CREATE INDEX idx_dislikes_user_id ON dislikes (user_id);`
 	DISLIKES_TABLE_INDEX_post_id = `CREATE INDEX IF NOT EXISTS idx_dislikes_post_id ON dislikes (post_id);`
 	DISLIKES_TABLE_INDEX_comment_id = `CREATE INDEX IF NOT EXISTS idx_dislikes_comment_id ON dislikes (comment_id);`
 )
