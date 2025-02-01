@@ -13,3 +13,14 @@ func GetUserByEmailOrUsername(email, username string) (models.User, error) {
 	}
 	return user, nil
 }
+
+func VerifyUser(email, password string) bool {
+	// User email or username to get users' full credentials
+	user, err := GetUserByEmailOrUsername(email, email)
+	if err != nil {
+		return false
+	}
+
+	// Compare provided password with the stored hashed password
+	return user.Password == password
+}
