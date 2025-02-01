@@ -13,6 +13,14 @@ func TestVerifyUser_ValidCredentials(t *testing.T) {
 	}
 }
 
+func TestVerifyUser_InvalidCredentials(t *testing.T) {
+	result := VerifyUser("milton@mail.com", "password")
+
+	if result {
+		t.Errorf("Expected VerifyUser to return false for valid credentials, but got true")
+	}
+}
+
 func TestGetUserByMailOrName(t *testing.T) {
 	var err error
 
