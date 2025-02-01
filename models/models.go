@@ -35,11 +35,12 @@ type Category struct {
 
 // Post struct
 type Post struct {
-	ID      int     `json:"id"`
-	Title   string  `json:"title"`
-	Content string  `json:"content"`
-	Media   *string `json:"media,omitempty"`
-	UserID  int     `json:"user_id"`
+	ID        int       `json:"id"`
+	Title     string    `json:"title"`
+	Content   string    `json:"content"`
+	Media     string    `json:"media,omitempty"`
+	UserID    int       `json:"user_id"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 // PostCategory struct
@@ -50,10 +51,11 @@ type PostCategory struct {
 
 // Comment Struct
 type Comment struct {
-	ID      int    `json:"id"`
-	Content string `json:"content"`
-	PostID  int    `json:"post_id"`
-	UserID  int    `json:"user_id"`
+	ID        int       `json:"id"`
+	Content   string    `json:"content"`
+	PostID    int       `json:"post_id"`
+	UserID    int       `json:"user_id"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 // Like struct
