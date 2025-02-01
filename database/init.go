@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -18,6 +19,10 @@ func Init(dbname string) error {
 	db, err = sql.Open("sqlite3", dbname)
 	if err != nil {
 		return errors.New("could not open the database")
+	}
+	err = enableForeignKeys(db)
+	if err != nil {
+		return errors.New("error enebling foreign key constraints")
 	}
 
 	// initialize tables
@@ -46,10 +51,13 @@ func createTables(db *sql.DB) error {
 		CATEGORIES_TABLE_CREATE,
 		CATEGORIES_TABLE_INDEX_name,
 		POSTS_TABLE_CREATE,
+		POSTS_TABLE_INDEX_uuid,
 		POSTS_TABLE_INDEX_user_id,
 		POST_CATEGORIES_TABLE_CREATE,
 		POST_CATEGORIES_TABLE_INDEX_post_id,
+		POST_CATEGORIES_TABLE_INDEX_category_id,
 		COMMENTS_TABLE_CREATE,
+		COMMENTS_TABLE_INDEX_uuid,
 		COMMENTS_TABLE_INDEX_user_id,
 		COMMENTS_TABLE_INDEX_post_id,
 		LIKES_TABLE_CREATE,
@@ -74,4 +82,14 @@ func createTables(db *sql.DB) error {
 
 func Close() {
 	db.Close()
+}
+
+// SQLite does not enforce foreign key constraints by default
+func enableForeignKeys(db *sql.DB) error {
+	// enable foreign key constraints for this connection
+	_, err := db.Exec("PRAGMA foreign_keys = ON;")
+	if err != nil {
+		return fmt.Errorf("failed to enable foreign key constraints: %w", err)
+	}
+	return nil
 }
