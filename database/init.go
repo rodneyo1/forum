@@ -7,24 +7,26 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-var db *sql.DB
+// module level variables
+var (
+	db  *sql.DB
+	err error
+)
 
 // Initialize the DB handle
-func Init(dbname string) (*sql.DB, error) {
-	var err error
-
+func Init(dbname string) error {
 	db, err = sql.Open("sqlite3", dbname)
 	if err != nil {
-		return nil, errors.New("could not open the database")
+		return errors.New("could not open the database")
 	}
 
 	// initialize tables
 	err = createTables(db)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return db, nil
+	return nil
 }
 
 func createTables(db *sql.DB) error {
@@ -56,11 +58,15 @@ func createTables(db *sql.DB) error {
 	}
 
 	for _, query := range tables {
-		_, err := db.Exec(query)
+		_, err = db.Exec(query)
 		if err != nil {
 			return err
 		}
 	}
 
 	return nil
+}
+
+func Close() {
+	db.Close()
 }
