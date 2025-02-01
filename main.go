@@ -20,6 +20,8 @@ func init() {
 func main() {
 	defer database.Close()
 
+	database.CreateUser("toni", "toni@mail.com", "@antony222")
+
 	// Restrict arguments parsed
 	if len(os.Args) != 1 {
 		log.Println("Too many arguments")
