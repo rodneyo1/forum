@@ -1,12 +1,13 @@
 package database
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
 )
 
-func TestVerifyUserValidCredentials(t *testing.T) {
+func TestVerifyUser_ValidCredentials(t *testing.T) {
 	db, mock, err := sqlmock.New()
 	if err != nil {
 		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
@@ -28,5 +29,15 @@ func TestVerifyUserValidCredentials(t *testing.T) {
 
 	if err := mock.ExpectationsWereMet(); err != nil {
 		t.Errorf("there were unfulfilled expectations: %s", err)
+	}
+}
+
+func TestGetUserByMailOrName(t *testing.T) {
+	var err error
+
+	user, err := GetUserByEmailOrUsername("milton@mail.com", "milton")
+	if user.Username != "milton" || err != nil {
+		fmt.Println("USername: ", user.Username, " Passcode: ", user.Password, " Email: ", user.Email)
+		t.Errorf("expected username to be milton, but got %s\n", user.Username)
 	}
 }
