@@ -54,30 +54,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Validate credentials
 	if !database.VerifyUser(emailUsername, password) {
-		// Define template path and error message
-		alert := map[string]string{"Error Message": "Invalid password"}
-		tmplPath, err := GetTemplatePath("login.html")
-		if err != nil {
-			InternalServerErrorHandler(w)
-			log.Println("Could not find template file", err)
-			return
-		}
-
-		// Render login page
-		tmpl, err := template.ParseFiles(tmplPath)
-		if err != nil {
-			InternalServerErrorHandler(w)
-			log.Printf("Could not parse template: %v", err)
-			return
-		}
-
-		// Execute login page
-		err = tmpl.Execute(w, alert)
-		if err != nil {
-			InternalServerErrorHandler(w)
-			log.Printf("Could not execute template %v", err)
-			return
-		}
+		ParseAlertMessage(w, templatePath, "Invalid Username or Password") // Parse error message
+		return
 	}
 
 	// Redirect user to home page
@@ -95,4 +73,25 @@ func SuccessHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Error(w, "Loged in1!", http.StatusInternalServerError)
+}
+
+func ParseAlertMessage(w http.ResponseWriter, tmplPath, message string) {
+	// Define template path and error message
+	alert := map[string]string{"ErrorMessage": message}
+
+	// Render page
+	tmpl, err := template.ParseFiles(tmplPath)
+	if err != nil {
+		InternalServerErrorHandler(w)
+		log.Printf("Could not parse template: %v", err)
+		return
+	}
+
+	// Execute page
+	err = tmpl.Execute(w, alert)
+	if err != nil {
+		InternalServerErrorHandler(w)
+		log.Printf("Could not execute template %v", err)
+		return
+	}
 }
