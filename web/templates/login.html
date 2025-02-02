@@ -11,7 +11,10 @@
 
         <div class="login">
             <p>Enter Credentials</p>
-            <form method="GET" action="/success">
+            {{if .Error}}
+                <p style="color: red;">{{.Error}}</p>
+            {{end}}
+            <form method="POST" action="/login">
                 <input type="text" id="email_username" placeholder="email/username" name="email_username" required>
                 <input type="password" id="password" placeholder="password" name="password" required>
                 <button type="submit">Login</button>
