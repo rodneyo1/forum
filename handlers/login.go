@@ -63,7 +63,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func SuccessHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
+	if r.Method != "GET" {
 		BadRequestHandler(w)
 		return
 	}
