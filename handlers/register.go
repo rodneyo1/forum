@@ -89,9 +89,13 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Redirect user to login page
+	// Inform user of their successful signup
 	ParseAlertMessage(w, tmpl, tmplPath, fmt.Sprintf("%v, you created a new account", user.Username))
-	http.Redirect(w, r, "/login", http.StatusFound)
+
+	// Redirect user to login page
+	if w.Header().Get("Content-Type") == "" {
+		http.Redirect(w, r, "/login", http.StatusFound)
+	}
 }
 
 func ValidEmail(email string) bool {

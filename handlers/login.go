@@ -59,7 +59,9 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Redirect user to home page
-	http.Redirect(w, r, "/success", http.StatusFound)
+	if w.Header().Get("Content-Type") == "" {
+		http.Redirect(w, r, "/success", http.StatusFound)
+	}
 }
 
 func SuccessHandler(w http.ResponseWriter, r *http.Request) {
