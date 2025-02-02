@@ -4,7 +4,6 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"strings"
 
 	"forum/database"
 )
@@ -60,10 +59,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Redirect user to home page
 	http.Redirect(w, r, "/success", http.StatusFound)
-}
-
-func IsValidEmail(email string) bool {
-	return strings.Contains(email, "@") && strings.HasSuffix(email, ".com")
 }
 
 func SuccessHandler(w http.ResponseWriter, r *http.Request) {
