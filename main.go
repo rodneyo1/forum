@@ -8,6 +8,7 @@ import (
 	"forum/database"
 	"forum/handlers"
 	postHandlers "forum/handlers/posts"
+	middleware "forum/handlers/middlewares"
 )
 
 func init() {
@@ -30,13 +31,14 @@ func main() {
 	}
 
 	// Candle hundler functions
+	http.HandleFunc("/", handlers.IndexHandler)
 	http.HandleFunc("/static/", handlers.StaticHandler)
 	http.HandleFunc("/success", handlers.SuccessHandler)
 	http.HandleFunc("/login", handlers.LoginHandler)
 	http.HandleFunc("/forgot-password", handlers.ForgotPasswordHandler)
 	http.HandleFunc("/register", handlers.RegistrationHandler)
 
-	http.HandleFunc("/posts/create", postHandlers.PostCreate)
+	http.Handle("/posts/create", middleware.AuthMiddleware(http.HandlerFunc(postHandlers.PostCreate)))
 
 	// Inform user initialization of server
 	log.Println("Server started on port 8080")
