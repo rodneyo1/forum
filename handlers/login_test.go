@@ -66,3 +66,27 @@ func TestLoginHandler_InvalidMethod(t *testing.T) {
 			status, http.StatusBadRequest)
 	}
 }
+
+func TestLoginHandler_FormFields(t *testing.T) {
+	req, err := http.NewRequest("GET", "/login", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(LoginHandler)
+
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
+	}
+
+	body := rr.Body.String()
+	if !strings.Contains(body, `name="email_username"`) {
+		t.Error("login form does not contain email/username field")
+	}
+	if !strings.Contains(body, `name="password"`) {
+		t.Error("login form does not contain password field")
+	}
+}
