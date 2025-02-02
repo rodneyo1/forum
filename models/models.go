@@ -15,9 +15,9 @@ type User struct {
 	Username  string    `json:"username"`
 	Email     string    `json:"email"`
 	Password  string    `json:"-"` // Exclude from JSON responses
-	Bio       *string   `json:"bio,omitempty"`
-	Image     *string   `json:"image,omitempty"`
-	SessionID *string   `json:"session_id,omitempty"`
+	Bio       string   `json:"bio,omitempty"`
+	Image     string   `json:"image,omitempty"`
+	SessionID string   `json:"session_id,omitempty"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
