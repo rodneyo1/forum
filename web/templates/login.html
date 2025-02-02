@@ -11,7 +11,7 @@
 
         <div class="login">
             <p>Enter Credentials</p>
-            <form method="GET" action="/success">
+            <form method="POST" action="/login">
                 <input type="text" id="email_username" placeholder="email/username" name="email_username" required>
                 <input type="password" id="password" placeholder="password" name="password" required>
                 <button type="submit">Login</button>
@@ -29,6 +29,17 @@
             <p>forgot password? <a href="/forgot-password">click here</a></p>
             <p>don't have an account? <a href="/register">sign up</a></p>
         </div>
+
+        <input type="hidden" id="error_message" value="{{.ErrorMessage}}">
+
+        <script>
+            window.onload = function() {
+                errMessage = document.getElementById("error_message").value;
+                if (errMessage) {
+                    alert(errMessage);
+                }
+            }
+        </script>
     </div>
 </body>
 </html>

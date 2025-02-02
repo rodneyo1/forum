@@ -22,7 +22,7 @@ func CreatePostWithCategories(userID int, title, content, media string, category
 		}
 	}()
 
-	postUUID , err := utils.GenerateUUID()
+	postUUID, err := utils.GenerateUUID()
 	if err != nil {
 		return 0, fmt.Errorf("failed to generate a random uuid: %w", err)
 	}
