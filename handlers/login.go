@@ -26,7 +26,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	// When method is GET, render form
 	if r.Method == "GET" {
-		if err := tmpl.Execute(w, r); err != nil {
+		if err := tmpl.Execute(w, nil); err != nil {
 			InternalServerErrorHandler(w)
 			return
 		}
@@ -54,7 +54,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Validate credentials
 	if !database.VerifyUser(emailUsername, password) {
-		ParseAlertMessage(w, tmpl, templatePath, "Invalid Username or Password") // Parse error message
+		ParseAlertMessage(w, tmpl, "Invalid Username or Password") // Parse error message
 		return
 	}
 
@@ -73,7 +73,7 @@ func SuccessHandler(w http.ResponseWriter, r *http.Request) {
 	http.Error(w, "Loged in1!", http.StatusInternalServerError)
 }
 
-func ParseAlertMessage(w http.ResponseWriter, tmpl *template.Template, tmplPath, message string) {
+func ParseAlertMessage(w http.ResponseWriter, tmpl *template.Template, message string) {
 	// Define template path and error message
 	alert := map[string]string{"ErrorMessage": message}
 

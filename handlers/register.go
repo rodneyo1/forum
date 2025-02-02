@@ -31,7 +31,8 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Render registration form when method is GET
 	if r.Method == "GET" {
-		if err := tmpl.Execute(w, r); err != nil {
+		err := tmpl.Execute(w, nil)
+		if err != nil {
 			InternalServerErrorHandler(w)
 			log.Println("Could not render registration template: ", err)
 			return
@@ -56,14 +57,14 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Validate email format
 	if !ValidEmail(r.FormValue("email")) {
-		ParseAlertMessage(w, tmpl, tmplPath, "Invalid email format")
+		ParseAlertMessage(w, tmpl, "Invalid email format")
 		return
 	}
 
 	// Check if email or username is taken
 	existingUser, _ := database.GetUserByEmailOrUsername(r.FormValue("email"), r.FormValue("username"))
 	if existingUser.Username != "" {
-		ParseAlertMessage(w, tmpl, tmplPath, fmt.Sprintf("%s taken!", r.FormValue("email")))
+		ParseAlertMessage(w, tmpl, fmt.Sprintf("%s taken!", r.FormValue("email")))
 		return
 	}
 
@@ -76,7 +77,7 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Validate passwords
 	if password != confirmPassword {
-		ParseAlertMessage(w, tmpl, tmplPath, "Passwords do not match")
+		ParseAlertMessage(w, tmpl, "Passwords do not match")
 		return
 	}
 
@@ -85,12 +86,9 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	// Create new user in the database
 	_, err = database.CreateUser(user.Username, user.Email, user.Password)
 	if err != nil {
-		ParseAlertMessage(w, tmpl, tmplPath, "Error creating user")
+		ParseAlertMessage(w, tmpl, "Error creating user")
 		return
 	}
-
-	// Inform user of their successful signup
-	ParseAlertMessage(w, tmpl, tmplPath, fmt.Sprintf("%v, you created a new account", user.Username))
 
 	// Redirect user to login page
 	if w.Header().Get("Content-Type") == "" {
