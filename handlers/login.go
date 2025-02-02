@@ -89,12 +89,13 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	// Validate credentials
 	if !database.VerifyUser(emailUsername, password) {
 		// Render login.html template
-		tmpl, err := template.ParseFiles(templatePath)
-		if err != nil {
-			http.Error(w, "Failed to load Login template", http.StatusInternalServerError)
-			return
-		}
-		ParseAlertMessage(w, tmpl, templatePath, "Invalid Username or Password") // Parse error message
+		// tmpl, err := template.ParseFiles(templatePath)
+		// if err != nil {
+		// 	http.Error(w, "Failed to load Login template", http.StatusInternalServerError)
+		// 	return
+		// }
+		//ParseAlertMessage(w, tmpl, templatePath, "Invalid Username or Password") // Parse error message
+		http.Redirect(w, r, "/login", http.StatusOK)
 		return
 	}
 
