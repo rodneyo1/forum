@@ -49,3 +49,20 @@ func TestLoginHandler_GET(t *testing.T) {
 		}
 	}
 }
+
+func TestLoginHandler_InvalidMethod(t *testing.T) {
+	req, err := http.NewRequest("PUT", "/login", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(LoginHandler)
+
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusBadRequest {
+		t.Errorf("handler returned wrong status code: got %v want %v",
+			status, http.StatusBadRequest)
+	}
+}
