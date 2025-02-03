@@ -81,6 +81,8 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Check password strength
+
 	user.Password = password // set password
 
 	// Create new user in the database
