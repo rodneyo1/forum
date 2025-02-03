@@ -1,14 +1,12 @@
 package handlers
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"regexp"
 
 	"forum/database"
-	"forum/models"
 	"forum/utils"
 )
 
@@ -31,7 +29,7 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//if method is Post
+	//if method is Post updated
 	if MethodCheck(w, r, http.MethodPost) {
 		//update hashed password
 		utils.Passwordhash(user)
@@ -46,6 +44,11 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Validate email format
 	if !ValidEmail(r.FormValue("email")) {
+		tmpl, err := template.ParseFiles("web/templates/register.html")
+		if err != nil {
+			http.Error(w, "Unable to load registration page", http.StatusInternalServerError)
+			return
+		}
 		ParseAlertMessage(w, tmpl, "Invalid email format")
 		return
 	}
@@ -55,22 +58,35 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	email := existingUser.Email
 	username := existingUser.Username
 	if existingUser.Username == username {
-		ParseAlertMessage(w, tmpl, fmt.Sprintf("Username %s is already taken!", r.FormValue("username")))
+		tmpl, err := template.ParseFiles("web/templates/register.html")
+		if err != nil {
+			http.Error(w, "Unable to load registration page", http.StatusInternalServerError)
+			return
+		}
+		ParseAlertMessage(w, tmpl, "Invalid email format")
 		return
 	}
 
 	if existingUser.Email == email {
-		ParseAlertMessage(w, tmpl, fmt.Sprintf("Email %s is already taken!", r.FormValue("email")))
+		tmpl, err := template.ParseFiles("web/templates/register.html")
+		if err != nil {
+			http.Error(w, "Unable to load registration page", http.StatusInternalServerError)
+			return
+		}
+		ParseAlertMessage(w, tmpl, "Invalid email format")
 		return
 	}
 
 	// Check password strength
-	if err = utils.PasswordStrength(user.Password); err != nil {
-		ParseAlertMessage(w, tmpl, err.Error())
+	if err := utils.PasswordStrength(user.Password); err != nil {
+		tmpl, err := template.ParseFiles("web/templates/register.html")
+		if err != nil {
+			http.Error(w, "Unable to load registration page", http.StatusInternalServerError)
+			return
+		}
+		ParseAlertMessage(w, tmpl, "Invalid email too weak")
 		return
 	}
-
-	utils.Passwordhash(&user) //set password
 
 	// Create new user in the database
 	_, err = database.CreateUser(user.Username, user.Email, user.Password)
@@ -90,4 +106,3 @@ func ValidEmail(email string) bool {
 	return regexp.MustCompile(regex).MatchString(email)
 
 }
-
