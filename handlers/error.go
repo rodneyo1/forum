@@ -22,20 +22,20 @@ func BadRequestHandler(w http.ResponseWriter) {
 		return
 	}
 
-	w.WriteHeader(http.StatusBadRequest) // Set page header
-
 	tmpl, err := template.ParseFiles(tmplPath)
 	if err != nil {
 		log.Println("Template parsing failed:", err)
 		http.Error(w, "Could not load template, error page unavailable", http.StatusInternalServerError)
 		return
 	}
+
+	// Set relevant headers
+	w.WriteHeader(http.StatusBadRequest)
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
 	// Set parameters of error
 	hitch.Code = http.StatusBadRequest
 	hitch.Issue = "Bad Request!"
-
-	// Set the Content-Type header for the response
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	// Execute bad request template, handle emerging errors
 	err = tmpl.Execute(w, hitch)
@@ -54,20 +54,19 @@ func InternalServerErrorHandler(w http.ResponseWriter) {
 		return
 	}
 
-	w.WriteHeader(http.StatusInternalServerError) // Set page header
-
 	tmpl, err := template.ParseFiles(tmplPath)
 	if err != nil {
 		http.Error(w, "Could not load template, error page unavailable", http.StatusInternalServerError)
 		return
 	}
 
+	// Set relevant headers
+	w.WriteHeader(http.StatusInternalServerError)
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
 	// Set parameters of error
 	hitch.Code = http.StatusInternalServerError
 	hitch.Issue = "Internal Server Error!"
-
-	// Set the Content-Type header for the response
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	// Execute internal server error template, handle emerging errors
 	err = tmpl.Execute(w, hitch)
@@ -87,19 +86,19 @@ func NotFoundHandler(w http.ResponseWriter) {
 		return
 	}
 
-	w.WriteHeader(http.StatusNotFound) // Set page header
-
 	tmpl, err := template.ParseFiles(tmplPath)
 	if err != nil {
 		http.Error(w, "Could not load template, error page unavailable", http.StatusInternalServerError)
 		return
 	}
+
+	// Set relevant header
+	w.WriteHeader(http.StatusNotFound)
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
 	// Set parameters of error
 	hitch.Code = http.StatusNotFound
 	hitch.Issue = "Not Found!"
-
-	// Set the Content-Type header for the response
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	// Execute not found error template, handle emerging errors
 	err = tmpl.Execute(w, hitch)
@@ -182,5 +181,3 @@ func MethodCheck(w http.ResponseWriter, r *http.Request, allowedMethod string) b
 
 	return false
 }
-
-
