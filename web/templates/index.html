@@ -78,7 +78,7 @@
             <h3>News Feed</h3>
             {{range .Posts}}
             <div class="post">
-                <h4>User {{.UserID}}</h4>
+                <h4>User {{.Creator}}</h4>
                 <p>{{.Title}}</p>
                 <p>{{.Content}}</p>
                 {{if .Media}}

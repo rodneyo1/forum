@@ -25,7 +25,7 @@ func ForumHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Execute the template with the posts data
 	data := struct {
-		Posts []models.Post
+		Posts []models.PostWithUsername
 	}{
 		Posts: posts,
 	}
