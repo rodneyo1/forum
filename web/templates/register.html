@@ -9,8 +9,6 @@
     <div class="registration-container">
         <h1>Register</h1>
         <form method="POST" action="/register">
-            <p>first Name</p><input type="text" id="first_name" placeholder="first name" name="first_name" required>
-            <p>last Name</p><input type="text" id="last_name" placeholder="last name" name="last_name" required>
             <p>email</p><input type="text" id="email" placeholder="example@email.com" name="email"required>
             <p>username</p><input type="text" id="username" placeholder="username" name="username" required>
             <p>password</p><input type="password" id="password" placeholder="password" name="password" required>
@@ -25,7 +23,19 @@
             <button>continue with google</button>
         </a>
 
-        <p>have an account? <a href="/login">register</a></p>
+        <p>have an account? <a href="/login">login</a></p>
+
+    <input type="hidden" id="error_message" value="{{.ErrorMessage}}">
+
+        <script>
+            window.onload = function() {
+                errMessage = document.getElementById("error_message").value;
+                if (errMessage) {
+                    alert(errMessage);
+                }
+            }
+        </script>
     </div>
+
 </body>
 </html>
