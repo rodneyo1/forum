@@ -9,7 +9,6 @@ import (
 	"forum/handlers"
 	middleware "forum/handlers/middlewares"
 	postHandlers "forum/handlers/posts"
-	middleware "forum/handlers/middlewares"
 )
 
 func init() {
