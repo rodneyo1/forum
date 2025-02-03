@@ -76,30 +76,33 @@
         </div>
         <div class="right-section">
             <h3>News Feed</h3>
+            {{range .Posts}}
             <div class="post">
-                <h4>John Doe</h4>
-                <p>Enjoying a great day at the beach! 🌊☀️</p>
-                <img src="beach.jpg" alt="Beach Image">
+                <h4>User {{.UserID}}</h4>
+                <p>{{.Title}}</p>
+                <p>{{.Content}}</p>
+                {{if .Media}}
+                <img src="{{.Media}}" alt="Post Image">
+                {{end}}
                 <div class="actions">
-                    <button>Like</button>
-                    <button>Dislike</button>
+                    <form action="/like" method="post">
+                        <input type="hidden" name="post_id" value="{{.UUID}}">
+                        <button type="submit">Like</button>
+                    </form>
+                    <form action="/dislike" method="post">
+                        <input type="hidden" name="post_id" value="{{.UUID}}">
+                        <button type="submit">Dislike</button>
+                    </form>
                 </div>
                 <div class="comment-section">
-                    <input type="text" placeholder="Write a comment...">
+                    <form action="/comment" method="post">
+                        <input type="hidden" name="post_id" value="{{.UUID}}">
+                        <input type="text" name="content" placeholder="Write a comment...">
+                        <button type="submit">Post</button>
+                    </form>
                 </div>
             </div>
-            <div class="post">
-                <h4>Jane Smith</h4>
-                <p>Just finished a fantastic book! Highly recommend it. 📖</p>
-                <img src="book.jpg" alt="Book Image">
-                <div class="actions">
-                    <button>Like</button>
-                    <button>Dislike</button>
-                </div>
-                <div class="comment-section">
-                    <input type="text" placeholder="Write a comment...">
-                </div>
-            </div>
+            {{end}}
         </div>
     </div>
 </body>

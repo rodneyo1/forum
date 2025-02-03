@@ -25,11 +25,11 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		// Skip login for users who are already loged in
 		{
-			hasCookie := HasCookie(r, w)
-			if hasCookie {
-				http.Redirect(w, r, "/", http.StatusFound)
-				return
-			}
+			// hasCookie := HasCookie(r, w)
+			// if hasCookie {
+			// 	http.Redirect(w, r, "/", http.StatusFound)
+			// 	return
+			// }
 		}
 
 		// Render login form
