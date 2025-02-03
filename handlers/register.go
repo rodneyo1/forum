@@ -7,19 +7,13 @@ import (
 	"regexp"
 
 	"forum/database"
+	"forum/models"
 	"forum/utils"
 )
 
 func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
-	user, err := utils.ParseUserForm(r)
-
-	if err != nil {
-		http.Error(w, err.Issue, err.Code)
-		return
-	}
-	// Check if the method is allowed (e.g., POST)
-	if MethodCheck(w, r, http.MethodGet) {
-		// Render the registration form
+	// Handle GET request: render registration page
+	if r.Method == http.MethodGet {
 		tmpl, err := template.ParseFiles("web/templates/register.html")
 		if err != nil {
 			http.Error(w, "Unable to load registration page", http.StatusInternalServerError)
@@ -29,80 +23,68 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//if method is Post updated
-	if MethodCheck(w, r, http.MethodPost) {
-		//update hashed password
-		utils.Passwordhash(user)
+	// Only allow POST method for registration
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
 	}
 
-	// Handle non-GET and non-POST requests
-	if r.Method != "POST" && r.Method != "GET" {
-		BadRequestHandler(w)
-		log.Println("RegistrationHandler ERROR: Bad request")
+	// Parse user form data
+	user, err := utils.ParseUserForm(r)
+	if err != nil {
+		http.Error(w, err.Issue, err.Code)
 		return
 	}
 
 	// Validate email format
-	if !ValidEmail(r.FormValue("email")) {
-		tmpl, err := template.ParseFiles("web/templates/register.html")
-		if err != nil {
-			http.Error(w, "Unable to load registration page", http.StatusInternalServerError)
-			return
-		}
-		ParseAlertMessage(w, tmpl, "Invalid email format")
+	if !ValidEmail(user.Email) {
+		renderErrorMessage(w, "Invalid email format")
 		return
 	}
 
-	// Check if email or username is taken
-	existingUser, _ := database.GetUserByEmailOrUsername(r.FormValue("email"), r.FormValue("username"))
-	email := existingUser.Email
-	username := existingUser.Username
-	if existingUser.Username == username {
-		tmpl, err := template.ParseFiles("web/templates/register.html")
-		if err != nil {
-			http.Error(w, "Unable to load registration page", http.StatusInternalServerError)
-			return
-		}
-		ParseAlertMessage(w, tmpl, "Invalid email format")
+	// Check if email or username is already taken
+	existingUser, _ := database.GetUserByEmailOrUsername(user.Email, user.Username)
+	if existingUser.Username == user.Username {
+		renderErrorMessage(w, "Username already taken")
 		return
 	}
-
-	if existingUser.Email == email {
-		tmpl, err := template.ParseFiles("web/templates/register.html")
-		if err != nil {
-			http.Error(w, "Unable to load registration page", http.StatusInternalServerError)
-			return
-		}
-		ParseAlertMessage(w, tmpl, "Invalid email format")
+	if existingUser.Email == user.Email {
+		renderErrorMessage(w, "Email already registered")
 		return
 	}
 
 	// Check password strength
 	if err := utils.PasswordStrength(user.Password); err != nil {
-		tmpl, err := template.ParseFiles("web/templates/register.html")
-		if err != nil {
-			http.Error(w, "Unable to load registration page", http.StatusInternalServerError)
-			return
-		}
-		ParseAlertMessage(w, tmpl, "Invalid email too weak")
+		renderErrorMessage(w, "Password too weak")
 		return
 	}
 
-	// Create new user in the database
-	_, err = database.CreateUser(user.Username, user.Email, user.Password)
+	// Hash the password before storing in database
+	utils.Passwordhash(user) 
+
+	// Store the user in the database
+	err = database.CreateUser(user.Username, user.Email, user.Password)
 	if err != nil {
-		ParseAlertMessage(w, tmpl, "Error creating user")
+		renderErrorMessage(w, "Error creating user")
 		return
 	}
 
 	// Redirect user to login page
-	if w.Header().Get("Content-Type") == "" {
-		http.Redirect(w, r, "/login", http.StatusFound)
-	}
+	http.Redirect(w, r, "/login", http.StatusFound)
 }
 
+// Validate email format
 func ValidEmail(email string) bool {
 	regex := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
 	return regexp.MustCompile(regex).MatchString(email)
+}
 
+// Helper function to render error messages
+func renderErrorMessage(w http.ResponseWriter, message string) {
+	tmpl, err := template.ParseFiles("web/templates/register.html")
+	if err != nil {
+		http.Error(w, "Unable to load registration page", http.StatusInternalServerError)
+		return
+	}
+	ParseAlertMessage(w, tmpl, message)
 }
