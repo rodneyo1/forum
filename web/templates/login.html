@@ -32,6 +32,17 @@
             <p>forgot password? <a href="/forgot-password">click here</a></p>
             <p>don't have an account? <a href="/register">sign up</a></p>
         </div>
+
+        <input type="hidden" id="error_message" value="{{.ErrorMessage}}">
+
+        <script>
+            window.onload = function() {
+                errMessage = document.getElementById("error_message").value;
+                if (errMessage) {
+                    //alert(errMessage);
+                }
+            }
+        </script>
     </div>
 </body>
 </html>

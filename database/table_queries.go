@@ -39,7 +39,7 @@ const (
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 		FOREIGN KEY (user_id) REFERENCES users(id)
 	);`
-	POSTS_TABLE_INDEX_uuid = `CREATE INDEX IF NOT EXISTS idx_posts_uuid ON posts (uuid);`
+	POSTS_TABLE_INDEX_uuid    = `CREATE INDEX IF NOT EXISTS idx_posts_uuid ON posts (uuid);`
 	POSTS_TABLE_INDEX_user_id = `CREATE INDEX IF NOT EXISTS idx_posts_user_id ON posts (user_id);`
 
 	POST_CATEGORIES_TABLE_CREATE = `CREATE TABLE IF NOT EXISTS post_categories (
@@ -61,7 +61,7 @@ const (
 		FOREIGN KEY (post_id) REFERENCES posts(uuid),
 		FOREIGN KEY (user_id) REFERENCES users(id)
 	);`
-	COMMENTS_TABLE_INDEX_uuid = `CREATE INDEX IF NOT EXISTS idx_comments_uuid ON comments (uuid);`
+	COMMENTS_TABLE_INDEX_uuid    = `CREATE INDEX IF NOT EXISTS idx_comments_uuid ON comments (uuid);`
 	COMMENTS_TABLE_INDEX_user_id = `CREATE INDEX IF NOT EXISTS idx_comments_user_id ON comments (user_id);`
 	COMMENTS_TABLE_INDEX_post_id = `CREATE INDEX IF NOT EXISTS idx_comments_post_id ON comments (post_id);`
 

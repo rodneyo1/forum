@@ -7,6 +7,7 @@ import (
 
 	"forum/database"
 	"forum/handlers"
+	middleware "forum/handlers/middlewares"
 	postHandlers "forum/handlers/posts"
 	middleware "forum/handlers/middlewares"
 )
@@ -31,8 +32,9 @@ func main() {
 	}
 
 	// Candle hundler functions
-	http.HandleFunc("/static/", handlers.StaticHandler)
 	http.HandleFunc("/", handlers.IndexHandler)
+	http.HandleFunc("/static/", handlers.StaticHandler)
+	http.HandleFunc("/success", handlers.SuccessHandler)
 	http.HandleFunc("/login", handlers.LoginHandler)
 	http.HandleFunc("/forgot-password", handlers.ForgotPasswordHandler)
 	http.HandleFunc("/register", handlers.RegistrationHandler)
