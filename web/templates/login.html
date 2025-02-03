@@ -11,6 +11,9 @@
 
         <div class="login">
             <p>Enter Credentials</p>
+            {{if .Error}}
+                <p style="color: red;">{{.Error}}</p>
+            {{end}}
             <form method="POST" action="/login">
                 <input type="text" id="email_username" placeholder="email/username" name="email_username" required>
                 <input type="password" id="password" placeholder="password" name="password" required>
@@ -36,7 +39,7 @@
             window.onload = function() {
                 errMessage = document.getElementById("error_message").value;
                 if (errMessage) {
-                    alert(errMessage);
+                    //alert(errMessage);
                 }
             }
         </script>
