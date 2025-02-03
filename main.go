@@ -7,8 +7,8 @@ import (
 
 	"forum/database"
 	"forum/handlers"
-	postHandlers "forum/handlers/posts"
 	middleware "forum/handlers/middlewares"
+	postHandlers "forum/handlers/posts"
 )
 
 func init() {
