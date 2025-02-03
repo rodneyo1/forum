@@ -9,6 +9,7 @@ import (
 
 	"forum/database"
 	"forum/models"
+	"forum/utils"
 )
 
 func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
@@ -78,6 +79,12 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	// Validate passwords
 	if password != confirmPassword {
 		ParseAlertMessage(w, tmpl, "Passwords do not match")
+		return
+	}
+
+	// Check password strength
+	if err = utils.PasswordStrength(password); err != nil {
+		ParseAlertMessage(w, tmpl, err.Error())
 		return
 	}
 

@@ -139,3 +139,45 @@ func GetTemplatePath(templateFile string) (string, error) {
 
 	return "", fmt.Errorf("template file not found: %s", templateFile)
 }
+
+//method checker
+func MethodCheck(w http.ResponseWriter, r *http.Request, allowedMethod string) bool {
+	// Check if the method matches the allowed method
+	if r.Method == allowedMethod {
+		return true
+	}
+
+	// If the method does not match, log and render an error page
+	log.Printf("Invalid method: %v. Expected: %v", r.Method, allowedMethod)
+
+	// Use BadRequestHandler to render the error page
+	hitch.Code = http.StatusMethodNotAllowed
+	hitch.Issue = fmt.Sprintf("Method Not Allowed! Expected method: %v", allowedMethod)
+
+	// Render custom error page
+	tmplPath, err := GetTemplatePath("error.html")
+	if err != nil {
+		log.Println("Error finding template file:", err)
+		http.Error(w, "Error finding template file", http.StatusInternalServerError)
+		return false
+	}
+
+	// Respond with method not allowed
+	log.Println("Rendering error template due to invalid method.")
+	tmpl, err := template.ParseFiles(tmplPath)
+	if err != nil {
+		log.Println("Error parsing template file:", err)
+		http.Error(w, "Error parsing template", http.StatusInternalServerError)
+		return false
+	}
+
+	w.WriteHeader(http.StatusMethodNotAllowed)
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	if err := tmpl.Execute(w, hitch); err != nil {
+		log.Println("Error executing template:", err)
+		http.Error(w, "Error rendering template", http.StatusInternalServerError)
+		return false
+	}
+
+	return false
+}
