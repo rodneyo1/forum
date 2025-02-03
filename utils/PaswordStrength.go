@@ -2,22 +2,19 @@ package utils
 
 import (
 	"fmt"
-	"os"
 	"regexp"
 )
 
 // PasswordStrength checks password strength and length constraints
-func PasswordStrength(password string) string {
+func PasswordStrength(password string) error {
 	// Ensure password does not exceed 72 bytes
 	if len([]byte(password)) > 72 {
-		fmt.Println("Your password exceeds the maximum length of 72 bytes")
-		os.Exit(1)
+		return fmt.Errorf("your password exceeds the maximum length of 72 bytes")
 	}
 
 	// Ensure password is at least 8 characters long
 	if len(password) < 8 {
-		fmt.Println("Password is too short: It should have at least 8 characters.")
-		os.Exit(1)
+		return fmt.Errorf("password is too short: it should have at least 8 characters")
 	}
 
 	// Check for at least one uppercase letter/lowercase/one digit/one special character
@@ -28,9 +25,8 @@ func PasswordStrength(password string) string {
 
 	// Validate all conditions
 	if !hasUpper || !hasLower || !hasDigit || !hasSpecial {
-		fmt.Println("Password too weak: It should have at least one uppercase letter, one lowercase letter, one number, and one special character.")
-		os.Exit(1)
+		return fmt.Errorf("password too weak: it should have at least one uppercase letter, one lowercase letter, one number, and one special character")
 	}
 
-	return password
+	return nil
 }

@@ -73,3 +73,14 @@ type Dislike struct {
 	PostID    *int `json:"post_id,omitempty"`
 	CommentID *int `json:"comment_id,omitempty"`
 }
+
+// used to fetch the post with the creator of the post from the database
+type PostWithUsername struct {
+	UUID      string    `json:"uuid"`
+	Creator   string    `json:"creator"`
+	Title     string    `json:"title"`
+	Content   string    `json:"content"`
+	Media     string    `json:"media,omitempty"`
+	UserID    int       `json:"user_id"`
+	CreatedAt time.Time `json:"created_at"`
+}

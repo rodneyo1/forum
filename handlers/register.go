@@ -5,10 +5,20 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"regexp"
+
+	"forum/database"
+	"forum/models"
 	"forum/utils"
 )
 
 func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
+	user, err := utils.ParseUserForm(r)
+
+	if err != nil {
+		http.Error(w, err.Issue, err.Code)
+		return
+	}
 	// Check if the method is allowed (e.g., POST)
 	if MethodCheck(w, r, http.MethodGet) {
 		// Render the registration form
@@ -21,44 +31,16 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//if method is Post
 	if MethodCheck(w, r, http.MethodPost) {
-		// Parse form values and validate user input
-		user, err := utils.PaerseUserForm(r)
-		if err != nil {
-			http.Error(w, err.Issue, err.Code)
-			return
-		}
+		//update hashed password
 		utils.Passwordhash(user)
-	}
-	tmpl, err := template.ParseFiles("web/templates/register.html")
-	if err != nil {
-		http.Error(w, "Unable to parse registration template", http.StatusInternalServerError)
-		return
-	}
-
-	// Render registration form when method is GET
-	if r.Method == "GET" {
-		err := tmpl.Execute(w, nil)
-		if err != nil {
-			InternalServerErrorHandler(w)
-			log.Println("Could not render registration template: ", err)
-			return
-		}
-		return
 	}
 
 	// Handle non-GET and non-POST requests
-	if r.Method != "POST" {
+	if r.Method != "POST" && r.Method != "GET" {
 		BadRequestHandler(w)
 		log.Println("RegistrationHandler ERROR: Bad request")
-		return
-	}
-
-	// Parse form data
-	err = r.ParseForm()
-	if err != nil {
-		BadRequestHandler(w)
-		log.Println("Invalid form submission", http.StatusBadRequest)
 		return
 	}
 
@@ -70,25 +52,25 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Check if email or username is taken
 	existingUser, _ := database.GetUserByEmailOrUsername(r.FormValue("email"), r.FormValue("username"))
-	if existingUser.Username != "" {
-		ParseAlertMessage(w, tmpl, fmt.Sprintf("%s taken!", r.FormValue("email")))
+	email := existingUser.Email
+	username := existingUser.Username
+	if existingUser.Username == username {
+		ParseAlertMessage(w, tmpl, fmt.Sprintf("Username %s is already taken!", r.FormValue("username")))
 		return
 	}
 
-	// Extract form data
-	user.Email = r.FormValue("email")
-	user.Username = r.FormValue("username")
-	password := r.FormValue("password")
-	confirmPassword := r.FormValue("confirm_password")
-	user.Bio = r.FormValue("bio")
-
-	// Validate passwords
-	if password != confirmPassword {
-		ParseAlertMessage(w, tmpl, "Passwords do not match")
+	if existingUser.Email == email {
+		ParseAlertMessage(w, tmpl, fmt.Sprintf("Email %s is already taken!", r.FormValue("email")))
 		return
 	}
 
-	user.Password = password // set password
+	// Check password strength
+	if err = utils.PasswordStrength(user.Password); err != nil {
+		ParseAlertMessage(w, tmpl, err.Error())
+		return
+	}
+
+	utils.Passwordhash(&user) //set password
 
 	// Create new user in the database
 	_, err = database.CreateUser(user.Username, user.Email, user.Password)
@@ -104,5 +86,8 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ValidEmail(email string) bool {
-	return strings.Contains(email, "@") || strings.HasPrefix(email, ".com")
+	regex := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
+	return regexp.MustCompile(regex).MatchString(email)
+
 }
+
