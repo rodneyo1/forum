@@ -3,6 +3,8 @@ package database
 import (
 	"fmt"
 	"strings"
+
+	"forum/utils"
 )
 
 // Create inserts data into the specified table using provided field names and values.
@@ -20,7 +22,12 @@ func CreatePostWithCategories(userID int, title, content, media string, category
 		}
 	}()
 
-	postValues := []interface{}{userID, title, content, media}
+	postUUID, err := utils.GenerateUUID()
+	if err != nil {
+		return 0, fmt.Errorf("failed to generate a random uuid: %w", err)
+	}
+
+	postValues := []interface{}{postUUID, userID, title, content, media}
 
 	// prepare the SQL query for the post
 	postPlaceholders := make([]string, len(postValues))
@@ -28,7 +35,7 @@ func CreatePostWithCategories(userID int, title, content, media string, category
 		postPlaceholders[i] = "?"
 	}
 
-	postQuery := fmt.Sprintf("INSERT INTO posts (user_id, title, content, media) VALUES (%s)",
+	postQuery := fmt.Sprintf("INSERT INTO posts (uuid, user_id, title, content, media) VALUES (%s)",
 		strings.Join(postPlaceholders, ", "),
 	)
 
@@ -46,7 +53,7 @@ func CreatePostWithCategories(userID int, title, content, media string, category
 
 	// insert post categories
 	for _, categoryID := range categoryIDs {
-		categoryValues := []interface{}{postID, categoryID}
+		categoryValues := []interface{}{postUUID, categoryID}
 
 		// prepare the SQL query for the category
 		categoryPlaceholders := make([]string, len(categoryValues))

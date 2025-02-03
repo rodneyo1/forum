@@ -15,9 +15,9 @@ type User struct {
 	Username  string    `json:"username"`
 	Email     string    `json:"email"`
 	Password  string    `json:"-"` // Exclude from JSON responses
-	Bio       *string   `json:"bio,omitempty"`
-	Image     *string   `json:"image,omitempty"`
-	SessionID *string   `json:"session_id,omitempty"`
+	Bio       string    `json:"bio,omitempty"`
+	Image     string    `json:"image,omitempty"`
+	SessionID string    `json:"session_id,omitempty"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
@@ -35,7 +35,7 @@ type Category struct {
 
 // Post struct
 type Post struct {
-	ID        int       `json:"id"`
+	UUID      string    `json:"uuid"`
 	Title     string    `json:"title"`
 	Content   string    `json:"content"`
 	Media     string    `json:"media,omitempty"`
@@ -51,7 +51,7 @@ type PostCategory struct {
 
 // Comment Struct
 type Comment struct {
-	ID        int       `json:"id"`
+	UUID      string    `json:"uuid"`
 	Content   string    `json:"content"`
 	PostID    int       `json:"post_id"`
 	UserID    int       `json:"user_id"`

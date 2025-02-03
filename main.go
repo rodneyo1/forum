@@ -7,6 +7,7 @@ import (
 
 	"forum/database"
 	"forum/handlers"
+	middleware "forum/handlers/middlewares"
 	postHandlers "forum/handlers/posts"
 )
 
@@ -20,6 +21,8 @@ func init() {
 func main() {
 	defer database.Close()
 
+	database.CreateUser("toni", "toni@mail.com", "@antony222")
+
 	// Restrict arguments parsed
 	if len(os.Args) != 1 {
 		log.Println("Too many arguments")
@@ -28,13 +31,14 @@ func main() {
 	}
 
 	// Candle hundler functions
+	http.HandleFunc("/", handlers.IndexHandler)
 	http.HandleFunc("/static/", handlers.StaticHandler)
-	// http.HandleFunc("/", handlers.IndexHandler)
+	http.HandleFunc("/success", handlers.SuccessHandler)
 	http.HandleFunc("/login", handlers.LoginHandler)
 	http.HandleFunc("/forgot-password", handlers.ForgotPasswordHandler)
 	http.HandleFunc("/register", handlers.RegistrationHandler)
 
-	http.HandleFunc("/posts/create", postHandlers.PostCreate)
+	http.Handle("/posts/create", middleware.AuthMiddleware(http.HandlerFunc(postHandlers.PostCreate)))
 
 	// Inform user initialization of server
 	log.Println("Server started on port 8080")
