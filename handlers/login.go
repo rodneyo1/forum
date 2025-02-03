@@ -16,6 +16,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	// Build path to login.html
 	templatePath, err := GetTemplatePath("login.html")
 	if err != nil {
+		log.Println("Not nil")
 		InternalServerErrorHandler(w)
 		log.Println("Could not find template file: ", err)
 		return
@@ -25,7 +26,12 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		// Skip login for users who are already loged in
 		{
-			hasCookie := HasCookie(r, w)
+			hasCookie, err := HasCookie(r)
+			if err != nil {
+				InternalServerErrorHandler(w)
+				log.Println("Error checking session cookie: ", err)
+			}
+
 			if hasCookie {
 				http.Redirect(w, r, "/", http.StatusFound)
 				return
@@ -120,26 +126,15 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
-func HasCookie(r *http.Request, w http.ResponseWriter) bool {
-	cookie, err := r.Cookie("session_id")
-	log.Printf(" Cookie : %#v, err: %#v", cookie, err)
+func HasCookie(r *http.Request) (bool, error) {
+	_, err := r.Cookie("session_id")
 	if err != nil {
-		// No session ID cookie found, redirect to login
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
-		return true
+		if err == http.ErrNoCookie {
+			return false, nil // No session cookie, but no error
+		}
+		return false, err // Actual error (e.g., internal failure)
 	}
-
-	sessionID := cookie.Value
-
-	// Check if the session exists and is valid
-	_, err = database.GetSession(sessionID)
-	if err == nil {
-		// Session found or already logged in, redirect to home
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return true
-	}
-
-	return false
+	return true, nil // Cookie exists
 }
 
 // ParseAlertMessage is used for displaying alert messages in templates.
