@@ -3,8 +3,11 @@ package handlers
 import (
 	"fmt"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"forum/database"
@@ -56,6 +59,10 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if err := r.ParseMultipartForm(20 << 20); err != nil { // 20MB max
+		ParseAlertMessage(w, tmpl, "File upload too large or invalid form data")
+		return
+	}
 	// Validate email format
 	if !ValidEmail(r.FormValue("email")) {
 		ParseAlertMessage(w, tmpl, "Invalid email format")
@@ -90,10 +97,76 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 
 	user.Password = password // set password
 
+	// Handle the uploaded file
+	file, handler, err := r.FormFile("image")
+	if err != nil {
+		ParseAlertMessage(w, tmpl, "image upload failed")
+		log.Panicln("Failed to retrieve the file")
+		return
+	}
+	defer file.Close()
+
+	// Validate the file extension type and size
+	allowedTypes := map[string]bool{
+		"image/png":  true,
+		"image/jpeg": true,
+	}
+	fileType := handler.Header.Get("Content-Type")
+	if !allowedTypes[fileType] {
+		ParseAlertMessage(w, tmpl, "Invalid file type. Only PNG and JPG images are allowed.")
+		log.Println("Invalid file type. Only PNG and JPG images are allowed.")
+		return
+	}
+
 	// Create new user in the database
 	_, err = database.CreateUser(user.Username, user.Email, user.Password)
 	if err != nil {
-		ParseAlertMessage(w, tmpl, "Error creating user")
+		ParseAlertMessage(w, tmpl, "registration in failed, try again")
+		log.Println("Error creating user")
+		return
+	}
+
+	// Generate a random filename
+	randomFileName, err := utils.GenerateRandomName()
+	if err != nil {
+		ParseAlertMessage(w, tmpl, "image upload failed")
+		log.Println("Failed to generate a unique filename")
+		return
+	}
+
+	// Determine the file extension based on the MIME type
+	var ext string
+	switch fileType {
+	case "image/png":
+		ext = ".png"
+	case "image/jpeg":
+		ext = ".jpg"
+	}
+
+	// Construct the full filename
+	filename := randomFileName + ext
+
+	// Save the file to the media folder
+	mediaFolder := "web/static/images"
+	if err := os.MkdirAll(mediaFolder, os.ModePerm); err != nil {
+		ParseAlertMessage(w, tmpl, "image upload failed")
+		log.Println("Failed to create media folder")
+		return
+	}
+
+	filePath := filepath.Join(mediaFolder, filename)
+	outFile, err := os.Create(filePath)
+	if err != nil {
+		ParseAlertMessage(w, tmpl, "image upload failed")
+		log.Println("Failed to save the file")
+		return
+	}
+	defer outFile.Close()
+
+	// Copy the file content to the new file
+	if _, err := io.Copy(outFile, file); err != nil {
+		ParseAlertMessage(w, tmpl, "image upload failed")
+		log.Println("Failed to save the file")
 		return
 	}
 
