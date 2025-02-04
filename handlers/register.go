@@ -96,7 +96,27 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user.Password = password // set password
+	UploadImage(w, r, &user, tmpl)
 
+	// Create new user in the database
+	_, err = database.CreateUser(user.Username, user.Email, user.Password)
+	if err != nil {
+		ParseAlertMessage(w, tmpl, "registration in failed, try again")
+		log.Println("Error creating user")
+		return
+	}
+
+	// Redirect user to login page
+	if w.Header().Get("Content-Type") == "" {
+		http.Redirect(w, r, "/login", http.StatusFound)
+	}
+}
+
+func ValidEmail(email string) bool {
+	return strings.Contains(email, "@") || strings.HasPrefix(email, ".com")
+}
+
+func UploadImage(w http.ResponseWriter, r *http.Request, user *models.User, tmpl *template.Template) {
 	// Handle the uploaded file
 	file, handler, err := r.FormFile("image")
 	if err != nil {
@@ -115,14 +135,6 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	if !allowedTypes[fileType] {
 		ParseAlertMessage(w, tmpl, "Invalid file type. Only PNG and JPG images are allowed.")
 		log.Println("Invalid file type. Only PNG and JPG images are allowed.")
-		return
-	}
-
-	// Create new user in the database
-	_, err = database.CreateUser(user.Username, user.Email, user.Password)
-	if err != nil {
-		ParseAlertMessage(w, tmpl, "registration in failed, try again")
-		log.Println("Error creating user")
 		return
 	}
 
@@ -145,6 +157,7 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Construct the full filename
 	filename := randomFileName + ext
+	user.Image = filename
 
 	// Save the file to the media folder
 	mediaFolder := "web/static/images"
@@ -169,13 +182,4 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("Failed to save the file")
 		return
 	}
-
-	// Redirect user to login page
-	if w.Header().Get("Content-Type") == "" {
-		http.Redirect(w, r, "/login", http.StatusFound)
-	}
-}
-
-func ValidEmail(email string) bool {
-	return strings.Contains(email, "@") || strings.HasPrefix(email, ".com")
 }
