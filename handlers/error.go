@@ -147,37 +147,43 @@ func MethodCheck(w http.ResponseWriter, r *http.Request, allowedMethod string) b
 		return true
 	}
 
-	// If the method does not match, log and render an error page
+	// If the method does not match, log the error
 	log.Printf("Invalid method: %v. Expected: %v", r.Method, allowedMethod)
 
-	// Use BadRequestHandler to render the error page
-	hitch.Code = http.StatusMethodNotAllowed
-	hitch.Issue = fmt.Sprintf("Method Not Allowed! Expected method: %v", allowedMethod)
+	// Render error page for method not allowed
+	respondWithError(w, http.StatusMethodNotAllowed, fmt.Sprintf("Method Not Allowed! Expected method: %v", allowedMethod))
+	return false
+}
 
-	// Render custom error page
+// Centralized function for rendering errors
+func respondWithError(w http.ResponseWriter, statusCode int, issue string) {
+	// Set up the error message
+	hitch := models.WebError{
+		Code:  statusCode,
+		Issue: issue,
+	}
+
+	// Get template path
 	tmplPath, err := GetTemplatePath("error.html")
 	if err != nil {
 		log.Println("Error finding template file:", err)
 		http.Error(w, "Error finding template file", http.StatusInternalServerError)
-		return false
+		return
 	}
 
-	// Respond with method not allowed
-	log.Println("Rendering error template due to invalid method.")
+	// Parse and render the template
 	tmpl, err := template.ParseFiles(tmplPath)
 	if err != nil {
 		log.Println("Error parsing template file:", err)
 		http.Error(w, "Error parsing template", http.StatusInternalServerError)
-		return false
+		return
 	}
 
-	w.WriteHeader(http.StatusMethodNotAllowed)
+	// Write the error response
+	w.WriteHeader(statusCode)
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	if err := tmpl.Execute(w, hitch); err != nil {
 		log.Println("Error executing template:", err)
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)
-		return false
 	}
-
-	return false
 }

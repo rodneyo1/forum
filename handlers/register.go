@@ -63,6 +63,7 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		ParseAlertMessage(w, tmpl, "File upload too large or invalid form data")
 		return
 	}
+
 	// Validate email format
 	if !ValidEmail(r.FormValue("email")) {
 		ParseAlertMessage(w, tmpl, "Invalid email format")
@@ -95,8 +96,9 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user.Password = password // set password
-	UploadImage(w, r, &user, tmpl)
+	user.Password = password       // set password
+	UploadImage(w, r, &user, tmpl) // upload image parsed as profile picture
+	utils.Passwordhash(&user)      // Hash password
 
 	// Create new user in the database
 	_, err = database.CreateNewUser(user)
@@ -131,6 +133,7 @@ func UploadImage(w http.ResponseWriter, r *http.Request, user *models.User, tmpl
 		"image/png":  true,
 		"image/jpeg": true,
 	}
+
 	fileType := handler.Header.Get("Content-Type")
 	if !allowedTypes[fileType] {
 		ParseAlertMessage(w, tmpl, "Invalid file type. Only PNG and JPG images are allowed.")
@@ -174,8 +177,8 @@ func UploadImage(w http.ResponseWriter, r *http.Request, user *models.User, tmpl
 		log.Println("Failed to save the file")
 		return
 	}
-	defer outFile.Close()
 
+	defer outFile.Close()
 	// Copy the file content to the new file
 	if _, err := io.Copy(outFile, file); err != nil {
 		ParseAlertMessage(w, tmpl, "image upload failed")
