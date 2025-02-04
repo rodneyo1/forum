@@ -46,3 +46,17 @@ func TestVerifyUser_NonExistentUsername(t *testing.T) {
 		t.Errorf("Expected VerifyUser to return false for non-existent username, but got true")
 	}
 }
+
+func TestVerifyUser_CaseSensitiveEmail(t *testing.T) {
+	// Test with a lowercase email
+	resultLower := VerifyUser("milton@mail.com", "mPass")
+	if !resultLower {
+		t.Errorf("Expected VerifyUser to return true for lowercase email, but got false")
+	}
+
+	// Test with an uppercase email
+	resultUpper := VerifyUser("MILTON@MAIL.COM", "mPass")
+	if resultUpper {
+		t.Errorf("Expected VerifyUser to return false for uppercase email, but got true")
+	}
+}
