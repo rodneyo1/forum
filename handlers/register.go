@@ -99,7 +99,7 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	UploadImage(w, r, &user, tmpl)
 
 	// Create new user in the database
-	_, err = database.CreateUser(user.Username, user.Email, user.Password)
+	_, err = database.CreateNewUser(user)
 	if err != nil {
 		ParseAlertMessage(w, tmpl, "registration in failed, try again")
 		log.Println("Error creating user")
