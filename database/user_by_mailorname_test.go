@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 )
 
@@ -74,5 +75,16 @@ func TestVerifyUser_CaseSensitiveUsername(t *testing.T) {
 
 	if !result {
 		t.Errorf("Expected VerifyUser to return true for correct case-sensitive username, but got false")
+	}
+}
+
+func TestVerifyUser_MaxLengthInputs(t *testing.T) {
+	maxLengthEmail := "a" + strings.Repeat("b", 254) + "@c.com" // 256 characters
+	maxLengthPassword := strings.Repeat("x", 72)                // 72 characters (common max length for bcrypt)
+
+	result := VerifyUser(maxLengthEmail, maxLengthPassword)
+
+	if result {
+		t.Errorf("Expected VerifyUser to return false for max length inputs, but got true")
 	}
 }
