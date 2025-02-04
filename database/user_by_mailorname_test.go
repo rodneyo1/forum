@@ -38,3 +38,11 @@ func TestVerifyUser_NonExistentUser(t *testing.T) {
 		t.Errorf("Expected VerifyUser to return false for non-existent user, but got true")
 	}
 }
+
+func TestVerifyUser_NonExistentUsername(t *testing.T) {
+	result := VerifyUser("nonexistent@mail.com", "password")
+
+	if result {
+		t.Errorf("Expected VerifyUser to return false for non-existent username, but got true")
+	}
+}
