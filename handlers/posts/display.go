@@ -1,6 +1,7 @@
 package posts
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 
@@ -12,6 +13,7 @@ func PostDisplay(w http.ResponseWriter, r *http.Request) {
 	queryParams := r.URL.Query()
 
 	postUUID := queryParams.Get("pid")
+	fmt.Println("UUID: ", postUUID)
 
 	switch r.Method {
 	case http.MethodGet:
