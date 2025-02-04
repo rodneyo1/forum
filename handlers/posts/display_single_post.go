@@ -9,18 +9,12 @@ import (
 )
 
 func DisplaySinglePost(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("web/templates/post.html")
+	tmpl, err := template.ParseFiles("./web/templates/post_display.html")
 	if err != nil {
 		http.Error(w, "Failed to load post template", http.StatusInternalServerError)
 		return
 	}
 	postID := r.URL.Query().Get("id")
-
-	// postID,err := strconv.Atoi(r.URL.Query().Get("id"))
-	// if err!=nil{
-	// 	http.Error(w, "Failed to get post ID", http.StatusInternalServerError)
-	// 	return
-	// 	}
 
 	PostData, err := database.GetPostByUUID(postID)
 	if err != nil {
