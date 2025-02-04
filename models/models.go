@@ -81,6 +81,16 @@ type PostWithUsername struct {
 	Title     string    `json:"title"`
 	Content   string    `json:"content"`
 	Media     string    `json:"media,omitempty"`
-	UserID    int       `json:"user_id"`
 	CreatedAt time.Time `json:"created_at"`
+}
+
+type PostWithCategories struct {
+	UUID       string    `json:"uuid"`
+	Creator    string    `json:"creator"`
+	Title      string    `json:"title"`
+	Content    string    `json:"content"`
+	Media      string    `json:"media,omitempty"`
+	Username   string    `json:"user_id"`
+	CreatedAt  time.Time `json:"created_at"`
+	Categories []string
 }

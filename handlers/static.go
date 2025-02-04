@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	"os"
+	"strings"
 )
 
 func StaticHandler(w http.ResponseWriter, r *http.Request) {
@@ -12,8 +13,14 @@ func StaticHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	path := r.URL.Path
+
+	if strings.HasPrefix(path, "/static") {
+		path = strings.TrimPrefix(path, "/static/")
+	}
+
 	// Set predetermined path to catch malicious file tranversal
-	filePath := "web/" + r.URL.Path
+	filePath := "./web/" + path
 	fileInfo, err := os.Stat(filePath)
 	if err != nil {
 		NotFoundHandler(w)
