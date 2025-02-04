@@ -39,7 +39,7 @@ func main() {
 	http.HandleFunc("/register", handlers.RegistrationHandler)
 	http.HandleFunc("/Home", handlers.ForumHandler)
 	http.Handle("/posts/create", middleware.AuthMiddleware(http.HandlerFunc(postHandlers.PostCreate)))
-	http.Handle("GET /posts/", middleware.AuthMiddleware(http.HandlerFunc(postHandlers.DisplaySinglePost)))
+	http.Handle("/posts/", middleware.AuthMiddleware(http.HandlerFunc(postHandlers.DisplaySinglePost)))
 
 	// Inform user initialization of server
 	log.Println("Server running on http://localhost:8080")
