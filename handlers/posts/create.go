@@ -82,7 +82,7 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 		filename := randomFileName + ext
 
 		// Save the file to the media folder
-		mediaFolder := "media"
+		mediaFolder := "web/media"
 		if err := os.MkdirAll(mediaFolder, os.ModePerm); err != nil {
 			http.Error(w, "Failed to create media folder", http.StatusInternalServerError)
 			return
