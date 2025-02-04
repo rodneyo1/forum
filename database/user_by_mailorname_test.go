@@ -30,3 +30,11 @@ func TestGetUserByMailOrName(t *testing.T) {
 		t.Errorf("expected username to be milton, but got %s\n", user.Username)
 	}
 }
+
+func TestVerifyUser_NonExistentUser(t *testing.T) {
+	result := VerifyUser("nonexistent@mail.com", "password")
+
+	if result {
+		t.Errorf("Expected VerifyUser to return false for non-existent user, but got true")
+	}
+}
