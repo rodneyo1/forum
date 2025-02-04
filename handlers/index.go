@@ -17,18 +17,12 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Load the HTML template
-	tmpl, err := template.ParseFiles("web/templates/index.html")
-	if err != nil {
-		http.Error(w, "Failed to load template", http.StatusInternalServerError)
-		return
-	}
-
+	tmpl := template.Must(template.ParseFiles("web/templates/index.html"))
 	// Execute the template with the posts data
 	data := struct {
 		Posts []models.PostWithUsername
 	}{
 		Posts: posts,
 	}
-
 	tmpl.Execute(w, data)
 }
