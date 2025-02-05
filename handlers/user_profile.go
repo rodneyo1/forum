@@ -37,18 +37,11 @@ func ViewUserProfile(w http.ResponseWriter, r *http.Request) {
     userData, err := database.GetUserbySessionID(cookie.Value)
    // fmt.Printf("UserData retrieved: %+v\n", userData)  // Add debug logging
     if err != nil {
-        fmt.Printf("Error getting user: %v\n", err)  // Add error logging
-        http.Error(w, "Session invalid", http.StatusUnauthorized)
+        log.Printf("Error getting user: %v\n", err)  // Add error logging
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+        fmt.Println("Redirected to login")
         return
     }
-
-    // // Create a data structure for the template
-    // data := struct {
-    //     User models.User
-    // }{
-    //     User: userData,
-    // }
-
 	// Render the template with data
 	path,err:=GetTemplatePath("profile.html")
 	if err!=nil{
