@@ -79,10 +79,10 @@
             {{range .Posts}}
             <div class="post">
                 <h4>User {{.Creator}}</h4>
-                <p>{{.Title}}</p>
+                <p><a href="/posts/display?pid={{.UUID}}">{{.Title}}</a></p>
                 <p>{{.Content}}</p>
                 {{if .Media}}
-                <img src="{{.Media}}" alt="Post Image">
+                <img src="/static/media/{{.Media}}" alt="Post Image" style="width: 70px; aspect-ratio: 1/1;">
                 {{end}}
                 <div class="actions">
                     <form action="/like" method="post">

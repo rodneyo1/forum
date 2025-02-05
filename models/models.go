@@ -81,6 +81,17 @@ type PostWithUsername struct {
 	Title     string    `json:"title"`
 	Content   string    `json:"content"`
 	Media     string    `json:"media,omitempty"`
-	UserID    int       `json:"user_id"`
 	CreatedAt time.Time `json:"created_at"`
+}
+type PostWithCategories struct {
+	UUID        string    `json:"uuid"`
+	Title       string    `json:"title"`
+	Content     string    `json:"content"`
+	Media       string    `json:"media"`
+	Username    string    `json:"username"`
+	UserID      int       `json:"user_id"`
+	CreatedAt   time.Time `json:"created_at"`
+	Categories  []string  `json:"categories"`  // Now it's a slice of strings
+	LikesCount  int       `json:"likes_count"` // Number of likes
+	DislikesCount  int       `json:"dislikes_count"` // Number of likes
 }
