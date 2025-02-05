@@ -77,7 +77,7 @@ func LoginUser(detailOne, detailTwo, password string) (string, error) {
 	}
 
 	// Verify the password (assuming you have a function to compare hashed passwords)
-	if !utils.MatchPasswords(hashedPassword, password) {
+	if match, _ := utils.MatchPasswords(hashedPassword, password); !match {
 		return "", fmt.Errorf("invalid username/email or password")
 	}
 

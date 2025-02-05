@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"forum/database"
@@ -79,7 +80,28 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	password := r.FormValue("password")
 
 	// Validate credentials
-	if !database.VerifyUser(emailUsername, password) {
+	match, err := database.VerifyUser(emailUsername, password)
+	if err != nil {
+		// Prepare template to render error message
+		tmpl, err := template.ParseFiles(templatePath)
+		if err != nil {
+			InternalServerErrorHandler(w)
+			return
+		}
+
+		if strings.Contains(err.Error(), "user does not exist") {
+			ParseAlertMessage(w, tmpl, "user does not exist")
+			log.Println("INFO: User does not exist")
+			return
+		}
+
+		ParseAlertMessage(w, tmpl, "something went wrong, please try again")
+		log.Println("ERROR: hash corruption or bcrypt error")
+		return
+	}
+
+	if !match {
+		// Prepare template to render error message
 		tmpl, err := template.ParseFiles(templatePath)
 		if err != nil {
 			InternalServerErrorHandler(w)
@@ -88,7 +110,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 		ParseAlertMessage(w, tmpl, "Invalid username/email or password")
 		log.Println("INFO: Invalid username/email or password")
-		http.Redirect(w, r, "/login", http.StatusOK)
 		return
 	}
 

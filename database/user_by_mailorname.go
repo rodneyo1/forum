@@ -1,6 +1,8 @@
 package database
 
 import (
+	"fmt"
+
 	"forum/models"
 	"forum/utils"
 )
@@ -15,11 +17,11 @@ func GetUserByEmailOrUsername(email, username string) (models.User, error) {
 	return user, nil
 }
 
-func VerifyUser(email, password string) bool {
+func VerifyUser(email, password string) (bool, error) {
 	// User email or username to get users' full credentials
 	user, err := GetUserByEmailOrUsername(email, email)
 	if err != nil {
-		return false
+		return false, fmt.Errorf("user does not exist: %v", err)
 	}
 
 	// Compare provided password with the stored hashed password
