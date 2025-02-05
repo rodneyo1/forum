@@ -3,9 +3,8 @@ package handlers
 import (
 	"log"
 	"net/http"
-	"time"
 
-	"forum/database"
+	"forum/utils"
 )
 
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
@@ -16,42 +15,13 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Destroy cookies if any
-	{
-		hasCookie, cookie, err := HasCookie(r)
-		if err != nil {
-			InternalServerErrorHandler(w)
-			log.Println("ERROR: checking session cookie failed: ", err)
-			return
-		}
-
-		// Invalidate session cookie
-		if hasCookie {
-			http.SetCookie(w, &http.Cookie{
-				Name:     "session_id",
-				Value:    "",
-				Path:     "/",
-				Expires:  time.Unix(0, 0),         // Expires imediately
-				MaxAge:   0,                       // Explicitly expire cookie
-				HttpOnly: true,                    // Restricts against JavaScript access
-				Secure:   true,                    // Ensures cookies only sent over HTTPS
-				SameSite: http.SameSiteStrictMode, // Restricts against CSRF requests
-			})
-
-			log.Println("INFO: session cookie has been invalidate")
-		} else {
-			log.Println("INFO: session cookie not found")
-		}
-
-		// Delete session from database
-		sessionID := cookie.Value
-		err = database.DeleteSession(sessionID)
-		if err != nil {
-			InternalServerErrorHandler(w)
-			log.Println("ERROR: deleting session from database failed: ", err)
-			return
-		}
+	// Destroy cookies if any, logout session from database
+	err := utils.LogOutSession(w, r)
+	if err != nil {
+		InternalServerErrorHandler(w)
+		return
 	}
 
-	http.Redirect(w, r, "/login", http.StatusFound)
+	// Redirect user to home page
+	http.Redirect(w, r, "/home", http.StatusFound)
 }
