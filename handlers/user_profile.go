@@ -11,7 +11,7 @@ import (
 
 // ViewUserProfile handler
 func ViewUserProfile(w http.ResponseWriter, r *http.Request) {
-    cookieExists, err := HasCookie(r)
+    cookieExists, cookie, err := HasCookie(r)
     if err != nil {
         http.Redirect(w, r, "/login", http.StatusSeeOther)
         fmt.Println("Redirected to login")
@@ -20,12 +20,6 @@ func ViewUserProfile(w http.ResponseWriter, r *http.Request) {
 
     if !cookieExists {
         http.Redirect(w, r, "/login", http.StatusSeeOther)
-        return
-    }
-
-    cookie, err := r.Cookie("session_id")
-    if err != nil {
-        http.Error(w, "Failed to get cookie", http.StatusUnauthorized)
         return
     }
 
