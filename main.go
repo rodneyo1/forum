@@ -37,7 +37,7 @@ func main() {
 	http.HandleFunc("/login", handlers.LoginHandler)
 	http.HandleFunc("/forgot-password", handlers.ForgotPasswordHandler)
 	http.HandleFunc("/register", handlers.RegistrationHandler)
-	http.HandleFunc("/Home", handlers.ForumHandler)
+	http.HandleFunc("/home", handlers.ForumHandler)
 	http.Handle("/posts/create", middleware.AuthMiddleware(http.HandlerFunc(postHandlers.PostCreate)))
 
 	// Inform user initialization of server
