@@ -3,26 +3,55 @@ package handlers
 import (
 	"log"
 	"net/http"
+	"time"
+
+	"forum/database"
 )
 
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	// Restrict non-POST requests
 	if r.Method != "POST" {
 		BadRequestHandler(w)
-		log.Println("LogoutHandler does not allow non-POST requests")
+		log.Println("ERROR: LogoutHandler does not allow non-POST requests")
+		return
 	}
 
 	// Destroy cookies if any
 	{
-		hasCookie, err := HasCookie(r)
+		hasCookie, cookie, err := HasCookie(r)
 		if err != nil {
 			InternalServerErrorHandler(w)
-			log.Println("Error checking session cookie: ", err)
+			log.Println("ERROR: checking session cookie failed: ", err)
+			return
 		}
 
+		// Invalidate session cookie
 		if hasCookie {
-			http.Redirect(w, r, "/home", http.StatusFound)
+			http.SetCookie(w, &http.Cookie{
+				Name:     "session_id",
+				Value:    "",
+				Path:     "/",
+				Expires:  time.Unix(0, 0),         // Expires imediately
+				MaxAge:   0,                       // Explicitly expire cookie
+				HttpOnly: true,                    // Restricts against JavaScript access
+				Secure:   true,                    // Ensures cookies only sent over HTTPS
+				SameSite: http.SameSiteStrictMode, // Restricts against CSRF requests
+			})
+
+			log.Println("INFO: session cookie has been invalidate")
+		} else {
+			log.Println("INFO: session cookie not found")
+		}
+
+		// Delete session from database
+		sessionID := cookie.Value
+		err = database.DeleteSession(sessionID)
+		if err != nil {
+			InternalServerErrorHandler(w)
+			log.Println("ERROR: deleting session from database failed: ", err)
 			return
 		}
 	}
+
+	http.Redirect(w, r, "/login", http.StatusFound)
 }
