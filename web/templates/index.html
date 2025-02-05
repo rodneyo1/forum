@@ -11,76 +11,128 @@
             box-sizing: border-box;
             font-family: Arial, sans-serif;
         }
+        
         body {
-            background-color: #f0f2f5;
+            background-color: #b6e4e6;
+            color: #333;
         }
+        
         .navbar {
-            background-color: #1877f2;
-            padding: 10px;
-            color: white;
+            background-color: #ffffff;
+            padding: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+        
+        .navbar__title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1694d7;
+        }
+        
+        .navbar__search {
+            padding: 8px;
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
         .container {
             display: flex;
-            margin: 20px;
+            margin: 20px auto;
+            max-width: 1200px;
         }
-        .left-section {
-            width: 30%;
-            background: white;
+        
+        .sidebar {
+            width: 20%;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
         }
-        .right-section {
-            flex: 1;
-            margin-left: 15px;
-            background: white;
+        
+        .sidebar__heading {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #1694d7;
+        }
+        
+        .sidebar__list {
+            list-style: none;
+        }
+        
+        .sidebar__list-item {
+            font-size: 14px;
+            margin: 10px 0;
+            color: #555;
+        }
+        
+        .main-content {
+            width: 60%;
+            margin: 0 20px;
+        }
+        
+        .main-content__heading {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #1694d7;
+        }
+        
+        .card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
             padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
         }
-        .post {
-            background: #fff;
-            padding: 10px;
+        
+        .card__title {
+            font-size: 16px;
+            font-weight: bold;
             margin-bottom: 10px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
         }
-        .post img {
-            width: 100%;
-            border-radius: 5px;
-            margin-top: 10px;
+        
+        .card__description {
+            font-size: 14px;
+            color: #555;
         }
+        
         .actions {
             display: flex;
             justify-content: space-between;
-            margin-top: 10px;
-        }
-        .comment-section {
             margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div class="navbar">
-        <h1>Forum</h1>
-        <input type="text" placeholder="Search Forum" style="padding: 5px;">
+        <h1 class="navbar__title">Forum</h1>
+        <input type="text" class="navbar__search" placeholder="Search Forum">
     </div>
+    
     <div class="container">
-        <div class="left-section">
-            <h3>Friend Suggestions</h3>
-            <p>Michael Brown</p>
-            <p>Emily White</p>
+        <div class="sidebar">
+            <h3 class="sidebar__heading">Categories</h3>
+            <ul class="sidebar__list">
+                <li class="sidebar__list-item">All Posts</li>
+                <li class="sidebar__list-item">Technology</li>
+                <li class="sidebar__list-item">Science</li>
+                <li class="sidebar__list-item">Health</li>
+                <li class="sidebar__list-item">Sports</li>
+                <li class="sidebar__list-item">Fashion</li>
+                <li class="sidebar__list-item">Multi-Category</li>
+            </ul>
         </div>
-        <div class="right-section">
-            <h3>News Feed</h3>
+        
+        <div class="main-content">
+            <h3 class="main-content__heading">Posts</h3>
             {{range .Posts}}
-            <div class="post">
-                <h4>User {{.Creator}}</h4>
+            <div class="card">
+                <h4 class="card__title">User {{.Creator}}</h4>
                 <p><a href="/posts/display?pid={{.UUID}}">{{.Title}}</a></p>
-                <p>{{.Content}}</p>
+                <p class="card__description">{{.Content}}</p>
                 {{if .Media}}
                 <img src="/static/media/{{.Media}}" alt="Post Image" style="width: 70px; aspect-ratio: 1/1;">
                 {{end}}
@@ -92,13 +144,6 @@
                     <form action="/posts/dislike" method="post">
                         <input type="hidden" name="post-id" value="{{.UUID}}">
                         <button type="submit">Dislike</button>
-                    </form>
-                </div>
-                <div class="comment-section">
-                    <form action="/comment" method="post">
-                        <input type="hidden" name="post_id" value="{{.UUID}}">
-                        <input type="text" name="content" placeholder="Write a comment...">
-                        <button type="submit">Post</button>
                     </form>
                 </div>
             </div>
