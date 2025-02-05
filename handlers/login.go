@@ -87,6 +87,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		ParseAlertMessage(w, tmpl, "Invalid username/email or password")
+		log.Println("INFO: Invalid username/email or password")
 		http.Redirect(w, r, "/login", http.StatusOK)
 		return
 	}
