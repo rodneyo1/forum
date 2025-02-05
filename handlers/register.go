@@ -104,9 +104,13 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user.Password = password       // set password
-	UploadImage(w, r, &user, tmpl) // upload image parsed as profile picture
-	utils.Passwordhash(&user)      // Hash password
+	user.Password = password  // set password
+	utils.Passwordhash(&user) // Hash password
+
+	// If provided, upload image parsed as profile picture
+	if r.FormValue("image") != "" {
+		UploadImage(w, r, &user, tmpl)
+	}
 
 	// Create new user in the database
 	_, err = database.CreateNewUser(user)
