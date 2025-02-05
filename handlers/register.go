@@ -2,12 +2,9 @@ package handlers
 
 import (
 	"html/template"
-	"log"
 	"net/http"
 	"regexp"
-
 	"forum/database"
-	"forum/models"
 	"forum/utils"
 )
 
@@ -60,14 +57,9 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Hash the password before storing in database
-	utils.Passwordhash(user) 
+	utils.Passwordhash(user)
 
-	// Store the user in the database
-	err = database.CreateUser(user.Username, user.Email, user.Password)
-	if err != nil {
-		renderErrorMessage(w, "Error creating user")
-		return
-	}
+	// Create new user in the database
 
 	// Redirect user to login page
 	http.Redirect(w, r, "/login", http.StatusFound)
