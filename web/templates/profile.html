@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+</head>
+<body>
+    <h1>Profile Page</h1>
+    <p>Username: {{.Username}}</p>
+    <p>Email: {{.Email}}</p>
+    {{if .Image}}
+        <img src="{{.User.Image}}" alt="Profile Image" style="max-width: 200px; max-height: 200px;">
+    {{else}}
+        <p>No profile image</p>
+    {{end}}
+    
+    {{if .Bio}}
+    <p>Bio: </p>
+    {{else}}
+    <p>No Bio</p>
+    {{end}}
+    <!-- Add other fields as needed -->
+</body>
+</html>

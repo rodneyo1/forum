@@ -1,10 +1,28 @@
 package handlers
 
 import (
-	"fmt"
+	"html/template"
 	"net/http"
+
+	"forum/database"
+	"forum/models"
 )
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Welcome to the home page!")
+	// Fetch posts from the database
+	posts, err := database.GetAllPosts()
+	if err != nil {
+		http.Error(w, "Failed to load posts", http.StatusInternalServerError)
+		return
+	}
+
+	// Load the HTML template
+	tmpl := template.Must(template.ParseFiles("web/templates/index.html"))
+	// Execute the template with the posts data
+	data := struct {
+		Posts []models.PostWithUsername
+	}{
+		Posts: posts,
+	}
+	tmpl.Execute(w, data)
 }

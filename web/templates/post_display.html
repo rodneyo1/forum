@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Title}}</title>
+</head>
+<body>
+    <header>
+        <h1>{{.Title}}</h1>
+        <p><strong>Posted by:</strong> {{.Username}}</p>
+        <p><strong>Created At:</strong> {{.CreatedAt}}</p>
+        <p>Likes: {{.LikesCount}} Dislikes: {{.DislikesCount }}</p>
+    </header>
+
+    <article>
+        <div>
+            <h2>Content</h2>
+            <p>{{.Content}}</p>
+        </div>
+        <div>
+            <h3>Media</h3>
+            {{if .Media}}
+                <img src="/static/media/{{.Media}}" alt="Post Media" />
+            {{else}}
+                <p>No media available for this post.</p>
+            {{end}}
+        </div>
+    </article>
+
+    <section>
+        <h3>Categories:</h3>
+        <ul>
+            {{range .Categories}}
+                <li>{{.}}</li>
+            {{end}}
+        </ul>
+    </section>
+
+    <section>
+        <div class="comment-section">
+            <!-- Displaying existing comments -->
+            {{range .Comments}}
+            <div class="comment">
+                <p><strong>{{.Creator}}</strong> commented:</p>
+                <p>{{.Content}}</p>
+                <p><em>{{.CreatedAt}}</em></p>
+            </div>
+            {{else}}
+            <p>No comments yet. Be the first to comment!</p>
+            {{end}}
+        
+            <!-- Comment form -->
+            <form action="/comment" method="POST">
+                <input type="hidden" name="postUUID" value="{{.UUID}}">
+                <input type="text" name="comment" placeholder="Write a comment..." required>
+                <button type="submit">Post</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p><a href="/Home">Back to Posts</a></p>
+    </footer>
+</body>
+</html>
