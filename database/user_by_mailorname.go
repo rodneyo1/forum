@@ -23,5 +23,5 @@ func VerifyUser(email, password string) bool {
 	}
 
 	// Compare provided password with the stored hashed password
-	return utils.ComparePasswords(user.Password, password)
+	return utils.MatchPasswords(user.Password, password)
 }
