@@ -126,7 +126,7 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		http.Redirect(w, r, "/", http.StatusOK)
+		http.Redirect(w, r, "/", http.StatusFound)
 		return
 
 	default:
