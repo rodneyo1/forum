@@ -50,6 +50,7 @@ func LogOutSession(w http.ResponseWriter, r *http.Request) error {
 		log.Println("INFO: session cookie has been invalidate")
 	} else {
 		log.Println("INFO: session cookie not found")
+		return nil
 	}
 
 	// Delete session from database
