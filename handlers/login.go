@@ -26,7 +26,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		// Skip login for users who are already loged in
 		{
-			hasCookie, err := HasCookie(r)
+			hasCookie, _, err := HasCookie(r)
 			if err != nil {
 				InternalServerErrorHandler(w)
 				log.Println("Error checking session cookie: ", err)
@@ -133,15 +133,15 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }
 
-func HasCookie(r *http.Request) (bool, error) {
-	_, err := r.Cookie("session_id")
+func HasCookie(r *http.Request) (bool, *http.Cookie, error) {
+	cookie, err := r.Cookie("session_id")
 	if err != nil {
 		if err == http.ErrNoCookie {
-			return false, nil // No session cookie, but no error
+			return false, nil, nil // No session cookie, but no error
 		}
-		return false, err // Actual error (e.g., internal failure)
+		return false, nil, err // Actual error (e.g., internal failure)
 	}
-	return true, nil // Cookie exists
+	return true, cookie, nil // Cookie exists
 }
 
 // ParseAlertMessage is used for displaying alert messages in templates.
