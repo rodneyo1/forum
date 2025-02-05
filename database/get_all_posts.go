@@ -22,7 +22,7 @@ func GetAllPosts() ([]models.PostWithUsername, error) {
 		if err != nil {
 			return nil, err
 		}
-		fmt.Println("POST id: %s\n", post.UUID)
+		fmt.Printf("POST id: %s\n", post.UUID)
 		posts = append(posts, post)
 	}
 
