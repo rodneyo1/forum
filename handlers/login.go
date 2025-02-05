@@ -33,7 +33,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			}
 
 			if hasCookie {
-				http.Redirect(w, r, "/", http.StatusFound)
+				http.Redirect(w, r, "/home", http.StatusFound)
 				return
 			}
 		}
@@ -121,7 +121,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	cookie := http.Cookie{
 		Name:     "session_id",
 		Value:    sessionID,
-		Path:     "/",
+		Path:     "/home",
 		Expires:  time.Now().Add(24 * time.Hour), // Session expires in 24 hours
 		HttpOnly: true,                           // Prevent client-side script access
 		Secure:   true,                           // Ensure cookie is only sent over HTTPS
@@ -130,7 +130,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	http.SetCookie(w, &cookie)
 	// Redirect the user to the home page or a protected route
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }
 
 func HasCookie(r *http.Request) (bool, error) {
