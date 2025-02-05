@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -43,6 +44,11 @@ func main() {
 	// User Profile routes
 	http.HandleFunc("GET /profile", handlers.ViewUserProfile)
 	// http.HandleFunc("GET /user/update", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateUserProfile))) // Protected
+
+	http.HandleFunc("/get", func(w http.ResponseWriter, r *http.Request) {
+		user, _ := database.GetUserByEmailOrUsername("toni", "toni")
+		fmt.Println("User: ", user)
+	})
 
 	// Inform user initialization of server
 	log.Println("Server started on port 8080")
