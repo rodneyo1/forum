@@ -1,18 +1,20 @@
 package handlers
 
 import (
-	"forum/database"
-	"forum/models"
-	"forum/utils"
 	"html/template"
 	"log"
 	"net/http"
 	"time"
+
+	"forum/database"
+	"forum/models"
+	"forum/utils"
 )
 
 // LoginHandler handles user login and session creation, as well as preventing login when already logged in.
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	var user models.User
+
 	// Build path to login.html
 	templatePath, err := GetTemplatePath("login.html")
 	if err != nil {
@@ -31,7 +33,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 				InternalServerErrorHandler(w)
 				log.Println("Error checking session cookie: ", err)
 			}
-
 			if hasCookie {
 				http.Redirect(w, r, "/home", http.StatusFound)
 				return
@@ -63,6 +64,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to parse form data", http.StatusBadRequest)
 		return
 	}
+
 	// Populate user credentials
 	// Determine whether input is a valid email
 	if utils.IsValidEmail(r.FormValue("email_username")) {
@@ -70,6 +72,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		user.Username = r.FormValue("email_username")
 	}
+
 	// Extract form data
 	user.Password = r.FormValue("password") // Populate password field
 	emailUsername := r.FormValue("email_username")
@@ -98,12 +101,14 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println("Could not find template file: ", err)
 			return
 		}
+
 		// Render error message
 		tmpl, err := template.ParseFiles(templatePath)
 		if err != nil {
 			http.Error(w, "Failed to load Login template", http.StatusInternalServerError)
 			return
 		}
+
 		// Pass the error message to the template
 		data := struct {
 			Error string
@@ -114,6 +119,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			InternalServerErrorHandler(w)
 			return
 		}
+
 		return
 	}
 
@@ -129,6 +135,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.SetCookie(w, &cookie)
+
 	// Redirect the user to the home page or a protected route
 	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }
