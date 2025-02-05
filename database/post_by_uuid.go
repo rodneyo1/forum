@@ -7,7 +7,9 @@ import (
 	"forum/models"
 )
 
+// Fetch a post by UUID, including its categories, likes, dislikes, and comments
 func GetPostByUUID(postID string) (models.PostWithCategories, error) {
+	// SQL query to fetch post details with categories, likes, and dislikes
 	query := `
 		SELECT 
 			p.uuid, 
@@ -60,5 +62,14 @@ func GetPostByUUID(postID string) (models.PostWithCategories, error) {
 		post.Categories = []string{} // Ensure Categories is not nil
 	}
 
+	// Fetch the comments associated with the post
+	comments, err := GetPostsComments(postID)
+	if err != nil {
+		post.Comments = []models.CommentWithCreator{} // If no comments, return an empty slice
+	} else {
+		post.Comments = comments
+	}
+
+	// Return the post with categories and comments
 	return post, nil
 }

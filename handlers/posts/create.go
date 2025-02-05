@@ -120,13 +120,14 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Create the post with categories
-		postID, err := database.CreatePostWithCategories(userID, title, content, filename, categoryIDsInt)
+		_, err = database.CreatePostWithCategories(userID, title, content, filename, categoryIDsInt)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("Failed to create post: %v", err), http.StatusInternalServerError)
 			return
 		}
 
-		fmt.Fprintf(w, "Post created successfully! Post ID: %d\n", postID)
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
 
 	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)

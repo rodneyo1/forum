@@ -1,18 +1,20 @@
 package handlers
 
 import (
-	"forum/database"
-	"forum/models"
-	"forum/utils"
 	"html/template"
 	"log"
 	"net/http"
 	"time"
+
+	"forum/database"
+	"forum/models"
+	"forum/utils"
 )
 
 // LoginHandler handles user login and session creation, as well as preventing login when already logged in.
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	var user models.User
+
 	// Build path to login.html
 	templatePath, err := GetTemplatePath("login.html")
 	if err != nil {
@@ -26,14 +28,13 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		// Skip login for users who are already loged in
 		{
-			hasCookie, err := HasCookie(r)
+			hasCookie, _, err := HasCookie(r)
 			if err != nil {
 				InternalServerErrorHandler(w)
 				log.Println("Error checking session cookie: ", err)
 			}
-
 			if hasCookie {
-				http.Redirect(w, r, "/", http.StatusFound)
+				http.Redirect(w, r, "/home", http.StatusFound)
 				return
 			}
 		}
@@ -63,6 +64,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to parse form data", http.StatusBadRequest)
 		return
 	}
+
 	// Populate user credentials
 	// Determine whether input is a valid email
 	if utils.IsValidEmail(r.FormValue("email_username")) {
@@ -70,6 +72,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		user.Username = r.FormValue("email_username")
 	}
+
 	// Extract form data
 	user.Password = r.FormValue("password") // Populate password field
 	emailUsername := r.FormValue("email_username")
@@ -84,6 +87,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		ParseAlertMessage(w, tmpl, "Invalid username/email or password")
+		log.Println("INFO: Invalid username/email or password")
 		http.Redirect(w, r, "/login", http.StatusOK)
 		return
 	}
@@ -98,12 +102,14 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println("Could not find template file: ", err)
 			return
 		}
+
 		// Render error message
 		tmpl, err := template.ParseFiles(templatePath)
 		if err != nil {
 			http.Error(w, "Failed to load Login template", http.StatusInternalServerError)
 			return
 		}
+
 		// Pass the error message to the template
 		data := struct {
 			Error string
@@ -114,6 +120,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			InternalServerErrorHandler(w)
 			return
 		}
+
 		return
 	}
 
@@ -129,19 +136,20 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.SetCookie(w, &cookie)
+
 	// Redirect the user to the home page or a protected route
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }
 
-func HasCookie(r *http.Request) (bool, error) {
-	_, err := r.Cookie("session_id")
+func HasCookie(r *http.Request) (bool, *http.Cookie, error) {
+	cookie, err := r.Cookie("session_id")
 	if err != nil {
 		if err == http.ErrNoCookie {
-			return false, nil // No session cookie, but no error
+			return false, nil, nil // No session cookie, but no error
 		}
-		return false, err // Actual error (e.g., internal failure)
+		return false, nil, err // Actual error (e.g., internal failure)
 	}
-	return true, nil // Cookie exists
+	return true, cookie, nil // Cookie exists
 }
 
 // ParseAlertMessage is used for displaying alert messages in templates.
