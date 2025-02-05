@@ -1,9 +1,7 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
-	"strconv"
 
 	"forum/database"
 )
@@ -15,19 +13,14 @@ func LikePostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	r.ParseForm()
-	postIDStr := r.FormValue("post_id")
-	postID, err := strconv.Atoi(postIDStr)
+	postID := r.FormValue("post_id")
+	userID := 1 // Replace with actual logged-in user ID
+
+	err := database.Like(userID, postID, postID)
 	if err != nil {
-		fmt.Println("Invalid PostID")
-	} else {
-		userID := 1 // Replace with actual logged-in user ID
-
-		err := database.Like(userID, &postID, nil)
-		if err != nil {
-			http.Error(w, "Failed to like post", http.StatusInternalServerError)
-			return
-		}
-
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		http.Error(w, "Failed to like post", http.StatusInternalServerError)
+		return
 	}
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

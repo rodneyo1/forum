@@ -12,6 +12,6 @@ func ViewUserProfile(w http.ResponseWriter, r *http.Request){
 }
 
 
-func UpdateUserProfile(){
-	// Update user profile
-}
+// func UpdateUserProfile(){
+// 	// Update user profile
+// }

@@ -16,7 +16,7 @@ func DislikeCommentHandler(w http.ResponseWriter, r *http.Request) {
 	commentID := r.FormValue("comment_id")
 	userID := 1 // Replace with actual logged-in user ID
 
-	err := database.Dislike(userID, nil, &commentID)
+	err := database.Dislike(userID, commentID, commentID)
 	if err != nil {
 		http.Error(w, "Failed to dislike comment", http.StatusInternalServerError)
 		return
