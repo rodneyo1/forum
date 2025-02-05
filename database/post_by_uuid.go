@@ -9,7 +9,6 @@ import (
 
 // Fetch a post by UUID, including its categories, likes, dislikes, and comments
 func GetPostByUUID(postID string) (models.PostWithCategories, error) {
-	fmt.Println("GET POST UUID: ", postID)
 	// SQL query to fetch post details with categories, likes, and dislikes
 	query := `
 		SELECT 
