@@ -16,10 +16,7 @@
         <div class="login">
             <p>Enter Credentials</p>
             <input type="hidden" id="error_message" value="{{.ErrorMessage}}">
-            {{ if .ErrorMessage }}
-            <p style="color: red;">{{.ErrorMessage}}</p>
-        {{ end }}
-
+                <p style="color: red;">{{.ErrorMessage}}</p>
             <form method="POST" action="/login">
                 <label for="email_username">Email/Username</label>
                 <input type="text" id="email_username" placeholder="email/username" name="email_username" required>
