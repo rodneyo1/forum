@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -37,8 +38,17 @@ func main() {
 	http.HandleFunc("/login", handlers.LoginHandler)
 	http.HandleFunc("/forgot-password", handlers.ForgotPasswordHandler)
 	http.HandleFunc("/register", handlers.RegistrationHandler)
-	http.HandleFunc("/Home", handlers.ForumHandler)
 	http.Handle("/posts/create", middleware.AuthMiddleware(http.HandlerFunc(postHandlers.PostCreate)))
+	http.Handle("/posts/", middleware.AuthMiddleware(http.HandlerFunc(postHandlers.DisplaySinglePost)))
+	http.HandleFunc(" /posts/display", postHandlers.PostDisplay)
+	// User Profile routes
+	http.HandleFunc("GET /profile", handlers.ViewUserProfile)
+	// http.HandleFunc("GET /user/update", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateUserProfile))) // Protected
+
+	http.HandleFunc("/get", func(w http.ResponseWriter, r *http.Request) {
+		user, _ := database.GetUserByEmailOrUsername("toni", "toni")
+		fmt.Println("User: ", user)
+	})
 
 	// Inform user initialization of server
 	log.Println("Server started on port 8080")

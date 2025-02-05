@@ -1,12 +1,11 @@
 package database
 
 import (
-	"database/sql"
 	"fmt"
 )
 
 // Like adds a like for a post or comment and removes any existing dislike for the same post or comment.
-func Like(userID int, postID, commentID *int) error {
+func Like(userID int, postID, commentID string) error {
 	// Start a transaction
 	tx, err := db.Begin()
 	if err != nil {
@@ -43,7 +42,7 @@ func Like(userID int, postID, commentID *int) error {
 }
 
 // Dislike adds a dislike for a post or comment and removes any existing like for the same post or comment.
-func Dislike(db *sql.DB, userID int, postID, commentID *int) error {
+func Dislike(userID int, postID, commentID string) error {
 	// Start a transaction
 	tx, err := db.Begin()
 	if err != nil {

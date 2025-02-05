@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Title}}</title>
+</head>
+<body>
+    <header>
+        <h1>{{.Title}}</h1>
+        <p><strong>Posted by:</strong> {{.Username}}</p>
+        <p><strong>Created At:</strong> {{.CreatedAt}}</p>
+        <p>Likes: {{.LikesCount}} Dislikes: {{.DislikesCount }}</p>
+    </header>
+
+    <article>
+        <div>
+            <h2>Content</h2>
+            <p>{{.Content}}</p>
+        </div>
+        <div>
+            <h3>Media</h3>
+            {{if .Media}}
+                <img src="/static/media/{{.Media}}" alt="Post Media" />
+            {{else}}
+                <p>No media available for this post.</p>
+            {{end}}
+        </div>
+    </article>
+
+    <section>
+        <h3>Categories:</h3>
+        <ul>
+            {{range .Categories}}
+                <li>{{.}}</li>
+            {{end}}
+        </ul>
+    </section>
+
+    <footer>
+        <p><a href="/Home">Back to Posts</a></p>
+    </footer>
+</body>
+</html>
