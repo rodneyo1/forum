@@ -8,8 +8,8 @@
 <body>
     <div class="registration-container">
         <h1>Register</h1>
-        <form method="POST" action="/register">
-            <p>email</p><input type="text" id="email" placeholder="example@email.com" name="email"required>
+        <form method="POST" action="/register" enctype="multipart/form-data">
+            <p>email</p><input type="text" id="email" placeholder="example@email.com" name="email" required>
             <p>username</p><input type="text" id="username" placeholder="username" name="username" required>
             <p>
                 <ul>
@@ -21,6 +21,10 @@
             <p>password</p><input type="password" id="password" placeholder="password" name="password" required>
             <p>confirm Password</p><input type="password" id="confirm_password" placeholder="confirm password" name="confirm_password" required>
             <p>Bio</p><textarea type="text" id="bio" placeholder="about me" name="bio" required></textarea>
+            <br>
+            <label for="image">choose image</label>
+            <input type="file" id="image" name="image" accept="image/*">
+            <br>
             <button type="submit">Register</button>
         </form>
         

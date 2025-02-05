@@ -2,6 +2,7 @@ package database
 
 import (
 	"forum/models"
+	"forum/utils"
 )
 
 func GetUserByEmailOrUsername(email, username string) (models.User, error) {
@@ -22,6 +23,6 @@ func VerifyUser(email, password string) bool {
 	}
 
 	// Compare provided password with the stored hashed password
-	return user.Password == password
+	return utils.ComparePasswords(user.Password, password)
 }
 
