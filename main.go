@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -38,10 +37,11 @@ func main() {
 	http.HandleFunc("/forgot-password", handlers.ForgotPasswordHandler)
 	http.HandleFunc("/register", handlers.RegistrationHandler)
 	http.HandleFunc("/home", handlers.ForumHandler)
+	http.HandleFunc("/home", handlers.ForumHandler)
 	http.Handle("/posts/create", middleware.AuthMiddleware(http.HandlerFunc(postHandlers.PostCreate)))
 
 	// Inform user initialization of server
-	log.Println("Server runing on http://localhost:8080")
+	log.Println("Server started on port 8080")
 
 	// Start the server, handle emerging errors
 	err := http.ListenAndServe(":8080", nil)
