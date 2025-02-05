@@ -44,6 +44,14 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Logout previous session
+	err = LogOutSession(w, r)
+	if err != nil {
+		InternalServerErrorHandler(w)
+		log.Println("Error logging out session: ", err)
+		return
+	}
+
 	// Handle non-GET and non-POST requests
 	if r.Method != "POST" {
 		BadRequestHandler(w)
