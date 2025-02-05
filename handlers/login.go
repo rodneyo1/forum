@@ -89,6 +89,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		// Check for non-existent users
 		if strings.Contains(err.Error(), "user does not exist") {
 			ParseAlertMessage(w, tmpl, "user does not exist")
 			log.Println("INFO: User does not exist")
