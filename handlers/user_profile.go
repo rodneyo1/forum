@@ -1,12 +1,11 @@
 package handlers
 
 import (
-	"fmt"
 	"forum/database"
 	"net/http"
 	"html/template"
 	 "log"
-	 //"forum/models"
+	 "forum/models"
 )
 
 // ViewUserProfile handler
@@ -14,7 +13,6 @@ func ViewUserProfile(w http.ResponseWriter, r *http.Request) {
     cookieExists, cookie, err := HasCookie(r)
     if err != nil {
         http.Redirect(w, r, "/login", http.StatusSeeOther)
-        fmt.Println("Redirected to login")
         return
     }
 
@@ -28,14 +26,28 @@ func ViewUserProfile(w http.ResponseWriter, r *http.Request) {
     if err != nil {
         log.Printf("Error getting user: %v\n", err)  // Add error logging
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
-        fmt.Println("Redirected to login")
         return
     }
+
+	UserPosts,err:=database.GetUserPostsbyUserID(userData.ID)
+	if err != nil {
+        log.Printf("Error getting posts: %v\n", err)  // Add error logging
+    }
+
 	// Render the template with data
 	path,err:=GetTemplatePath("profile.html")
 	if err!=nil{
-		fmt.Println("Error getting template path")
+		log.Println("Error getting template path")
 	}
+
+  // Combine user data and user posts into a single struct
+  profileData := struct{
+	User models.User
+	Posts []models.Post
+  }{
+	User:  userData,
+	Posts: UserPosts,
+}
 
     tmpl, err := template.ParseFiles(path)
     if err != nil {
@@ -43,15 +55,13 @@ func ViewUserProfile(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    if err := tmpl.Execute(w, userData); err != nil {
+    if err := tmpl.Execute(w, profileData); err != nil {
         log.Printf("Error executing template: %v", err)
         http.Error(w, "Internal Server Error", http.StatusInternalServerError)
     }
 }
 
-
-
-
 // func UpdateUserProfile(){
 // 	// Update user profile
 // }
+

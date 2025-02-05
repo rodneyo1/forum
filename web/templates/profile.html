@@ -7,19 +7,20 @@
 </head>
 <body>
     <h1>Profile Page</h1>
-    <p>Username: {{.Username}}</p>
-    <p>Email: {{.Email}}</p>
-    {{if .Image}}
-        <img src="{{.User.Image}}" alt="Profile Image" style="max-width: 200px; max-height: 200px;">
+    <p>ID: {{ User.UUID}} </p>
+    <p>Username: {{.User.Username}}</p>
+    <p>Email: {{.User.Email}}</p>
+    {{if .User.Image}}
+        <img src="/static/images/{{.User.Image}}" alt="Profile Image" style="max-width: 200px; max-height: 200px;">
     {{else}}
         <p>No profile image</p>
     {{end}}
     
-    {{if .Bio}}
+    {{if .User.Bio}}
     <p>Bio: </p>
     {{else}}
     <p>No Bio</p>
     {{end}}
-    <!-- Add other fields as needed -->
+
 </body>
 </html>

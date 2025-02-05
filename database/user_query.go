@@ -1,7 +1,7 @@
 package database
 
 import (
-	"fmt"
+    "log"
 	"forum/models"
 	"forum/utils"
 	"database/sql"
@@ -30,13 +30,13 @@ func VerifyUser(email, password string) bool {
 
 // GetUserbySessionID function
 func GetUserbySessionID(UUID string) (models.User, error) {
-   // fmt.Println("Session ID:", UUID)
-    query := `SELECT username, email, bio, image, created_at FROM users WHERE session_id = ?`
+    query := `SELECT id, username, email, bio, image, created_at FROM users WHERE session_id = ?`
     
     var user models.User
     var bio, image sql.NullString  // Use sql.NullString for nullable fields
     
     err := db.QueryRow(query, UUID).Scan(
+        &user.ID,
         &user.Username,
         &user.Email,
         &bio,      // Scan into NullString
@@ -45,10 +45,10 @@ func GetUserbySessionID(UUID string) (models.User, error) {
     )
     
     if err != nil {
-        fmt.Printf("Database error: %v\n", err)
+        log.Printf("Database error: %v\n", err)
         return models.User{}, err
     }
-    
+
     // Convert NullString to string, using empty string if NULL
     if bio.Valid {
         user.Bio = bio.String
@@ -58,4 +58,39 @@ func GetUserbySessionID(UUID string) (models.User, error) {
     }
     
     return user, nil
+}
+
+// Get all posts by a user
+func GetUserPostsbyUserID(ID int)([]models.Post, error) {
+	query := `SELECT user_id, title, content, media, created_at FROM posts WHERE user_id = ?`
+    rows,err := db.Query(query,ID)
+    if err != nil {
+        log.Println("Error querying posts by user ID:", err)
+        return nil, err
+    }
+    defer rows.Close()
+
+    var posts []models.Post
+    for rows.Next() {
+        var post models.Post
+        var media sql.NullString
+        err:=rows.Scan( &post.UserID, &post.Title, &post.Content, &media, &post.CreatedAt)
+        if err!=nil{
+            log.Println("Error scanning post row:", err)
+            return nil, err
+        }
+        if media.Valid{
+            post.Media = media.String
+        } else{
+            post.Media = ""
+        }
+        posts=append(posts,post)
+    }
+
+    if err = rows.Err(); err != nil {
+        log.Println("Error scanning posts:", err)
+        return nil, err
+    }    
+
+    return posts,nil
 }
