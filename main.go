@@ -37,12 +37,24 @@ func main() {
 	http.HandleFunc("/login", handlers.LoginHandler)
 	http.HandleFunc("/forgot-password", handlers.ForgotPasswordHandler)
 	http.HandleFunc("/register", handlers.RegistrationHandler)
-	http.HandleFunc("/home", handlers.ForumHandler)
-	http.HandleFunc("/home", handlers.ForumHandler)
-	http.Handle("/posts/create", middleware.AuthMiddleware(http.HandlerFunc(postHandlers.PostCreate)))
+	// RESTORE // http.Handle("/posts/create", middleware.AuthMiddleware(http.HandlerFunc(postHandlers.PostCreate)))
+	http.HandleFunc("/posts/create", postHandlers.PostCreate)
+	http.HandleFunc(" /posts/display", postHandlers.PostDisplay)
+	// User Profile routes
+	http.HandleFunc("GET /profile", handlers.ViewUserProfile)
+	// http.HandleFunc("GET /user/update", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateUserProfile))) // Protected
+
+	http.HandleFunc("/get", func(w http.ResponseWriter, r *http.Request) {
+		user, _ := database.GetUserByEmailOrUsername("toni", "toni")
+		fmt.Println("User: ", user)
+	})
+
+	http.HandleFunc("/posts/like", handlers.LikePostHandler)
+	http.HandleFunc("/posts/dislike", handlers.DislikePostHandler)
+	http.HandleFunc("/comment", Comment)
 
 	// Inform user initialization of server
-	log.Println("Server started on port 8080")
+	log.Println("Server runing on http://localhost:8080")
 
 	// Start the server, handle emerging errors
 	err := http.ListenAndServe(":8080", nil)
