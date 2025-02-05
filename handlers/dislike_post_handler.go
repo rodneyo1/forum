@@ -19,14 +19,12 @@ func DislikePostHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	postID := r.FormValue("post_id")
-	// commentID := r.FormValue("comment_id")
+	postID := r.FormValue("post-id")
 
 	// Replace with actual logged-in user ID
 	userID := 1
 
-	// Call the Dislike function with the database connection
-	err = database.Dislike(userID, postID, postID)
+	err = database.DislikePost(userID, postID)
 	if err != nil {
 		http.Error(w, "Failed to dislike post/comment", http.StatusInternalServerError)
 		return

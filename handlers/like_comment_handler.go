@@ -13,11 +13,11 @@ func LikeCommentHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	r.ParseForm()
-	commentID := r.FormValue("comment_id")
+	commentID := r.FormValue("comment-id")
 
 	userID := 1 // Replace with actual logged-in user ID
 
-	err := database.Like(userID, commentID, commentID)
+	err := database.LikeComment(userID, commentID)
 	if err != nil {
 		http.Error(w, "Failed to like comment", http.StatusInternalServerError)
 		return

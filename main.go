@@ -50,6 +50,9 @@ func main() {
 		fmt.Println("User: ", user)
 	})
 
+	http.HandleFunc("/posts/like", handlers.LikePostHandler)
+	http.HandleFunc("/posts/dislike", handlers.DislikePostHandler)
+
 	// Inform user initialization of server
 	log.Println("Server started on port 8080")
 
