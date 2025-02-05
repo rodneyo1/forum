@@ -54,7 +54,7 @@ func main() {
 	http.HandleFunc("/comment", Comment)
 
 	// Inform user initialization of server
-	log.Println("Server started on port 8080")
+	log.Println("Server runing on http://localhost:8080")
 
 	// Start the server, handle emerging errors
 	err := http.ListenAndServe(":8080", nil)
