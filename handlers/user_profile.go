@@ -3,7 +3,12 @@ package handlers
 import (
 	"fmt"
 	"forum/database"
+	"fmt"
+	"forum/database"
 	"net/http"
+	"html/template"
+	 "log"
+	 //"forum/models"
 	"html/template"
 	 "log"
 	 //"forum/models"
@@ -11,7 +16,7 @@ import (
 
 // ViewUserProfile handler
 func ViewUserProfile(w http.ResponseWriter, r *http.Request) {
-    cookieExists, cookie, err := HasCookie(r)
+    cookieExists, err := HasCookie(r)
     if err != nil {
         http.Redirect(w, r, "/login", http.StatusSeeOther)
         fmt.Println("Redirected to login")
@@ -23,14 +28,27 @@ func ViewUserProfile(w http.ResponseWriter, r *http.Request) {
         return
     }
 
+    cookie, err := r.Cookie("session_id")
+    if err != nil {
+        http.Error(w, "Failed to get cookie", http.StatusUnauthorized)
+        return
+    }
+
     userData, err := database.GetUserbySessionID(cookie.Value)
    // fmt.Printf("UserData retrieved: %+v\n", userData)  // Add debug logging
     if err != nil {
-        log.Printf("Error getting user: %v\n", err)  // Add error logging
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
-        fmt.Println("Redirected to login")
+        fmt.Printf("Error getting user: %v\n", err)  // Add error logging
+        http.Error(w, "Session invalid", http.StatusUnauthorized)
         return
     }
+
+    // // Create a data structure for the template
+    // data := struct {
+    //     User models.User
+    // }{
+    //     User: userData,
+    // }
+
 	// Render the template with data
 	path,err:=GetTemplatePath("profile.html")
 	if err!=nil{
