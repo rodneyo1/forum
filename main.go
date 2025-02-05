@@ -39,7 +39,7 @@ func main() {
 	http.HandleFunc("/register", handlers.RegistrationHandler)
 	// RESTORE // http.Handle("/posts/create", middleware.AuthMiddleware(http.HandlerFunc(postHandlers.PostCreate)))
 	http.HandleFunc("/posts/create", postHandlers.PostCreate)
-	http.HandleFunc(" /posts/display", postHandlers.PostDisplay)
+	http.HandleFunc("/posts/display", postHandlers.PostDisplay)
 	// User Profile routes
 	http.HandleFunc("GET /profile", handlers.ViewUserProfile)
 	// http.HandleFunc("GET /user/update", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateUserProfile))) // Protected
