@@ -121,7 +121,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	cookie := http.Cookie{
 		Name:     "session_id",
 		Value:    sessionID,
-		Path:     "/home",
+		Path:     "/",
 		Expires:  time.Now().Add(24 * time.Hour), // Session expires in 24 hours
 		HttpOnly: true,                           // Prevent client-side script access
 		Secure:   true,                           // Ensure cookie is only sent over HTTPS
