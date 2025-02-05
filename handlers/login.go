@@ -82,6 +82,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	// Validate credentials
 	match, err := database.VerifyUser(emailUsername, password)
 	if err != nil {
+		issue := err.Error()
 		// Prepare template to render error message
 		tmpl, err := template.ParseFiles(templatePath)
 		if err != nil {
@@ -90,7 +91,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Check for non-existent users
-		if strings.Contains(err.Error(), "user does not exist") {
+		if strings.Contains(issue, "user does not exist") {
 			ParseAlertMessage(w, tmpl, "user does not exist")
 			log.Println("INFO: User does not exist")
 			return
