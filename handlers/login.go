@@ -35,7 +35,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 				log.Println("Error checking session cookie: ", err)
 			}
 			if hasCookie {
-				http.Redirect(w, r, "/home", http.StatusFound)
+				http.Redirect(w, r, "/", http.StatusFound)
 				return
 			}
 		}
@@ -161,7 +161,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &cookie)
 
 	// Redirect the user to the home page or a protected route
-	http.Redirect(w, r, "/home", http.StatusSeeOther)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func HasCookie(r *http.Request) (bool, *http.Cookie, error) {
