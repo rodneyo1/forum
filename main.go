@@ -41,7 +41,7 @@ func main() {
 	http.Handle("/posts/create", middleware.AuthMiddleware(http.HandlerFunc(postHandlers.PostCreate)))
 
 	// Inform user initialization of server
-	log.Println("Server started on port 8080")
+	log.Println("Server running on http://localhost:8080")
 
 	// Start the server, handle emerging errors
 	err := http.ListenAndServe(":8080", nil)
