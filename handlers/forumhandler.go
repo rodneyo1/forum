@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 
@@ -28,6 +29,10 @@ func ForumHandler(w http.ResponseWriter, r *http.Request) {
 		Posts []models.PostWithUsername
 	}{
 		Posts: posts,
+	}
+
+	for i, post := range posts {
+		fmt.Printf("Uid#%d count is %d\n", i, post.LikesCount)
 	}
 
 	tmpl.Execute(w, data)

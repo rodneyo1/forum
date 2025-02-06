@@ -67,12 +67,14 @@ type Dislike struct {
 
 // used to fetch the post with the creator of the post from the database
 type PostWithUsername struct {
-	UUID      string    `json:"uuid"`
-	Creator   string    `json:"creator"`
-	Title     string    `json:"title"`
-	Content   string    `json:"content"`
-	Media     string    `json:"media,omitempty"`
-	CreatedAt time.Time `json:"created_at"`
+	UUID          string    `json:"uuid"`
+	Creator       string    `json:"creator"`
+	Title         string    `json:"title"`
+	Content       string    `json:"content"`
+	Media         string    `json:"media,omitempty"`
+	CreatedAt     time.Time `json:"created_at"`
+	LikesCount    int       `json:"likes_count"`
+	DislikesCount int       `json:"dislikes_count"`
 }
 
 // PostWithCategories struct to hold post data along with categories, likes, dislikes, and comments
@@ -98,10 +100,13 @@ type Comment struct {
 	UserID    int       `json:"user_id"`
 	CreatedAt time.Time `json:"created_at"`
 }
+
 type CommentWithCreator struct {
-	UUID      string    `json:"uuid"`
-	Content   string    `json:"content"`
-	PostID    string    `json:"post_id"`
-	Creator   string    `json:"creator"`
-	CreatedAt time.Time `json:"created_at"`
+	UUID          string    `json:"uuid"`
+	Content       string    `json:"content"`
+	PostID        string    `json:"post_id"`
+	Creator       string    `json:"creator"`
+	CreatedAt     time.Time `json:"created_at"`
+	LikesCount    int       `json:"likes_count"`
+	DislikesCount int       `json:"dislikes_count"`
 }
