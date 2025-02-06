@@ -95,7 +95,7 @@ func FetchCategoryPostsWithID(categoryID int) ([]models.Post, error) {
     query := `
         SELECT p.uuid, p.title, p.content, p.media, p.user_id, p.created_at
         FROM posts p
-        JOIN post_categories pc ON p.id = pc.post_id
+        JOIN post_categories pc ON p.uuid = pc.post_id
         WHERE pc.category_id = ?`
     rows, err := db.Query(query, categoryID)
     if err != nil {
