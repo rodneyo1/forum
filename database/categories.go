@@ -87,3 +87,8 @@ func ValidateCategories(categoryIDs []int) error {
 
 	return nil
 }
+
+func FetchCategoryPostsWithID(categoryID int)([]models.PostWithUsername, error){
+	//
+	return []models.PostWithUsername{},err
+}
