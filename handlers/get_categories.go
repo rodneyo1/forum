@@ -27,6 +27,8 @@ func GetCategoriesHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(categories)
 }
+
+// Sends all categories
 func CategoriesPageHandler(w http.ResponseWriter, r *http.Request ){
 	categories, err := database.FetchCategories()
 	if err != nil {
@@ -44,6 +46,7 @@ func CategoriesPageHandler(w http.ResponseWriter, r *http.Request ){
 	tmpl.Execute(w, data)
 }
 
+// Sends all posts of a single category
 func SingeCategoryPosts(w http.ResponseWriter, r *http.Request ){
 	categoryID:= r.URL.Query().Get("ID")
 	ID,err:=strconv.Atoi(categoryID)
