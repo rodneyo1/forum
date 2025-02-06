@@ -1,8 +1,6 @@
 package database
 
 import (
-	"fmt"
-
 	"forum/models"
 )
 
@@ -22,7 +20,6 @@ func GetAllPosts() ([]models.PostWithUsername, error) {
 		if err != nil {
 			return nil, err
 		}
-		fmt.Printf("POST id: %s\n", post.UUID)
 		posts = append(posts, post)
 	}
 

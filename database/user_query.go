@@ -2,9 +2,10 @@ package database
 
 import (
 	"database/sql"
-	"fmt"
+    "log"
 	"forum/models"
 	"forum/utils"
+    "fmt"
 )
 
 func GetUserByEmailOrUsername(email, username string) (models.User, error) {
@@ -30,32 +31,68 @@ func VerifyUser(email, password string) (bool, error) {
 
 // GetUserbySessionID function
 func GetUserbySessionID(UUID string) (models.User, error) {
-	// fmt.Println("Session ID:", UUID)
-	query := `SELECT username, email, bio, image, created_at FROM users WHERE session_id = ?`
+    query := `SELECT id, username, email, bio, image, created_at FROM users WHERE session_id = ?`
+    
+    var user models.User
+    var bio, image sql.NullString  // Use sql.NullString for nullable fields
+    
+    err := db.QueryRow(query, UUID).Scan(
+        &user.ID,
+        &user.Username,
+        &user.Email,
+        &bio,      // Scan into NullString
+        &image,    // Scan into NullString
+        &user.CreatedAt,
+    )
+    
+    if err != nil {
+        log.Printf("Database error: %v\n", err)
+        return models.User{}, err
+    }
 
-	var user models.User
-	var bio, image sql.NullString // Use sql.NullString for nullable fields
+    // Convert NullString to string, using empty string if NULL
+    if bio.Valid {
+        user.Bio = bio.String
+    }
+    if image.Valid {
+        user.Image = image.String
+    }
+    
+    return user, nil
+}
 
-	err := db.QueryRow(query, UUID).Scan(
-		&user.Username,
-		&user.Email,
-		&bio,   // Scan into NullString
-		&image, // Scan into NullString
-		&user.CreatedAt,
-	)
+// Get all posts by a user
+func GetUserPostsbyUserID(ID int)([]models.Post, error) {
+    
+	query := `SELECT uuid, title, content, media, created_at FROM posts WHERE user_id = ?`
+    rows,err := db.Query(query,ID)
+    if err != nil {
+        log.Println("Error querying posts by user ID:", err)
+        return nil, err
+    }
+    defer rows.Close()
 
-	if err != nil {
-		fmt.Printf("Database error: %v\n", err)
-		return models.User{}, err
-	}
+    var posts []models.Post
+    for rows.Next() {
+        var post models.Post
+        var media sql.NullString
+        err:=rows.Scan( &post.UUID, &post.Title, &post.Content, &media, &post.CreatedAt)
+        if err!=nil{
+            log.Println("Error scanning post row:", err)
+            return nil, err
+        }
+        if media.Valid{
+            post.Media = media.String
+        } else{
+            post.Media = ""
+        }
+        posts=append(posts,post)
+    }
 
-	// Convert NullString to string, using empty string if NULL
-	if bio.Valid {
-		user.Bio = bio.String
-	}
-	if image.Valid {
-		user.Image = image.String
-	}
+    if err = rows.Err(); err != nil {
+        log.Println("Error scanning posts:", err)
+        return nil, err
+    }    
 
-	return user, nil
+    return posts,nil
 }

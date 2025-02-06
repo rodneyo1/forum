@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="/static/css/onboarding.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
+    <link rel="stylesheet" href="/static/css/onboarding.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <div class="login-container">
@@ -16,6 +19,11 @@
 
         <div class="login">
             <p>Enter Credentials</p>
+            <input type="hidden" id="error_message" value="{{.ErrorMessage}}">
+            {{ if .ErrorMessage }}
+            <p style="color: red;">{{.ErrorMessage}}</p>
+        {{ end }}
+
             <input type="hidden" id="error_message" value="{{.ErrorMessage}}">
             {{ if .ErrorMessage }}
             <p style="color: red;">{{.ErrorMessage}}</p>
