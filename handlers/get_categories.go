@@ -9,6 +9,7 @@ import (
 	"forum/models"
 	"html/template"
 	"strconv"
+	"strings"
 )
 
 // GetCategoriesHandler handles requests to retrieve all categories.
@@ -48,13 +49,20 @@ func CategoriesPageHandler(w http.ResponseWriter, r *http.Request ){
 
 // Sends all posts of a single category
 func SingeCategoryPosts(w http.ResponseWriter, r *http.Request ){
-	categoryID:= r.URL.Query().Get("ID")
-	ID,err:=strconv.Atoi(categoryID)
-	if err!=nil{
-		log.Println(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+	// Extract the category ID from the URL path
+    pathParts := strings.Split(r.URL.Path, "/")
+    if len(pathParts) < 3 {
+        http.Error(w, "Invalid URL", http.StatusBadRequest)
+        return
+    }
+    categoryID := pathParts[2]
+    ID, err := strconv.Atoi(categoryID)
+    if err != nil {
+        log.Println(err)
+        w.WriteHeader(http.StatusInternalServerError)
+        return
+    }
+	// Fetch posts from the database
 	posts, err := database.FetchCategoryPostsWithID(ID)
 	if err != nil {
 		http.Error(w, "Category doesn't exist", http.StatusInternalServerError)
@@ -68,5 +76,8 @@ func SingeCategoryPosts(w http.ResponseWriter, r *http.Request ){
 	}{
 		Posts: posts,
 	}
-	tmpl.Execute(w, data)
+	err=tmpl.Execute(w, data)
+	if err != nil {
+        log.Println("Error executing template:", err)
+    }
 }

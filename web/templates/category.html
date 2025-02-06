@@ -7,10 +7,12 @@
 </head>
 <body>
     <H1>More from this category</H1>
+    {{if .Posts}}
     <div>
         {{range .Posts}}
             <div class="post">
-                <h4>User {{.Creator}}</h4>
+                <h4>User {{.Title}}</h4>
+                <p>{{.CreatedAt}}</p>
                 <p><a href="/posts/display?pid={{.UUID}}">{{.Title}}</a></p>
                 <p>{{.Content}}</p>
                 {{if .Media}}
@@ -29,5 +31,8 @@
             </div>
             {{end}}
     </div>
+    {{else}}
+    <p>No posts in this category</p>
+    {{end}}
 </body>
 </html>
