@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"forum/database"
 	"forum/handlers"
@@ -19,6 +20,12 @@ func init() {
 }
 
 func main() {
+	port := ":8080"
+	portStr := os.Getenv("PORT")
+
+	if _, e := strconv.Atoi(portStr); e == nil {
+		port = ":" + portStr
+	}
 	defer database.Close()
 
 	database.CreateUser("toni", "toni@mail.com", "@antony222")
@@ -51,16 +58,18 @@ func main() {
 
 	http.HandleFunc("/posts/like", handlers.LikePostHandler)
 	http.HandleFunc("/posts/dislike", handlers.DislikePostHandler)
+	http.HandleFunc("/comments/like", handlers.LikeCommentHandler)
+	http.HandleFunc("/comments/dislike", handlers.DislikeCommentHandler)
 	http.HandleFunc("/comment", Comment)
 	http.HandleFunc("/categories", handlers.CategoriesPageHandler)
 	http.HandleFunc("/category/", handlers.SingeCategoryPosts)
 
 
 	// Inform user initialization of server
-	log.Println("Server runing on http://localhost:8080")
+	log.Printf("Server runing on http://localhost:%s\n", portStr)
 
 	// Start the server, handle emerging errors
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(port, nil)
 	if err != nil {
 		log.Println("Failed to start server: ", err)
 		return

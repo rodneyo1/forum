@@ -15,9 +15,15 @@ func LikePostHandler(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 	postID := r.FormValue("post-id")
-	userID := 1 // Replace with actual logged-in user ID
+	// userID := 1 // Replace with actual logged-in user ID
 
-	err := database.LikePost(userID, postID)
+	userID, _, err := database.GetUserData(r)
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	err = database.LikePost(userID, postID)
 	if err != nil {
 		fmt.Println(err.Error())
 		http.Error(w, "Failed to like post", http.StatusInternalServerError)
