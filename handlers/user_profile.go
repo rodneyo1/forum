@@ -6,6 +6,7 @@ import (
 	"html/template"
 	 "log"
 	 "forum/models"
+	//  "fmt"
 )
 
 // ViewUserProfile handler
@@ -48,7 +49,7 @@ func ViewUserProfile(w http.ResponseWriter, r *http.Request) {
 	User:  userData,
 	Posts: UserPosts,
 }
-
+// fmt.Println(profileData.Posts)
     tmpl, err := template.ParseFiles(path)
     if err != nil {
         http.Error(w, "Failed to load profile template", http.StatusInternalServerError)
