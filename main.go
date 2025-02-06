@@ -61,6 +61,9 @@ func main() {
 	http.HandleFunc("/comments/like", handlers.LikeCommentHandler)
 	http.HandleFunc("/comments/dislike", handlers.DislikeCommentHandler)
 	http.HandleFunc("/comment", Comment)
+	http.HandleFunc("/categories", handlers.CategoriesPageHandler)
+	http.HandleFunc("/category/", handlers.SingeCategoryPosts)
+
 
 	// Inform user initialization of server
 	log.Printf("Server runing on http://localhost:%s\n", portStr)

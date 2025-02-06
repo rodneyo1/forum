@@ -6,6 +6,11 @@
     <title>Document</title>
 </head>
 <body>
-    <p>This is the categories page</p>
+    <h1>Categories</h1>
+            {{range .Categories}}
+            <a href="/category/{{.ID}}">
+                <p>{{.Name}}</p>
+            </a>
+            {{end}}
 </body>
 </html>
