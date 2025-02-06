@@ -5,6 +5,7 @@ import (
     "log"
 	"forum/models"
 	"forum/utils"
+    "fmt"
 )
 
 func GetUserByEmailOrUsername(email, username string) (models.User, error) {

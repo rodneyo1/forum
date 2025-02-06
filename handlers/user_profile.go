@@ -1,11 +1,12 @@
 package handlers
 
 import (
+	"fmt"
 	"forum/database"
+	"forum/models"
 	"html/template"
 	"log"
 	"net/http"
-	"forum/models"
 	//  "fmt"
 )
 
@@ -49,6 +50,7 @@ func ViewUserProfile(w http.ResponseWriter, r *http.Request) {
 	User:  userData,
 	Posts: UserPosts,
 }
+fmt.Println(profileData.Posts)
 // fmt.Println(profileData.Posts)
     tmpl, err := template.ParseFiles(path)
     if err != nil {
