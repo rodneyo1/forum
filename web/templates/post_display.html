@@ -6,6 +6,7 @@
     <title>{{.Title}}</title>
 </head>
 <body>
+    {{$post := .}}
     <header>
         <h1>{{.Title}}</h1>
         <p><strong>Posted by:</strong> {{.Username}}</p>
@@ -38,18 +39,36 @@
     </section>
 
     <section>
+        {{if .Comments}}
         <div class="comment-section">
             <!-- Displaying existing comments -->
-            {{range .Comments}}
+            {{range $comment := .Comments}}
             <div class="comment">
-                <p><strong>{{.Creator}}</strong> commented:</p>
-                <p>{{.Content}}</p>
-                <p><em>{{.CreatedAt}}</em></p>
+                <p><strong>{{$comment.Creator}}</strong> commented:</p>
+                <p>{{$comment.Content}}</p>
+                <p><em>{{$comment.CreatedAt}}</em></p>
             </div>
-            {{else}}
-            <p>No comments yet. Be the first to comment!</p>
+            <div class="actions">
+                <form action="/comments/like" method="post">
+                    <input type="hidden" name="comment-id" value="{{$comment.UUID}}">
+                    <input type="hidden" name="post-id" value="{{$post.UUID}}">
+                    <button type="submit">Like: {{$comment.LikesCount}}</button>
+                </form>
+                <form action="/comments/dislike" method="post">
+                    <input type="hidden" name="comment-id" value="{{$comment.UUID}}">
+                    <input type="hidden" name="post-id" value="{{$post.UUID}}">
+
+                    <button type="submit">Dislike: {{$comment.DislikesCount}}</button>
+                </form>
+            </div>
             {{end}}
-        
+        </div>
+        {{else}}
+            <div class="comment-section">
+                No comments yet. Be the first to comment!
+            </div>
+        {{end}}
+        <div>
             <!-- Comment form -->
             <form action="/comment" method="POST">
                 <input type="hidden" name="postUUID" value="{{.UUID}}">
@@ -60,7 +79,7 @@
     </section>
 
     <footer>
-        <p><a href="/Home">Back to Posts</a></p>
+        <p><a href="/">Back to Posts</a></p>
     </footer>
 </body>
 </html>

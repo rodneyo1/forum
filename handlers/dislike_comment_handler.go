@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"forum/database"
@@ -14,13 +15,21 @@ func DislikeCommentHandler(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 	commentID := r.FormValue("comment-id")
-	userID := 1 // Replace with actual logged-in user ID
-
-	err := database.DislikeComment(userID, commentID)
+	postID := r.FormValue("post-id")
+	userID, _, err := database.GetUserData(r)
 	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	err = database.DislikeComment(userID, commentID)
+	if err != nil {
+		fmt.Println(err.Error())
 		http.Error(w, "Failed to dislike comment", http.StatusInternalServerError)
 		return
 	}
 
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	// Redirect to the posts display page with the postID as a query parameter
+	redirectURL := fmt.Sprintf("/posts/display?pid=%s", postID)
+	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
 }

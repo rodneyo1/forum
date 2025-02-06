@@ -28,17 +28,17 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	// If the method is GET, if serve blank login form
 	if r.Method == "GET" {
 		// Skip login for users who are already loged in
-		{
-			hasCookie, _, err := HasCookie(r)
-			if err != nil {
-				InternalServerErrorHandler(w)
-				log.Println("Error checking session cookie: ", err)
-			}
-			if hasCookie {
-				http.Redirect(w, r, "/", http.StatusFound)
-				return
-			}
-		}
+		// {
+		// 	hasCookie, _, err := HasCookie(r)
+		// 	if err != nil {
+		// 		InternalServerErrorHandler(w)
+		// 		log.Println("Error checking session cookie: ", err)
+		// 	}
+		// 	if hasCookie {
+		// 		http.Redirect(w, r, "/", http.StatusFound)
+		// 		return
+		// 	}
+		// }
 
 		// Render login form
 		tmpl, err := template.ParseFiles(templatePath)
