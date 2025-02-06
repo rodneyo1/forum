@@ -196,17 +196,13 @@
     </div>
     
     <div class="container">
-        <div class="sidebar">
-            <h3 class="sidebar__heading">Categories</h3>
-            <ul class="sidebar__list">
-                <li class="sidebar__list-item">All Posts</li>
-                <li class="sidebar__list-item">Technology</li>
-                <li class="sidebar__list-item">Science</li>
-                <li class="sidebar__list-item">Health</li>
-                <li class="sidebar__list-item">Sports</li>
-                <li class="sidebar__list-item">Fashion</li>
-                <li class="sidebar__list-item">Multi-Category</li>
-            </ul>
+        <div class="left-section">
+            <h3>Categories</h3>
+            {{range .Categories}}
+            <a href="/categories/{{.ID}}">
+                <p>{{.Name}}</p>
+            </a>
+            {{end}}
         </div>
         
         <div class="main-content">
