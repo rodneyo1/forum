@@ -1,0 +1,111 @@
+/* Apply a background color to the entire page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #5c5b5b;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Center the login container */
+.login-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    width: 350px;
+    text-align: center;
+}
+
+/* Style headings */
+h1 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 15px;
+    letter-spacing: 2px;
+}
+
+.login p:first-of-type {
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    font-style: italic;
+    letter-spacing: 1px;
+    color: #555;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* Style form elements */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Style the labels */
+form label {
+    display: block;  /* Ensures labels are on their own line */
+    text-align: left;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000000;
+    margin-top: 10px;
+    margin-left: 15px;
+    letter-spacing: 1px;
+}
+
+form input {
+    display: block;       /* Ensures each input takes a full line */
+    width: 100%;           /* Adjust width as needed */
+    max-width: 300px;     /* Prevents input from becoming too large */
+    margin: 0 auto;       /* Centers the input horizontally */
+    padding: 10px;        /* Adds space inside the input box */
+    border: 1px solid #ccc; /* Light border for structure */
+    border-radius: 5px;   /* Soft rounded edges */
+    font-size: 14px;      /* Readable text size */
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Style buttons */
+button {
+    background-color: #F13B50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+button:hover {
+    background-color: #d33648;
+}
+
+/* Account issues text */
+.account-issues {
+    text-align: left;
+    margin-left: 12px;
+}
+
+/* Account issues links */
+.account-issues a {
+    color: #F13B50;
+    text-decoration: none;
+}
+
+.account-issues a:hover {
+    text-decoration: underline;
+}
