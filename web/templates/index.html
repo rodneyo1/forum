@@ -72,9 +72,12 @@
     </div>
     <div class="container">
         <div class="left-section">
-            <h3>Friend Suggestions</h3>
-            <p>Michael Brown</p>
-            <p>Emily White</p>
+            <h3>Categories</h3>
+            {{range .Categories}}
+            <a href="/categories/{{.ID}}">
+                <p>{{.Name}}</p>
+            </a>
+            {{end}}
         </div>
         <div class="right-section">
             <h3>News Feed</h3>
