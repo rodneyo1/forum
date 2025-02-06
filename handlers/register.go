@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
+	"regexp"
 
 	"forum/database"
 	"forum/models"
@@ -126,8 +126,11 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Validate email format
+
 func ValidEmail(email string) bool {
-	return strings.Contains(email, "@") || strings.HasPrefix(email, ".com")
+	regex := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
+	return regexp.MustCompile(regex).MatchString(email)
 }
 
 func UploadImage(w http.ResponseWriter, r *http.Request, user *models.User, tmpl *template.Template) {
