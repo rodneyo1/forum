@@ -28,6 +28,18 @@ h1 {
     letter-spacing: 2px;
 }
 
+/* Style logo */
+.logo {
+    font-family: 'Open Sans', sans-serif;  /* Use Open Sans */
+    font-weight: 700;                      /* Make it bold */
+    font-size: 50px;                        /* Adjust size */
+    text-transform: none;              
+    letter-spacing: 2px;                    /* Add spacing for a sleek look */
+    color: #0172eb;                            /* Dark color */
+    text-align: center;                     /* Center it */
+    margin-bottom: 10px;                    /* Add spacing below */
+}
+
 .login p:first-of-type {
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
@@ -78,7 +90,7 @@ input {
 
 /* Style buttons */
 button {
-    background-color: #F13B50;
+    background-color: #0172eb;
     color: white;
     padding: 10px;
     border: none;
@@ -91,7 +103,7 @@ button {
 }
 
 button:hover {
-    background-color: #d33648;
+    background-color: #0056b3;
 }
 
 /* Account issues text */
@@ -102,7 +114,7 @@ button:hover {
 
 /* Account issues links */
 .account-issues a {
-    color: #F13B50;
+    color: #0172eb;
     text-decoration: none;
 }
 
