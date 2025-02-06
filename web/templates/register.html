@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/onboarding.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@700&display=swap" rel="stylesheet">
     <title>Register</title>
 </head>
 <body>
@@ -15,25 +15,25 @@
             <label for="email">Email</label>
             <input type="text" id="email" placeholder="example@email.com" name="email" required>
 
-            <label for="username">username</label>
+            <label for="username">Username</label>
             <input type="text" id="username" placeholder="username" name="username" required>
-            <p>
-                <ul>
-                   *<strong>Recommended Password Rules</strong>
-                   <li>Password must be at least 8 characters login.</li>
-                    <li>Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%).</li>
-                </ul>
-            </p>
-            <label for="password">password</label>
+
+            <ul class="password-rules">
+                <li><strong>Recommended Password Rules</strong></li>
+                <li>Password must be at least 8 characters long.</li>
+                <li>Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%).</li>
+            </ul>
+
+            <label for="password">Password</label>
             <input type="password" id="password" placeholder="password" name="password" required>
 
-            <label for="confirm_password">confirm Password</label>
+            <label for="confirm_password">Confirm Password</label>
             <input type="password" id="confirm_password" placeholder="confirm password" name="confirm_password" required>
 
             <label for="bio">Bio</label>
-            <textarea type="text" id="bio" placeholder="about me" name="bio" required></textarea>
-        
-            <label for="image">choose image</label>
+            <textarea id="bio" placeholder="About me" name="bio" required></textarea>
+
+            <label for="image">Choose Image</label>
             <input type="file" id="image" name="image" accept="image/*">
            
             <button type="submit">Register</button>
