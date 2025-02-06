@@ -62,7 +62,8 @@ func GetUserbySessionID(UUID string) (models.User, error) {
 
 // Get all posts by a user
 func GetUserPostsbyUserID(ID int)([]models.Post, error) {
-	query := `SELECT user_id, title, content, media, created_at FROM posts WHERE user_id = ?`
+    
+	query := `SELECT uuid, title, content, media, created_at FROM posts WHERE user_id = ?`
     rows,err := db.Query(query,ID)
     if err != nil {
         log.Println("Error querying posts by user ID:", err)
@@ -74,7 +75,7 @@ func GetUserPostsbyUserID(ID int)([]models.Post, error) {
     for rows.Next() {
         var post models.Post
         var media sql.NullString
-        err:=rows.Scan( &post.UserID, &post.Title, &post.Content, &media, &post.CreatedAt)
+        err:=rows.Scan( &post.UUID, &post.Title, &post.Content, &media, &post.CreatedAt)
         if err!=nil{
             log.Println("Error scanning post row:", err)
             return nil, err
