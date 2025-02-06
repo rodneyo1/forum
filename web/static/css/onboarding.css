@@ -110,6 +110,7 @@ button:hover {
 .account-issues {
     text-align: left;
     margin-left: 12px;
+    font-size: 18px;
 }
 
 /* Account issues links */
@@ -119,5 +120,6 @@ button:hover {
 }
 
 .account-issues a:hover {
-    text-decoration: underline;
+    text-transform: uppercase;
+    font-weight: 700;
 }
