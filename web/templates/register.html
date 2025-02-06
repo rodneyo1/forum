@@ -9,10 +9,14 @@
 </head>
 <body>
     <div class="registration-container">
+        <h1 class="logo">forum</h1>
         <h1>Register</h1>
         <form method="POST" action="/register" enctype="multipart/form-data">
-            <p>email</p><input type="text" id="email" placeholder="example@email.com" name="email" required>
-            <p>username</p><input type="text" id="username" placeholder="username" name="username" required>
+            <label for="email">Email</label>
+            <input type="text" id="email" placeholder="example@email.com" name="email" required>
+
+            <label for="username">username</label>
+            <input type="text" id="username" placeholder="username" name="username" required>
             <p>
                 <ul>
                    *<strong>Recommended Password Rules</strong>
@@ -20,13 +24,18 @@
                     <li>Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%).</li>
                 </ul>
             </p>
-            <p>password</p><input type="password" id="password" placeholder="password" name="password" required>
-            <p>confirm Password</p><input type="password" id="confirm_password" placeholder="confirm password" name="confirm_password" required>
-            <p>Bio</p><textarea type="text" id="bio" placeholder="about me" name="bio" required></textarea>
-            <br>
+            <label for="password">password</label>
+            <input type="password" id="password" placeholder="password" name="password" required>
+
+            <label for="confirm_password">confirm Password</label>
+            <input type="password" id="confirm_password" placeholder="confirm password" name="confirm_password" required>
+
+            <label for="bio">Bio</label>
+            <textarea type="text" id="bio" placeholder="about me" name="bio" required></textarea>
+        
             <label for="image">choose image</label>
             <input type="file" id="image" name="image" accept="image/*">
-            <br>
+           
             <button type="submit">Register</button>
         </form>
         
@@ -35,8 +44,9 @@
         <a href="/google-signin">
             <button>continue with google</button>
         </a> -->
-
-        <p>have an account? <a href="/login">login</a></p>
+        <div class="account-issues"></div>
+        <p>Have an Account? <a href="/login">Login</a></p>
+    </div>
 
     <input type="hidden" id="error_message" value="{{.ErrorMessage}}">
 
