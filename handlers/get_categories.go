@@ -64,7 +64,7 @@ func SingeCategoryPosts(w http.ResponseWriter, r *http.Request ){
 	tmpl := template.Must(template.ParseFiles("web/templates/category.html"))
 	// Execute the template with the posts
 	data := struct {
-		Posts []models.PostWithUsername
+		Posts []models.Post
 	}{
 		Posts: posts,
 	}
