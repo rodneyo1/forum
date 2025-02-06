@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"forum/database"
@@ -34,7 +35,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 				log.Println("Error checking session cookie: ", err)
 			}
 			if hasCookie {
-				http.Redirect(w, r, "/home", http.StatusFound)
+				http.Redirect(w, r, "/", http.StatusFound)
 				return
 			}
 		}
@@ -79,16 +80,25 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	password := r.FormValue("password")
 
 	// Validate credentials
-	if !database.VerifyUser(emailUsername, password) {
-		tmpl, err := template.ParseFiles(templatePath)
-		if err != nil {
+	_, err = database.VerifyUser(emailUsername, password)
+	if err != nil {
+		issue := err.Error()
+		// Prepare template to render error message
+		tmpl, err1 := template.ParseFiles(templatePath)
+		if err1 != nil {
 			InternalServerErrorHandler(w)
 			return
 		}
 
-		ParseAlertMessage(w, tmpl, "Invalid username/email or password")
-		log.Println("INFO: Invalid username/email or password")
-		http.Redirect(w, r, "/login", http.StatusOK)
+		// Check for non-existent users
+		if strings.Contains(issue, "user does not exist") {
+			ParseAlertMessage(w, tmpl, "user does not exist")
+			log.Println("INFO: User does not exist")
+			return
+		}
+
+		ParseAlertMessage(w, tmpl, "wrong password")
+		log.Printf("ERROR: %v", err)
 		return
 	}
 
@@ -138,7 +148,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &cookie)
 
 	// Redirect the user to the home page or a protected route
-	http.Redirect(w, r, "/home", http.StatusSeeOther)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func HasCookie(r *http.Request) (bool, *http.Cookie, error) {

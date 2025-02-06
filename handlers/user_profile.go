@@ -2,10 +2,10 @@ package handlers
 
 import (
 	"forum/database"
-	"net/http"
 	"html/template"
-	 "log"
-	 "forum/models"
+	"log"
+	"net/http"
+	"forum/models"
 	//  "fmt"
 )
 
@@ -17,15 +17,15 @@ func ViewUserProfile(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    if !cookieExists {
-        http.Redirect(w, r, "/login", http.StatusSeeOther)
-        return
-    }
+	if !cookieExists {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
 
-    userData, err := database.GetUserbySessionID(cookie.Value)
-   // fmt.Printf("UserData retrieved: %+v\n", userData)  // Add debug logging
-    if err != nil {
-        log.Printf("Error getting user: %v\n", err)  // Add error logging
+	userData, err := database.GetUserbySessionID(cookie.Value)
+	// fmt.Printf("UserData retrieved: %+v\n", userData)  // Add debug logging
+	if err != nil {
+		log.Printf("Error getting user: %v\n", err) // Add error logging
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
         return
     }
