@@ -80,12 +80,12 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	password := r.FormValue("password")
 
 	// Validate credentials
-	match, err := database.VerifyUser(emailUsername, password)
+	_, err = database.VerifyUser(emailUsername, password)
 	if err != nil {
 		issue := err.Error()
 		// Prepare template to render error message
-		tmpl, err := template.ParseFiles(templatePath)
-		if err != nil {
+		tmpl, err1 := template.ParseFiles(templatePath)
+		if err1 != nil {
 			InternalServerErrorHandler(w)
 			return
 		}
@@ -97,21 +97,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		ParseAlertMessage(w, tmpl, "something went wrong, please try again")
-		log.Println("ERROR: hash corruption or bcrypt error")
-		return
-	}
-
-	if !match {
-		// Prepare template to render error message
-		tmpl, err := template.ParseFiles(templatePath)
-		if err != nil {
-			InternalServerErrorHandler(w)
-			return
-		}
-
-		ParseAlertMessage(w, tmpl, "Invalid username/email or password")
-		log.Println("INFO: Invalid username/email or password")
+		ParseAlertMessage(w, tmpl, "wrong password")
+		log.Printf("ERROR: %v", err)
 		return
 	}
 
