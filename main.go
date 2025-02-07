@@ -56,6 +56,7 @@ func main() {
 	http.HandleFunc("/posts/dislike", posts.DislikePost)
 	http.HandleFunc("/categories", posts.CategoriesPage)
 	http.HandleFunc("/categories/", posts.SingeCategoryPosts)
+	http.HandleFunc("/search", posts.Search)
 	// RESTORE // http.Handle("/posts/create", middleware.AuthMiddleware(http.HandlerFunc(postHandlers.PostCreate)))
 
 	// comments

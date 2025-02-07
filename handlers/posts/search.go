@@ -1,4 +1,4 @@
-package handlers
+package posts
 
 import (
     "forum/database"
@@ -9,7 +9,7 @@ import (
 )
 
 // SearchHandler handles search requests
-func SearchHandler(w http.ResponseWriter, r *http.Request) {
+func Search(w http.ResponseWriter, r *http.Request) {
     query := r.URL.Query().Get("q")
     if query == "" {
         http.Error(w, "Query parameter is missing", http.StatusBadRequest)
