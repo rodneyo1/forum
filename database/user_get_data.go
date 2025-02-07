@@ -1,7 +1,6 @@
 package database
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"net/http"
@@ -33,12 +32,12 @@ func GetUserData(r *http.Request) (int, string, error) {
 	}
 
 	// Save user data to the request context
-	ctx := r.Context()
-	ctx = context.WithValue(ctx, "userID", userData.ID)
-	ctx = context.WithValue(ctx, "username", userData.Username)
+	// ctx := r.Context()
+	// ctx = context.WithValue(ctx, "userID", userData.ID)
+	// ctx = context.WithValue(ctx, "username", userData.Username)
 
-	// Pass the updated context back to the request
-	r = r.WithContext(ctx)
+	// // Pass the updated context back to the request
+	// r = r.WithContext(ctx)
 
 	// Return user data
 	return userData.ID, userData.Username, nil
