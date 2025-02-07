@@ -11,6 +11,12 @@
     <div class="registration-container">
         <h1 class="logo">forum</h1>
         <h1>Register</h1>
+
+        <input type="hidden" id="error_message" value="{{.ErrorMessage}}">
+        {{ if .ErrorMessage }}
+        <p style="color: red;">{{.ErrorMessage}}</p>
+    {{ end }}
+
         <form method="POST" action="/register" enctype="multipart/form-data">
             <label for="email">Email</label>
             <input type="text" id="email" placeholder="example@email.com" name="email" required>
@@ -33,9 +39,13 @@
             <label for="bio">Bio</label>
             <textarea id="bio" placeholder="About me" name="bio" required></textarea>
 
-            <label for="image">Choose Image</label>
-            <input type="file" id="image" name="image" accept="image/*">
-            <span id="file-name">No file chosen</span>
+            <div class="custom-file-upload">
+                <label for="image" class="upload-btn">Choose Image</label>
+                <input type="file" id="image" name="image" accept="image/*">
+                <p id="file-name">No file chosen</p>
+                <button id="remove-image" class="remove-btn" style="display: none;">Remove Image</button>
+            </div>
+            
            
             <button type="submit">Register</button>
         </form>
@@ -50,23 +60,7 @@
     </div>
 </div>
 
-    <input type="hidden" id="error_message" value="{{.ErrorMessage}}">
-
-        <script>
-            window.onload = function() {
-                errMessage = document.getElementById("error_message").value;
-                if (errMessage) {
-                    alert(errMessage);
-                }
-            }
-        </script>
-
-<script>
-    document.getElementById("image").addEventListener("change", function() {
-        let fileName = this.files.length > 0 ? this.files[0].name : "No file chosen";
-        document.getElementById("file-name").textContent = fileName;
-    });
-</script>
+    <script src="/static/js/onboarding.js"></script>
 
 </body>
 </html>
