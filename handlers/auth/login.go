@@ -1,4 +1,4 @@
-package handlers
+package auth
 
 import (
 	"html/template"
@@ -8,19 +8,20 @@ import (
 	"time"
 
 	"forum/database"
+	"forum/handlers/errors"
 	"forum/models"
 	"forum/utils"
 )
 
 // LoginHandler handles user login and session creation, as well as preventing login when already logged in.
-func LoginHandler(w http.ResponseWriter, r *http.Request) {
+func Login(w http.ResponseWriter, r *http.Request) {
 	var user models.User
 
 	// Build path to login.html
-	templatePath, err := GetTemplatePath("login.html")
+	templatePath, err := utils.GetTemplatePath("login.html")
 	if err != nil {
 		log.Println("Not nil")
-		InternalServerErrorHandler(w)
+		errors.InternalServerErrorHandler(w)
 		log.Println("Could not find template file: ", err)
 		return
 	}
@@ -31,7 +32,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		{
 			hasCookie, _, err := HasCookie(r)
 			if err != nil {
-				InternalServerErrorHandler(w)
+				errors.InternalServerErrorHandler(w)
 				log.Println("Error checking session cookie: ", err)
 			}
 			if hasCookie {
@@ -47,7 +48,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if err := tmpl.Execute(w, nil); err != nil {
-			InternalServerErrorHandler(w)
+			errors.InternalServerErrorHandler(w)
 			return
 		}
 		return
@@ -55,7 +56,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Catch non-Get and non-POST requests
 	if r.Method != "POST" {
-		BadRequestHandler(w)
+		errors.BadRequestHandler(w)
 		log.Println("LoginHandler ERROR: Bad request method")
 		return
 	}
@@ -86,7 +87,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		// Prepare template to render error message
 		tmpl, err1 := template.ParseFiles(templatePath)
 		if err1 != nil {
-			InternalServerErrorHandler(w)
+			errors.InternalServerErrorHandler(w)
 			return
 		}
 
@@ -106,9 +107,9 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	sessionID, err := database.LoginUser(user.Username, user.Email, user.Password)
 	if err != nil {
 		// Login failed, render the login template with an error message
-		templatePath, err := GetTemplatePath("login.html")
+		templatePath, err := utils.GetTemplatePath("login.html")
 		if err != nil {
-			InternalServerErrorHandler(w)
+			errors.InternalServerErrorHandler(w)
 			log.Println("Could not find template file: ", err)
 			return
 		}
@@ -127,7 +128,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			Error: "Invalid username/email or password",
 		}
 		if err := tmpl.Execute(w, data); err != nil {
-			InternalServerErrorHandler(w)
+			errors.InternalServerErrorHandler(w)
 			return
 		}
 
@@ -169,15 +170,15 @@ func ParseAlertMessage(w http.ResponseWriter, tmpl *template.Template, message s
 	// Execute the page
 	err := tmpl.Execute(w, alert)
 	if err != nil {
-		InternalServerErrorHandler(w)
+		errors.InternalServerErrorHandler(w)
 		log.Printf("Could not execute template %v", err)
 		return
 	}
 }
 
-func SuccessHandler(w http.ResponseWriter, r *http.Request) {
+func Success(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
-		BadRequestHandler(w)
+		errors.BadRequestHandler(w)
 		return
 	}
 	http.Error(w, "Loged in1!", http.StatusInternalServerError)

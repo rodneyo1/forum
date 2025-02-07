@@ -1,4 +1,4 @@
-package handlers
+package posts
 
 import (
 	"net/http"
@@ -6,7 +6,7 @@ import (
 	"forum/database"
 )
 
-func DislikePostHandler(w http.ResponseWriter, r *http.Request) {
+func DislikePost(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return

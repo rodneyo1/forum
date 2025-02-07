@@ -1,4 +1,4 @@
-package handlers
+package auth
 
 import (
 	"fmt"
@@ -11,17 +11,18 @@ import (
 	"regexp"
 
 	"forum/database"
+	"forum/handlers/errors"
 	"forum/models"
 	"forum/utils"
 )
 
-func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
+func Registration(w http.ResponseWriter, r *http.Request) {
 	var user models.User
 
 	// Construct absolute path to register.html
-	tmplPath, err := GetTemplatePath("register.html")
+	tmplPath, err := utils.GetTemplatePath("register.html")
 	if err != nil {
-		InternalServerErrorHandler(w)
+		errors.InternalServerErrorHandler(w)
 		log.Println("Could not find template file: ", err)
 		return
 	}
@@ -37,7 +38,7 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		err := tmpl.Execute(w, nil)
 		if err != nil {
-			InternalServerErrorHandler(w)
+			errors.InternalServerErrorHandler(w)
 			log.Println("Could not render registration template: ", err)
 			return
 		}
@@ -47,14 +48,14 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	// Logout previous session
 	err = LogOutSession(w, r)
 	if err != nil {
-		InternalServerErrorHandler(w)
+		errors.InternalServerErrorHandler(w)
 		log.Println("Error logging out session: ", err)
 		return
 	}
 
 	// Handle non-GET and non-POST requests
 	if r.Method != "POST" {
-		BadRequestHandler(w)
+		errors.BadRequestHandler(w)
 		log.Println("RegistrationHandler ERROR: Bad request")
 		return
 	}
@@ -62,7 +63,7 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	// Parse form data
 	err = r.ParseForm()
 	if err != nil {
-		BadRequestHandler(w)
+		errors.BadRequestHandler(w)
 		log.Println("Invalid form submission", http.StatusBadRequest)
 		return
 	}

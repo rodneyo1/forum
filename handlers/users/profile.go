@@ -1,17 +1,19 @@
-package handlers
+package auth
 
 import (
 	"fmt"
-	"forum/database"
 	"html/template"
 	"log"
 	"net/http"
-	//"forum/models"
+
+	"forum/database"
+	"forum/handlers/auth"
+	"forum/utils"
 )
 
 // ViewUserProfile handler
-func ViewUserProfile(w http.ResponseWriter, r *http.Request) {
-	cookieExists, cookie, err := HasCookie(r)
+func ViewProfile(w http.ResponseWriter, r *http.Request) {
+	cookieExists, cookie, err := auth.HasCookie(r)
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		fmt.Println("Redirected to login")
@@ -32,7 +34,7 @@ func ViewUserProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Render the template with data
-	path, err := GetTemplatePath("profile.html")
+	path, err := utils.GetTemplatePath("profile.html")
 	if err != nil {
 		fmt.Println("Error getting template path")
 	}

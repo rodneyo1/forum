@@ -1,4 +1,4 @@
-package handlers
+package posts
 
 import (
 	"encoding/json"
@@ -13,7 +13,7 @@ import (
 )
 
 // GetCategoriesHandler handles requests to retrieve all categories.
-func GetCategoriesHandler(w http.ResponseWriter, r *http.Request) {
+func GetCategories(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
@@ -30,7 +30,7 @@ func GetCategoriesHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Sends all categories
-func CategoriesPageHandler(w http.ResponseWriter, r *http.Request) {
+func CategoriesPage(w http.ResponseWriter, r *http.Request) {
 	categories, err := database.FetchCategories()
 	if err != nil {
 		http.Error(w, "Failed to fetch categories", http.StatusInternalServerError)

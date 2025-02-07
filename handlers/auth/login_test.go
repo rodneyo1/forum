@@ -1,4 +1,4 @@
-package handlers
+package auth
 
 import (
 	"net/http"
@@ -18,7 +18,7 @@ func TestLoginHandler_GET(t *testing.T) {
 	rr := httptest.NewRecorder()
 
 	// Call the handler function
-	handler := http.HandlerFunc(LoginHandler)
+	handler := http.HandlerFunc(Login)
 	handler.ServeHTTP(rr, req)
 
 	// Check the status code
@@ -57,7 +57,7 @@ func TestLoginHandler_InvalidMethod(t *testing.T) {
 	}
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(LoginHandler)
+	handler := http.HandlerFunc(Login)
 
 	handler.ServeHTTP(rr, req)
 
@@ -74,7 +74,7 @@ func TestLoginHandler_FormFields(t *testing.T) {
 	}
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(LoginHandler)
+	handler := http.HandlerFunc(Login)
 
 	handler.ServeHTTP(rr, req)
 

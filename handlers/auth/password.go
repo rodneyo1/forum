@@ -1,11 +1,13 @@
-package handlers
+package auth
 
 import (
 	"html/template"
 	"net/http"
+
+	"forum/handlers/errors"
 )
 
-func ForgotPasswordHandler(w http.ResponseWriter, r *http.Request) {
+func ForgotPassword(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("web/templates/forgot_password.html")
 	if err != nil {
 		http.Error(w, "Failed to load Success template", http.StatusInternalServerError)
@@ -13,7 +15,7 @@ func ForgotPasswordHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := tmpl.Execute(w, r); err != nil {
-		InternalServerErrorHandler(w)
+		errors.InternalServerErrorHandler(w)
 		return
 	}
 }

@@ -1,4 +1,4 @@
-package handlers
+package auth
 
 import (
 	"log"
@@ -6,12 +6,14 @@ import (
 	"time"
 
 	"forum/database"
+	"forum/handlers/errors"
+
 )
 
-func LogoutHandler(w http.ResponseWriter, r *http.Request) {
+func Logout(w http.ResponseWriter, r *http.Request) {
 	// Restrict non-POST requests
 	if r.Method != "POST" {
-		BadRequestHandler(w)
+		errors.BadRequestHandler(w)
 		log.Println("ERROR: LogoutHandler does not allow non-POST requests")
 		return
 	}
@@ -19,7 +21,7 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	// Destroy cookies if any
 	err := LogOutSession(w, r)
 	if err != nil {
-		InternalServerErrorHandler(w)
+		errors.InternalServerErrorHandler(w)
 		return
 	}
 

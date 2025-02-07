@@ -8,7 +8,7 @@ import (
 	"forum/models"
 )
 
-func IndexHandler(w http.ResponseWriter, r *http.Request) {
+func Index(w http.ResponseWriter, r *http.Request) {
 	// Fetch posts from the database
 	posts, err := database.GetAllPosts()
 	if err != nil {
