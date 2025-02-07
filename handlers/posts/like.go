@@ -1,4 +1,4 @@
-package handlers
+package posts
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"forum/database"
 )
 
-func LikePostHandler(w http.ResponseWriter, r *http.Request) {
+func LikePost(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return

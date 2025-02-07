@@ -1,4 +1,4 @@
-package handlers
+package errors
 
 import (
 	"net/http"
@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"forum/models"
+	"forum/utils"
 )
 
 func TestBadRequestHandler_StatusCode400(t *testing.T) {
@@ -236,7 +237,7 @@ func TestGetTemplatePath_FoundInCurrentDirectory(t *testing.T) {
 	defer os.Chdir(oldWd)
 
 	// Call the function
-	path, err := GetTemplatePath(templateFile)
+	path, err := utils.GetTemplatePath(templateFile)
 	// Check the result
 	if err != nil {
 		t.Errorf("Expected no error, got: %v", err)
@@ -264,7 +265,7 @@ func TestGetTemplatePath_NotFound(t *testing.T) {
 	defer os.Chdir(originalWd)
 
 	// Call GetTemplatePath with a non-existent template file
-	_, err = GetTemplatePath("non_existent_template.html")
+	_, err = utils.GetTemplatePath("non_existent_template.html")
 
 	// Check if an error is returned
 	if err == nil {
@@ -311,7 +312,7 @@ func TestGetTemplatePath_SpecialCharacters(t *testing.T) {
 	defer os.Chdir(originalWd)
 
 	// Test GetTemplatePath with the special character file name
-	result, err := GetTemplatePath(specialFileName)
+	result, err := utils.GetTemplatePath(specialFileName)
 	if err != nil {
 		t.Errorf("GetTemplatePath returned an error: %v", err)
 	}
@@ -323,7 +324,7 @@ func TestGetTemplatePath_SpecialCharacters(t *testing.T) {
 }
 
 func TestGetTemplatePath_EmptyFileName(t *testing.T) {
-	_, err := GetTemplatePath("")
+	_, err := utils.GetTemplatePath("")
 	if err == nil {
 		t.Error("Expected an error for empty file name, but got nil")
 	}
@@ -347,7 +348,7 @@ func TestGetTemplatePath_DirectoryNotExist(t *testing.T) {
 	defer os.Chdir(oldWd)
 
 	// Call GetTemplatePath
-	_, err = GetTemplatePath("test.html")
+	_, err = utils.GetTemplatePath("test.html")
 
 	// Check if the function returns an error
 	if err == nil {
@@ -387,7 +388,7 @@ func TestGetTemplatePath_SymbolicLinks(t *testing.T) {
 	defer os.Chdir(oldWd)
 
 	// Test GetTemplatePath
-	path, err := GetTemplatePath("test.html")
+	path, err := utils.GetTemplatePath("test.html")
 	if err != nil {
 		t.Errorf("GetTemplatePath failed: %v", err)
 	}
@@ -430,7 +431,7 @@ func TestGetTemplatePath_MultipleMatches(t *testing.T) {
 	}
 
 	// Call the function
-	result, err := GetTemplatePath("test.html")
+	result, err := utils.GetTemplatePath("test.html")
 	// Check the result
 	if err != nil {
 		t.Errorf("Unexpected error: %v", err)
