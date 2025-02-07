@@ -7,9 +7,10 @@ import (
 	"os"
 
 	"forum/database"
-	"forum/handlers"
+
 	auth "forum/handlers/auth"
 	comments "forum/handlers/comments"
+	"forum/handlers/misc"
 	posts "forum/handlers/posts"
 	users "forum/handlers/users"
 	"forum/utils"
@@ -41,8 +42,8 @@ func main() {
 	}
 
 	// authentication
-	http.HandleFunc("/", handlers.Index)
-	http.HandleFunc("/static/", handlers.Static)
+	http.HandleFunc("/", posts.Index)
+	http.HandleFunc("/static/", misc.Static)
 	http.HandleFunc("/success", auth.Success)
 	http.HandleFunc("/login", auth.Login)
 	http.HandleFunc("/forgot-password", auth.ForgotPassword)
