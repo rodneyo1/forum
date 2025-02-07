@@ -94,6 +94,10 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 20px;
     box-sizing: border-box;
+    position: sticky;
+    top: 100px; /* Distance from the top when scrolling */
+    height: fit-content; /* Adjust height based on content */
+    align-self: flex-start; /* Ensures it aligns properly in flexbox */
 }
 
 .sidebar__heading {
