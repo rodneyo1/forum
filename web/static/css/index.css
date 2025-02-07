@@ -6,12 +6,16 @@
 }
 
 body {
-    background-color: #d7dad9;
+    background-color: #c6c7c7;
     color: #333;
     line-height: 1.6;
 }
 
 .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     background-color: #ffffff;
     padding: 10px 20px;
     display: flex;
@@ -19,6 +23,7 @@ body {
     align-items: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     font-family: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    z-index: 1000;
 }
 
 .navbar__title {
@@ -119,6 +124,10 @@ body {
     transform: scale(1.05);
 }
 
+.sidebar a {
+    text-decoration: none;
+}
+
 .main-content {
     width: 70%;
     background-color: #ffffff;
@@ -133,6 +142,10 @@ body {
     color: #0172eb;
     margin-bottom: 20px;
     font-weight: 600;
+}
+
+.main-content a {
+    text-decoration: none;
 }
 
 .card {
