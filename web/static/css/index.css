@@ -97,6 +97,10 @@ body {
     align-self: flex-start; /* Ensures it aligns properly in flexbox */
 }
 
+/* .sidebar__close {
+    display: none;
+} */
+
 .sidebar__heading {
     font-size: 18px;
     margin-bottom: 20px;
@@ -261,10 +265,13 @@ body {
 
 /* Initially hide the sidebar on small screens */
 @media (max-width: 768px) {
+    body {
+        background-color: #ffffff;
+    }
     .sidebar {
         position: fixed;
         left: -100%; /* Hide off-screen */
-        top: 80px; /* Below navbar */
+        top: 70px; /* Below navbar */
         width: 250px;
         background-color: white;
         box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
@@ -279,7 +286,7 @@ body {
         background: none;
         border: none;
         font-size: 20px;
-        color: #0172eb;
+        color: #F13B50;
         cursor: pointer;
     }
   
@@ -292,11 +299,22 @@ body {
     .hamburger {
         display: block;
         cursor: pointer;
-        font-size: 24px;
+        font-size: 30px;
         background: none;
         border: none;
-        color: #0172eb;
-        padding: 10px;
+        color: #F13B50;
+        padding: 5px;
+        position: fixed;
+        top: 60px; /* Adjust for spacing from top */
+        left: 5px; /* Adjust for spacing from left */
+        z-index: 1000; /* Ensures it stays above other elements */
+    }
+
+    .main-content {
+        width: 100%;  /* Take full width */
+        border-radius: 20px;  /* Remove rounded corners for a clean look */
+        box-shadow: none;  /* Remove shadow to match full-width design */
+        padding: 15px; /* Slightly reduce padding for better spacing */
     }
 }
 
