@@ -16,8 +16,7 @@
         </a>
         
         <div class="navbar__actions">
-            <input type="text" class="navbar__search" placeholder="Search Forum">
-
+            <!-- <input type="text" class="navbar__search" placeholder="Search Forum"> -->
             <a href="/posts/create">
                 <button class="navbar__button" id="create-post-button">Create Post</button>
             </a>
@@ -45,6 +44,18 @@
             </a>
             {{end}}
         </div>
+
+        <!-- For mobile devices -->
+        <button class="hamburger" onclick="toggleSidebar()">☰</button>
+        <div class="sidebar">
+        <h2 class="sidebar__heading">Menu</h2>
+        <ul class="sidebar__list">
+            <li class="sidebar__list-item">Item 1</li>
+            <li class="sidebar__list-item">Item 2</li>
+            <li class="sidebar__list-item">Item 3</li>
+        </ul>
+    </div>
+
         
         <div class="main-content">
             <h3 class="main-content__heading">Posts</h3>
@@ -70,5 +81,6 @@
             {{end}}
         </div>
     </div>
+    <script src="/static/js/index.js"></script>
 </body>
 </html>
