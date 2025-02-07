@@ -31,12 +31,13 @@ func VerifyUser(email, password string) (bool, error) {
 // GetUserbySessionID function
 func GetUserbySessionID(UUID string) (models.User, error) {
 	// fmt.Println("Session ID:", UUID)
-	query := `SELECT username, email, bio, image, created_at FROM users WHERE session_id = ?`
+	query := `SELECT id, username, email, bio, image, created_at FROM users WHERE session_id = ?`
 
 	var user models.User
 	var bio, image sql.NullString // Use sql.NullString for nullable fields
 
 	err := db.QueryRow(query, UUID).Scan(
+		&user.ID,
 		&user.Username,
 		&user.Email,
 		&bio,   // Scan into NullString

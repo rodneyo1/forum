@@ -21,8 +21,11 @@ func DislikePostHandler(w http.ResponseWriter, r *http.Request) {
 
 	postID := r.FormValue("post-id")
 
-	// Replace with actual logged-in user ID
-	userID := 1
+	userID, _, err := database.GetUserData(r)
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
 
 	err = database.DislikePost(userID, postID)
 	if err != nil {
