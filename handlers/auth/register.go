@@ -3,12 +3,8 @@ package auth
 import (
 	"fmt"
 	"html/template"
-	"io"
 	"log"
 	"net/http"
-	"os"
-	"path/filepath"
-	"regexp"
 
 	"forum/database"
 	"forum/handlers/errors"
@@ -74,7 +70,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Validate email format
-	if !ValidEmail(r.FormValue("email")) {
+	if !utils.ValidEmail(r.FormValue("email")) {
 		ParseAlertMessage(w, tmpl, "Invalid email format")
 		return
 	}
@@ -109,9 +105,33 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	utils.Passwordhash(&user) // Hash password
 
 	// If provided, upload image parsed as profile picture
-	if r.FormValue("image") != "" {
-		UploadImage(w, r, &user, tmpl)
+	file, handler, err := r.FormFile("image")
+	if err != nil {
+		http.Error(w, "Failed to retrieve the file", http.StatusBadRequest)
+		return
 	}
+	defer file.Close()
+
+	// Validate the file extension type and size
+	allowedTypes := map[string]bool{
+		"image/png":  true,
+		"image/jpeg": true,
+	}
+	fileType := handler.Header.Get("Content-Type")
+	if !allowedTypes[fileType] {
+		http.Error(w, "Invalid file type. Only PNG and JPG images are allowed.", http.StatusBadRequest)
+		return
+	}
+
+	// save the image to disk
+	filename, err := utils.SaveImage(fileType, file, utils.IMAGES)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// update the name of the profile image
+	user.Image = filename
 
 	// Create new user in the database
 	_, err = database.CreateNewUser(user)
@@ -124,81 +144,5 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	// Redirect user to login page
 	if w.Header().Get("Content-Type") == "" {
 		http.Redirect(w, r, "/login", http.StatusFound)
-	}
-}
-
-// Validate email format
-
-func ValidEmail(email string) bool {
-	regex := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
-	return regexp.MustCompile(regex).MatchString(email)
-}
-
-func UploadImage(w http.ResponseWriter, r *http.Request, user *models.User, tmpl *template.Template) {
-	// Handle the uploaded file
-	file, handler, err := r.FormFile("image")
-	if err != nil {
-		ParseAlertMessage(w, tmpl, "image upload failed")
-		log.Panicln("Failed to retrieve the file")
-		return
-	}
-	defer file.Close()
-
-	// Validate the file extension type and size
-	allowedTypes := map[string]bool{
-		"image/png":  true,
-		"image/jpeg": true,
-	}
-
-	fileType := handler.Header.Get("Content-Type")
-	if !allowedTypes[fileType] {
-		ParseAlertMessage(w, tmpl, "Invalid file type. Only PNG and JPG images are allowed.")
-		log.Println("Invalid file type. Only PNG and JPG images are allowed.")
-		return
-	}
-
-	// Generate a random filename
-	randomFileName, err := utils.GenerateRandomName()
-	if err != nil {
-		ParseAlertMessage(w, tmpl, "image upload failed")
-		log.Println("Failed to generate a unique filename")
-		return
-	}
-
-	// Determine the file extension based on the MIME type
-	var ext string
-	switch fileType {
-	case "image/png":
-		ext = ".png"
-	case "image/jpeg":
-		ext = ".jpg"
-	}
-
-	// Construct the full filename
-	filename := randomFileName + ext
-	user.Image = filename
-
-	// Save the file to the media folder
-	mediaFolder := "web/static/images"
-	if err := os.MkdirAll(mediaFolder, os.ModePerm); err != nil {
-		ParseAlertMessage(w, tmpl, "image upload failed")
-		log.Println("Failed to create media folder")
-		return
-	}
-
-	filePath := filepath.Join(mediaFolder, filename)
-	outFile, err := os.Create(filePath)
-	if err != nil {
-		ParseAlertMessage(w, tmpl, "image upload failed")
-		log.Println("Failed to save the file")
-		return
-	}
-
-	defer outFile.Close()
-	// Copy the file content to the new file
-	if _, err := io.Copy(outFile, file); err != nil {
-		ParseAlertMessage(w, tmpl, "image upload failed")
-		log.Println("Failed to save the file")
-		return
 	}
 }

@@ -69,7 +69,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	// Populate user credentials
 	// Determine whether input is a valid email
-	if utils.IsValidEmail(r.FormValue("email_username")) {
+	if utils.ValidEmail(r.FormValue("email_username")) {
 		user.Email = r.FormValue("email_username")
 	} else {
 		user.Username = r.FormValue("email_username")
