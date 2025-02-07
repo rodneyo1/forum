@@ -103,7 +103,7 @@ func enableForeignKeys(db *sql.DB) error {
 * WAL (Write-Ahead Logging) Mode
 * In WAL mode, SQLite allows for greater concurrency by allowing multiple readers while there is a single writer.
 * This mode helps in reducing the chances of database locks when there are multiple concurrent read and write operations
-*/
+ */
 func enableWALMode(db *sql.DB) error {
 	_, err := db.Exec("PRAGMA journal_mode = WAL;")
 	if err != nil {

@@ -191,4 +191,3 @@ func DislikeComment(userID int, commentID string) error {
 
 	return nil
 }
-

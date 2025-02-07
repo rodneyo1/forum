@@ -30,7 +30,7 @@ func GetCategoriesHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Sends all categories
-func CategoriesPageHandler(w http.ResponseWriter, r *http.Request ){
+func CategoriesPageHandler(w http.ResponseWriter, r *http.Request) {
 	categories, err := database.FetchCategories()
 	if err != nil {
 		http.Error(w, "Failed to fetch categories", http.StatusInternalServerError)
@@ -48,20 +48,20 @@ func CategoriesPageHandler(w http.ResponseWriter, r *http.Request ){
 }
 
 // Sends all posts of a single category
-func SingeCategoryPosts(w http.ResponseWriter, r *http.Request ){
+func SingeCategoryPosts(w http.ResponseWriter, r *http.Request) {
 	// Extract the category ID from the URL path
-    pathParts := strings.Split(r.URL.Path, "/")
-    if len(pathParts) < 3 {
-        http.Error(w, "Invalid URL", http.StatusBadRequest)
-        return
-    }
-    categoryID := pathParts[2]
-    ID, err := strconv.Atoi(categoryID)
-    if err != nil {
-        log.Println(err)
-        w.WriteHeader(http.StatusInternalServerError)
-        return
-    }
+	pathParts := strings.Split(r.URL.Path, "/")
+	if len(pathParts) < 3 {
+		http.Error(w, "Invalid URL", http.StatusBadRequest)
+		return
+	}
+	categoryID := pathParts[2]
+	ID, err := strconv.Atoi(categoryID)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	// Fetch posts from the database
 	posts, err := database.FetchCategoryPostsWithID(ID)
 	if err != nil {
@@ -76,8 +76,8 @@ func SingeCategoryPosts(w http.ResponseWriter, r *http.Request ){
 	}{
 		Posts: posts,
 	}
-	err=tmpl.Execute(w, data)
+	err = tmpl.Execute(w, data)
 	if err != nil {
-        log.Println("Error executing template:", err)
-    }
+		log.Println("Error executing template:", err)
+	}
 }
