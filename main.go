@@ -23,9 +23,8 @@ func main() {
 	portStr := utils.Port() // get the port to use to start the server
 	port := fmt.Sprintf(":%d", portStr)
 
+	// will postpone the closure of the database handler created by init/0 function to when main/0 exits
 	defer database.Close()
-
-	database.CreateUser("toni", "toni@mail.com", "@antony222")
 
 	// Restrict arguments parsed
 	if len(os.Args) != 1 {
@@ -41,6 +40,7 @@ func main() {
 	http.HandleFunc("/login", handlers.LoginHandler)
 	http.HandleFunc("/forgot-password", handlers.ForgotPasswordHandler)
 	http.HandleFunc("/register", handlers.RegistrationHandler)
+	http.HandleFunc("/logout", handlers.LogoutHandler)
 	// RESTORE // http.Handle("/posts/create", middleware.AuthMiddleware(http.HandlerFunc(postHandlers.PostCreate)))
 	http.HandleFunc("/posts/create", postHandlers.PostCreate)
 	http.HandleFunc("/posts/display", postHandlers.PostDisplay)

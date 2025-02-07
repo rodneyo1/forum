@@ -1,0 +1,235 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #d7dad9;
+    color: #333;
+    line-height: 1.6;
+}
+
+.navbar {
+    background-color: #ffffff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-family: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+.navbar__title {
+    font-family: 'Open Sans', sans-serif;  /* Use Open Sans */
+    font-weight: 700;                      /* Make it bold */
+    font-size: 30px;                        /* Adjust size */
+    text-transform: none;              
+    letter-spacing: 3px;                    /* Add spacing for a sleek look */
+    color: #0172eb;                            /* Dark color */
+    text-align: center;                     /* Center it */
+    margin-bottom: 10px;                    /* Add spacing below */
+}
+
+.navbar a {
+    text-decoration: none;
+}
+
+.navbar__actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.navbar__search {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #333;
+    transition: border 0.3s ease;
+}
+
+.navbar__search:focus {
+    border-color: #0172eb;
+    outline: none;
+}
+
+.navbar__button {
+    padding: 8px 15px;
+    background-color: #0172eb;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.navbar__button:hover {
+    background-color: #0056b3;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 30px auto;
+    max-width: 1200px;
+    padding: 0 20px;
+}
+
+.sidebar {
+    width: 25%;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.sidebar__heading {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #0172eb;
+    font-weight: 600;
+}
+
+.sidebar__list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.sidebar__list-item {
+    font-size: 16px;
+    margin: 12px 0;
+    color: #555;
+    padding: 10px;
+    background-color: #f4f7fa;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar__list-item:hover {
+    background-color: #0172eb;
+    color: white;
+    transform: scale(1.05);
+}
+
+.main-content {
+    width: 70%;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.main-content__heading {
+    font-size: 22px;
+    color: #0172eb;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    padding: 20px;
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card__title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.card__description {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 15px;
+}
+
+.actions form {
+    display: inline-block;
+}
+
+.actions button {
+    padding: 8px 15px;
+    font-size: 14px;
+    background-color: #0172eb;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.actions button:hover {
+    background-color: #0056b3;
+}
+
+/* Popup Form Styles */
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 80%;
+    max-width: 500px;
+}
+
+.popup__overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.popup__form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.popup__form input,
+.popup__form textarea,
+.popup__form select,
+.popup__form button {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.popup__form button {
+    background-color: #0172eb;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.popup__form button:hover {
+    background-color: #0056b3;
+}

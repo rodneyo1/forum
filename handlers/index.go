@@ -24,11 +24,20 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("web/templates/index.html"))
 	// Execute the template with the posts data
 	data := struct {
-		Posts []models.PostWithUsername
+		Posts      []models.PostWithUsername
 		Categories []models.Category
+		IsLogged   bool
 	}{
-		Posts: posts,
+		Posts:      posts,
 		Categories: categories,
+		IsLogged:   IsLoggedIn(r), // Capture login status
 	}
+
 	tmpl.Execute(w, data)
+}
+
+// Checks if user is loged in
+func IsLoggedIn(r *http.Request) bool {
+	session, _ := r.Cookie("session_id")
+	return session != nil
 }
