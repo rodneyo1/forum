@@ -40,6 +40,7 @@ func main() {
 	http.HandleFunc("/login", handlers.LoginHandler)
 	http.HandleFunc("/forgot-password", handlers.ForgotPasswordHandler)
 	http.HandleFunc("/register", handlers.RegistrationHandler)
+	http.HandleFunc("/logout", handlers.LogoutHandler)
 	// RESTORE // http.Handle("/posts/create", middleware.AuthMiddleware(http.HandlerFunc(postHandlers.PostCreate)))
 	http.HandleFunc("/posts/create", postHandlers.PostCreate)
 	http.HandleFunc("/posts/display", postHandlers.PostDisplay)
