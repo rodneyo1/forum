@@ -139,10 +139,11 @@ body {
 }
 
 .main-content__heading {
-    font-size: 22px;
+    font-size: 26px;
+    letter-spacing: 1px;
     color: #0172eb;
     margin-bottom: 20px;
-    font-weight: 600;
+    font-weight: 800;
 }
 
 .main-content a {
@@ -160,6 +161,15 @@ body {
 
 .card:hover {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card img {
+    height: auto;
+    border-radius: 5px;
+}
+
+.card__subject {
+    font-size: 24px;
 }
 
 .card__title {
