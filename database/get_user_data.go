@@ -18,11 +18,11 @@ func GetUserData(r *http.Request) (int, string, error) {
 	cookieExists, cookie, err := HasCookie(r)
 	if err != nil {
 		fmt.Println("Redirected to login")
-		return 0, "", errors.New("User is not logged in")
+		return 0, "", errors.New("user is not logged in")
 	}
 
 	if !cookieExists {
-		return 0, "", errors.New("No such cookie")
+		return 0, "", errors.New("no such cookie")
 	}
 
 	userData, err := GetUserbySessionID(cookie.Value)

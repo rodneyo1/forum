@@ -24,11 +24,12 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("web/templates/index.html"))
 	// Execute the template with the posts data
 	data := struct {
-		Posts []models.PostWithUsername
+		Posts      []models.PostWithUsername
 		Categories []models.Category
 	}{
-		Posts: posts,
+		Posts:      posts,
 		Categories: categories,
 	}
+
 	tmpl.Execute(w, data)
 }
