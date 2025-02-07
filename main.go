@@ -23,9 +23,8 @@ func main() {
 	portStr := utils.Port() // get the port to use to start the server
 	port := fmt.Sprintf(":%d", portStr)
 
+	// will postpone the closure of the database handler created by init/0 function to when main/0 exits
 	defer database.Close()
-
-	database.CreateUser("toni", "toni@mail.com", "@antony222")
 
 	// Restrict arguments parsed
 	if len(os.Args) != 1 {
