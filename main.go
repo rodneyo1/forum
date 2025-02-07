@@ -58,7 +58,7 @@ func main() {
 	http.HandleFunc("/comments/like", handlers.LikeCommentHandler)
 	http.HandleFunc("/comments/dislike", handlers.DislikeCommentHandler)
 	http.HandleFunc("/comment", handlers.Comment)
-	http.HandleFunc("/categories", handlers.CategoriesPageHandler)
+	http.HandleFunc("/allcategories", handlers.CategoriesPageHandler)
 	http.HandleFunc("/categories/", handlers.SingeCategoryPosts)
 	http.HandleFunc("/search", handlers.SearchHandler)
 
