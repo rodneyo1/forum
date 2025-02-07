@@ -6,7 +6,7 @@ import (
     "forum/models"
 )
 
-// SearchPosts searches for posts matching the query
+// SearchPosts searches for posts matching the query(title or content)
 func SearchPosts(query string) ([]models.Post, error) {
     query = "%" + query + "%"
     sqlQuery := `
