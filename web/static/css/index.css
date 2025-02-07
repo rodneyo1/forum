@@ -32,6 +32,10 @@ body {
     margin-bottom: 10px;                    /* Add spacing below */
 }
 
+.navbar a {
+    text-decoration: none;
+}
+
 .navbar__actions {
     display: flex;
     align-items: center;
