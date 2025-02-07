@@ -28,14 +28,10 @@ body {
 }
 
 .navbar__title {
-    font-family: 'Open Sans', sans-serif;  /* Use Open Sans */
-    font-weight: 700;                      /* Make it bold */
-    font-size: 30px;                        /* Adjust size */
-    text-transform: none;              
-    letter-spacing: 3px;                    /* Add spacing for a sleek look */
-    color: #0172eb;                            /* Dark color */
-    text-align: center;                     /* Center it */
-    margin-bottom: 10px;                    /* Add spacing below */
+    font-size: 30px; /* Adjusted for mobile */
+    letter-spacing: 3px;
+    color: #0172eb;
+    font-weight: 700;                  /* Add spacing below */
 }
 
 .navbar a {
@@ -45,7 +41,7 @@ body {
 .navbar__actions {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
 }
 
 .navbar__search {
@@ -85,6 +81,7 @@ body {
     margin: 30px auto;
     max-width: 1200px;
     padding: 0 20px;
+    margin-top: 80px;
 }
 
 .sidebar {
@@ -95,7 +92,7 @@ body {
     padding: 20px;
     box-sizing: border-box;
     position: sticky;
-    top: 100px; /* Distance from the top when scrolling */
+    top: 80px; /* Distance from the top when scrolling */
     height: fit-content; /* Adjust height based on content */
     align-self: flex-start; /* Ensures it aligns properly in flexbox */
 }
@@ -260,4 +257,74 @@ body {
 
 .popup__form button:hover {
     background-color: #0056b3;
+}
+
+/* Initially hide the sidebar on small screens */
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        left: -100%; /* Hide off-screen */
+        top: 80px; /* Below navbar */
+        width: 250px;
+        background-color: white;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+        transition: left 0.3s ease-in-out;
+        z-index: 1000;
+    }
+
+    .sidebar__close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        font-size: 20px;
+        color: #0172eb;
+        cursor: pointer;
+    }
+  
+    /* Show sidebar when active */
+    .sidebar.active {
+        left: 0;
+    }
+
+    /* Style the hamburger button */
+    .hamburger {
+        display: block;
+        cursor: pointer;
+        font-size: 24px;
+        background: none;
+        border: none;
+        color: #0172eb;
+        padding: 10px;
+    }
+}
+
+/* Small screens: Tablets and Mobile Devices */
+@media (max-width: 600px) {
+    .navbar {
+        flex-direction: row; /* Keep items in a row */
+        flex-wrap: wrap; /* Allows wrapping */
+    }
+
+    .navbar__title {
+        font-size: 24px;
+        text-align: left; /* Align to the left */
+        flex: 1;
+    }
+
+    .navbar__button {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+
+    .navbar__actions {
+        flex: 1;
+        justify-content: flex-end; /* Align actions to the right */
+    }
+
+    /* .navbar__search {
+        width: 100%;
+        margin-top: 5px;
+    } */
 }
