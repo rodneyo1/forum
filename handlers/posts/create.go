@@ -13,10 +13,6 @@ import (
 	"forum/utils"
 )
 
-// TODO - Fetch the user id from the logged in user, e.g from r.Context
-// Mock user ID for now
-var userID int = 1
-
 // Handler for serving the form and handling form submission
 func PostCreate(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
@@ -116,6 +112,12 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 		// Validate that the selected categories exist in the database
 		if err := database.ValidateCategories(categoryIDsInt); err != nil {
 			http.Error(w, fmt.Sprintf("Invalid category: %v", err), http.StatusBadRequest)
+			return
+		}
+
+		userID, _, err := database.GetUserData(r)
+		if err != nil {
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
 

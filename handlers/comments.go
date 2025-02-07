@@ -29,7 +29,12 @@ func Comment(w http.ResponseWriter, r *http.Request) {
 	commentText := r.FormValue("comment")
 	postUUID := r.FormValue("postUUID")
 	// userID := r.FormValue("userID") // Assuming userID is passed in the form
-	userID := 1
+	
+	userID, _, err := database.GetUserData(r)
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
 
 	// fmt.Println("TEXT: ", commentText)
 
