@@ -22,10 +22,14 @@ body {
 }
 
 .navbar__title {
-    font-size: 22px;
-    font-weight: 600;
-    color: #0172eb;
-    font-family:'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif!important;
+    font-family: 'Open Sans', sans-serif;  /* Use Open Sans */
+    font-weight: 700;                      /* Make it bold */
+    font-size: 30px;                        /* Adjust size */
+    text-transform: none;              
+    letter-spacing: 3px;                    /* Add spacing for a sleek look */
+    color: #0172eb;                            /* Dark color */
+    text-align: center;                     /* Center it */
+    margin-bottom: 10px;                    /* Add spacing below */
 }
 
 .navbar__actions {
