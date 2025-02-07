@@ -7,7 +7,6 @@ import (
 
 	"forum/database"
 	"forum/handlers/errors"
-
 )
 
 func Logout(w http.ResponseWriter, r *http.Request) {

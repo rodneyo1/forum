@@ -19,7 +19,7 @@ func init() {
 	utils.CreatImagesFolder()
 	utils.CreatMediaFolder()
 	utils.CreatStorageFolder()
-	
+
 	err := database.Init("storage/forum.db")
 	if err != nil {
 		log.Fatalln(err.Error())

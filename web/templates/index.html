@@ -16,8 +16,7 @@
         </a>
         
         <div class="navbar__actions">
-            <input type="text" class="navbar__search" placeholder="Search Forum">
-
+            <!-- <input type="text" class="navbar__search" placeholder="Search Forum"> -->
             <a href="/posts/create">
                 <button class="navbar__button" id="create-post-button">Create Post</button>
             </a>
@@ -37,7 +36,11 @@
     </div>
     
     <div class="container">
-        <div class="sidebar">
+        <!-- For mobile devices -->
+        <button class="hamburger" onclick="toggleSidebar()">☰</button>
+
+        <div class="sidebar" id="sidebar">
+            <button class="sidebar__close" onclick="toggleSidebar()">✖</button>
             <h3 class="sidebar__heading">Categories</h3>
             {{range .Categories}}
             <a href="/categories/{{.ID}}">
@@ -45,13 +48,14 @@
             </a>
             {{end}}
         </div>
+
         
         <div class="main-content">
             <h3 class="main-content__heading">Posts</h3>
             {{range .Posts}}
             <div class="card">
-                <h4 class="card__title">User {{.Creator}}</h4>
-                <p><a href="/posts/display?pid={{.UUID}}" style="color: #0172eb;">{{.Title}}</a></p>
+                <h4 class="card__title">{{.Creator}}</h4>
+                <p class="card__subject"><a href="/posts/display?pid={{.UUID}}" style="color: #0172eb;">{{.Title}}</a></p>
                 <p class="card__description">{{.Content}}</p>
                 {{if .Media}}
                 <img src="/static/media/{{.Media}}" alt="Post Image" style="width: 70px; aspect-ratio: 1/1;">
@@ -70,5 +74,6 @@
             {{end}}
         </div>
     </div>
+    <script src="/static/js/index.js"></script>
 </body>
 </html>

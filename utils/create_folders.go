@@ -6,14 +6,14 @@ import (
 )
 
 const (
-	STORAGE = "storage"				// where database will live
-	MEDIA   = "web/static/media"	// all post media
-	IMAGES  = "web/static/images"	// all user profile images
+	STORAGE = "storage"           // where database will live
+	MEDIA   = "web/static/media"  // all post media
+	IMAGES  = "web/static/images" // all user profile images
 )
 
 /*
 * CreateStorageFolder/0 - creates the folder where the database will live
-*/
+ */
 func CreatStorageFolder() error {
 	// check if the folder exists
 	_, err := os.Stat(STORAGE)
@@ -30,7 +30,7 @@ func CreatStorageFolder() error {
 
 /*
 * CreateMediaFolder/0 - creates the folder for media files
-*/
+ */
 func CreatMediaFolder() error {
 	// check if the folder exists
 	_, err := os.Stat(MEDIA)
@@ -47,7 +47,7 @@ func CreatMediaFolder() error {
 
 /*
 * CreateImagesFolder - creates the folder to hold all the user profile images folder
-*/
+ */
 func CreatImagesFolder() error {
 	// check if the folder exists
 	_, err := os.Stat(IMAGES)
