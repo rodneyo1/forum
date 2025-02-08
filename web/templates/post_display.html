@@ -73,13 +73,12 @@
                 <form action="/comments/like" method="post">
                     <input type="hidden" name="comment-id" value="{{$comment.UUID}}">
                     <input type="hidden" name="post-id" value="{{$post.UUID}}">
-                    <button type="submit">Like: {{$comment.LikesCount}}</button>
+                    <button type="submit" class="like-btn">👍 {{$comment.LikesCount}}</button>
                 </form>
                 <form action="/comments/dislike" method="post">
                     <input type="hidden" name="comment-id" value="{{$comment.UUID}}">
                     <input type="hidden" name="post-id" value="{{$post.UUID}}">
-
-                    <button type="submit">Dislike: {{$comment.DislikesCount}}</button>
+                    <button type="submit" class="dislike-btn">👎 {{$comment.DislikesCount}}</button>
                 </form>
             </div>
             {{end}}
