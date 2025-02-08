@@ -14,14 +14,12 @@ import (
 func PostCreate(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		// Fetch categories from the database
+		// fetch categories from the database
 		categories, err := database.FetchCategories()
 		if err != nil {
 			http.Error(w, "Failed to fetch categories", http.StatusInternalServerError)
 			return
 		}
-
-		// Serve the form for creating a post
 		tmpl := template.Must(template.ParseFiles("./web/templates/posts_create.html"))
 		tmpl.Execute(w, categories)
 
@@ -31,35 +29,38 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// Extract the form values
 		title := r.FormValue("title")
 		content := r.FormValue("content")
 		categoryIDs := r.Form["categories"] // Get selected category IDs
 
-		// Handle the uploaded file
+		// if no categories are selected, default to category ID 1
+		if len(categoryIDs) == 0 {
+			categoryIDs = append(categoryIDs, "1")
+		}
+
+		// handle the uploaded file if present
+		var filename string
 		file, handler, err := r.FormFile("media")
-		if err != nil {
-			http.Error(w, "Failed to retrieve the file", http.StatusBadRequest)
-			return
-		}
-		defer file.Close()
+		if err == nil { // Only process the file if it's uploaded
+			defer file.Close()
 
-		// Validate the file extension type and size
-		allowedTypes := map[string]bool{
-			"image/png":  true,
-			"image/jpeg": true,
-		}
-		fileType := handler.Header.Get("Content-Type")
-		if !allowedTypes[fileType] {
-			http.Error(w, "Invalid file type. Only PNG and JPG images are allowed.", http.StatusBadRequest)
-			return
-		}
+			// Validate the file extension type and size
+			allowedTypes := map[string]bool{
+				"image/png":  true,
+				"image/jpeg": true,
+			}
+			fileType := handler.Header.Get("Content-Type")
+			if !allowedTypes[fileType] {
+				http.Error(w, "Invalid file type. Only PNG and JPG images are allowed.", http.StatusBadRequest)
+				return
+			}
 
-		// save the image to disk
-		filename, err := utils.SaveImage(fileType, file, utils.MEDIA)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+			// Save the image to disk
+			filename, err = utils.SaveImage(fileType, file, utils.MEDIA)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
 		}
 
 		// Convert category IDs from strings to integers
@@ -79,6 +80,7 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		// Get user data
 		userID, _, err := database.GetUserData(r)
 		if err != nil {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
