@@ -39,9 +39,12 @@
             </div>
 
             <div class="categories-container">
-                <label for="categories">Select Categories</label><br>
+                <label for="categories" class="select-categories">Select Categories</label>
                 {{range .}}
-                    <input type="checkbox" id="categories" name="categories" value="{{.ID}}"> {{.Name}}<br>
+                    <div class="category-item">
+                        <input type="checkbox" id="category-{{.ID}}" name="categories" value="{{.ID}}">
+                        <label for="category-{{.ID}}">{{.Name}}</label>
+                    </div>
                 {{end}}
             </div>
             <button type="submit">Create Post</button>

@@ -5,64 +5,38 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0;
+    margin-top: 50px;
 }
 
-/* Form Container */
-.form-container {
-    display: flex;
-    justify-content: center;
-    padding: 30px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin-top: 30px;
-}
-form {
-    width: 100%;
-    max-width: 600px;
-}
-h1 {
-    font-size: 24px;
-    color: #0172eb;
-    font-weight: 600;
-    margin-bottom: 20px;
-}
-label {
-    font-size: 16px;
-    color: #333;
-    margin-bottom: 5px;
-    display: block;
-}
-input[type="text"], textarea, input[type="file"], select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
+/* .form-container {
+    position: fixed;
+} */
+
+.categories-container {
+    background-color: #f8f8f8;
+    padding: 15px;
     border-radius: 5px;
     font-size: 14px;
+    color: #555;
+    margin: 10px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Adds spacing between category items */
+    align-items: flex-start; /* Aligns items to the left */
 }
-textarea {
-    resize: vertical;
-    min-height: 150px;
+
+.categories-container label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
 }
-input[type="submit"] {
-    padding: 10px 15px;
-    background-color: #0172eb;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.3s ease;
+
+.category-item {
+    display: flex;
+    align-items: center;
+    gap: 6px; /* Spacing between checkbox and text */
 }
-input[type="submit"]:hover {
-    background-color: #0056b3;
-}
-.categories-container {
-    margin-top: 10px;
-}
-.categories-container input[type="checkbox"] {
-    margin-right: 10px;
+
+.category-item input[type="checkbox"] {
+    margin: 0; /* Ensures checkboxes align properly */
 }
