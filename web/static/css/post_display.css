@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+
 /* Define color variables */
 :root {
     --primary-color: #0172eb; /* New primary color */
@@ -32,11 +34,19 @@ header {
     padding: 20px;
     border-radius: var(--border-radius);
     margin-bottom: 20px;
+    margin-top: 80px; /* Push the header down to avoid overlap */
 }
 
 header h1 {
-    font-size: 2rem;
-    margin-bottom: 10px;
+    font-family: 'Montserrat', sans-serif; /* New font */
+    font-size: 2.5rem; /* Increase size */
+    font-weight: 700; /* Make it bold */
+    text-align: center; /* Center it */
+    letter-spacing: 2px; /* Add spacing */
+    text-transform: uppercase; /* Convert to uppercase */
+    color: white; /* Keep it visible on the blue background */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+    margin-bottom: 10px; /* Add space below */
 }
 
 header p {
