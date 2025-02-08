@@ -6,6 +6,7 @@ import (
 
 	"forum/database"
 	"forum/models"
+	"forum/utils"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -30,14 +31,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	}{
 		Posts:      posts,
 		Categories: categories,
-		IsLogged:   IsLoggedIn(r), // Capture login status
+		IsLogged:   utils.IsLoggedIn(r), // Capture login status
 	}
 
 	tmpl.Execute(w, data)
-}
-
-// Checks if user is loged in
-func IsLoggedIn(r *http.Request) bool {
-	session, _ := r.Cookie("session_id")
-	return session != nil
 }
