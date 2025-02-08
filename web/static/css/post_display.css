@@ -92,11 +92,6 @@ header p {
     color: #ffffff;
 }
 
-.like.active, .dislike.active {
-    transform: scale(1.1); /* Slight zoom effect */
-    font-weight: 800; /* Make selected one bolder */
-}
-
 article {
     background-color: var(--card-background-color);
     padding: 20px;
@@ -141,6 +136,26 @@ ul li {
     margin: 5px 0;
     padding: 8px;
     border-radius: 4px;
+}
+
+.category-section ul {
+    list-style: none; /* Remove bullet points */
+    padding: 0;
+    display: flex; /* Arrange items in a row */
+    flex-wrap: wrap; /* Allow wrapping if too many categories */
+    gap: 10px; /* Space between pills */
+}
+
+.category-pill {
+    background-color: #aad2fd; /* Blue background */
+    color: #000000; /* White text */
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 8px 15px; /* Padding for pill effect */
+    border-radius: 50px; /* Rounded edges for pill shape */
+    display: inline-block; /* Ensure proper spacing */
+    transition: background 0.3s ease-in-out;
+    cursor: pointer; /* Indicate interactivity */
 }
 
 .comment-section {
