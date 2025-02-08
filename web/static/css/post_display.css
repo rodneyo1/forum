@@ -69,6 +69,34 @@ header p {
     letter-spacing: 1px; /* Add a slight spacing effect */
 }
 
+.metrics {
+    font-size: 1.2rem;
+    display: flex;
+    gap: 15px;
+}
+
+.like, .dislike {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.like {
+    color: #ffffff;
+}
+
+.dislike {
+    color: #ffffff;
+}
+
+.like.active, .dislike.active {
+    transform: scale(1.1); /* Slight zoom effect */
+    font-weight: 800; /* Make selected one bolder */
+}
+
 article {
     background-color: var(--card-background-color);
     padding: 20px;
