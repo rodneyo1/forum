@@ -35,11 +35,9 @@
 
     <article>
         <div class="post-content">
-            <h2>Content</h2>
             <p>{{.Content}}</p>
         </div>
         <div>
-            <h3>Media</h3>
             {{if .Media}}
                 <img src="/static/media/{{.Media}}" alt="Post Media" />
             {{else}}
@@ -49,7 +47,6 @@
     </article>
 
     <section class="category-section">
-        <h3>Categories:</h3>
         <ul>
             {{range .Categories}}
                 <li>{{.}}</li>
@@ -96,7 +93,7 @@
                      <button type="submit">Post</button>
                     </form>
                 </div>
-                
+
     </section>
 
     <footer>
