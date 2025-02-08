@@ -148,15 +148,6 @@ article img {
     margin-top: 10px;
 }
 
-section {
-    margin-top: 30px;
-}
-
-section h3 {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-}
-
 ul {
     list-style: none;
     padding-left: 0;
@@ -217,14 +208,14 @@ form {
 form input[type="text"] {
     padding: 10px;
     font-size: 1rem;
-    width: 80%;
+    width: 90%;
     border-radius: 4px;
     border: 1px solid #ddd;
     margin-right: 10px;
 }
 
 form button {
-    padding: 10px 15px;
+    padding: 10px 30px;
     font-size: 1rem;
     background-color: var(--primary-color);
     color: white;
@@ -271,11 +262,36 @@ footer a:hover {
         padding: 12px;
     }
 
+     /* Form styling */
+     form {
+        display: flex;
+        flex-direction: column; /* Stack input and button vertically */
+        align-items: center; /* Center elements along vertical axis */
+        justify-content: center; /* Center elements along horizontal axis */
+        gap: 10px; /* Adds spacing between input and button */
+    }
+
     form input[type="text"] {
-        width: 100%;
+        width: 100%; /* Ensures input takes full width */
+        max-width: 400px; /* Limits the width for readability */
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center; /* Centers text inside input */
+    }
+
+    form button {
+        width: auto;
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
     }
 
     .actions button {
-        font-size: 0.9rem;
+        font-size: 1rem;
     }
 }
