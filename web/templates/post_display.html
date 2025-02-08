@@ -9,21 +9,32 @@
     <link rel="stylesheet" href="/static/css/post_display.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@700&display=swap" rel="stylesheet">
 
-    <style>
-        
-    </style>
 </head>
 <body>
+
+    <div class="navbar">
+        <a href="/">
+            <h1 class="navbar__title">forum</h1>
+        </a>
+        
+        <div class="navbar__actions">
+            <!-- <input type="text" class="navbar__search" placeholder="Search Forum"> -->
+            <a href="/posts/create">
+                <button class="navbar__button" id="create-post-button">Create Post</button>
+            </a>
+        </div>
+    </div>
+
     {{$post := .}}
     <header>
         <h1>{{.Title}}</h1>
-        <p><strong>Posted by:</strong> {{.Username}}</p>
-        <p><strong>Created At:</strong> {{.CreatedAt}}</p>
-        <p>Likes: {{.LikesCount}} Dislikes: {{.DislikesCount }}</p>
+        <p class="author"><strong>Posted by:</strong> {{.Username}}</p>
+        <p class="date"><strong>Created At:</strong> {{.CreatedAt}}</p>
+        <p class="metrics">Likes: {{.LikesCount}} Dislikes: {{.DislikesCount }}</p>
     </header>
 
     <article>
-        <div>
+        <div class="post-content">
             <h2>Content</h2>
             <p>{{.Content}}</p>
         </div>
@@ -37,7 +48,7 @@
         </div>
     </article>
 
-    <section>
+    <section class="category-section">
         <h3>Categories:</h3>
         <ul>
             {{range .Categories}}
@@ -76,14 +87,16 @@
                 No comments yet. Be the first to comment!
             </div>
         {{end}}
-        <div>
+
             <!-- Comment form -->
-            <form action="/comment" method="POST">
-                <input type="hidden" name="postUUID" value="{{.UUID}}">
-                <input type="text" name="comment" placeholder="Write a comment..." required>
-                <button type="submit">Post</button>
-            </form>
-        </div>
+             <div class="form-container">
+                 <form action="/comment" method="POST">
+                     <input type="hidden" name="postUUID" value="{{.UUID}}">
+                     <input type="text" name="comment" placeholder="Write a comment..." required>
+                     <button type="submit">Post</button>
+                    </form>
+                </div>
+                
     </section>
 
     <footer>
