@@ -104,39 +104,38 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	user.Password = password  // set password
 	utils.Passwordhash(&user) // Hash password
 
-	// If provided, upload image parsed as profile picture
+	// Check if a file is uploaded for the profile image
+	var filename string
 	file, handler, err := r.FormFile("image")
-	if err != nil {
-		http.Error(w, "Failed to retrieve the file", http.StatusBadRequest)
-		return
-	}
-	defer file.Close()
+	if err == nil { // Only process the file if it's uploaded
+		defer file.Close()
 
-	// Validate the file extension type and size
-	allowedTypes := map[string]bool{
-		"image/png":  true,
-		"image/jpeg": true,
-	}
-	fileType := handler.Header.Get("Content-Type")
-	if !allowedTypes[fileType] {
-		http.Error(w, "Invalid file type. Only PNG and JPG images are allowed.", http.StatusBadRequest)
-		return
-	}
+		// Validate the file extension type and size
+		allowedTypes := map[string]bool{
+			"image/png":  true,
+			"image/jpeg": true,
+		}
+		fileType := handler.Header.Get("Content-Type")
+		if !allowedTypes[fileType] {
+			http.Error(w, "Invalid file type. Only PNG and JPG images are allowed.", http.StatusBadRequest)
+			return
+		}
 
-	// save the image to disk
-	filename, err := utils.SaveImage(fileType, file, utils.IMAGES)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+		// Save the image to disk
+		filename, err = utils.SaveImage(fileType, file, utils.IMAGES)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 
-	// update the name of the profile image
-	user.Image = filename
+		// Update the name of the profile image
+		user.Image = filename
+	}
 
 	// Create new user in the database
 	_, err = database.CreateNewUser(user)
 	if err != nil {
-		ParseAlertMessage(w, tmpl, "registration in failed, try again")
+		ParseAlertMessage(w, tmpl, "Registration failed, try again")
 		log.Println("Error creating user")
 		return
 	}
