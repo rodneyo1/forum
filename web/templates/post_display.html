@@ -30,7 +30,13 @@
         <h1>{{.Title}}</h1>
         <p class="author">Posted by:<strong> {{.Username}}</strong></p>
         <p class="date">Posted on:<strong> {{.CreatedAt}}</strong></p>
-        <p class="metrics">Likes: {{.LikesCount}} Dislikes: {{.DislikesCount }}</p>
+
+     <p class="metrics">
+        <span class="like" onclick="likePost()">👍 <span id="likeCount">{{.LikesCount}}</span></span>
+        <span class="dislike" onclick="dislikePost()">👎 <span id="dislikeCount">{{.DislikesCount}}</span></span>
+    </p>
+
+        
     </header>
 
     <article>

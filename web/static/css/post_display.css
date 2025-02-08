@@ -57,6 +57,18 @@ header p {
     margin-bottom: 5px;
 }
 
+.author, .date {
+    font-size: 1rem; /* Adjust size for readability */
+    color: #ccc; /* Subtle color for 'Posted by:' */
+}
+
+.author strong, .date strong {
+    font-size: 1.5rem; /* Increase size for prominence */
+    font-weight: 700; /* Make it bold */
+    color: white; /* Make it pop against the background */
+    letter-spacing: 1px; /* Add a slight spacing effect */
+}
+
 article {
     background-color: var(--card-background-color);
     padding: 20px;
