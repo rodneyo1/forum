@@ -3,9 +3,12 @@ body {
     background-color: #5c5b5b;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin-top: 50px;
+    align-items: flex-start; /* Align to the top instead of centering */
+    min-height: 100vh; /* Prevent cutting off content */
+    height: auto;
+    overflow-y: auto; /* Enable scrolling when needed */
+    margin: 0;
+    padding-top: 60px; /* Prevent overlap with navbar */
 }
 
 /* .form-container {
