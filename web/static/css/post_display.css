@@ -47,6 +47,9 @@ header h1 {
     color: white; /* Keep it visible on the blue background */
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow effect */
     margin-bottom: 10px; /* Add space below */
+    border-bottom: 3px solid white;
+    padding-bottom: 5px;
+    display: inline-block;
 }
 
 header p {
