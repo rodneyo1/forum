@@ -69,6 +69,23 @@ header p {
     letter-spacing: 1px; /* Add a slight spacing effect */
 }
 
+.comment-author, .comment-date {
+    font-size: 1rem; /* Adjust size for readability */
+    color: #666; /* Subtle color for 'Posted by:' */
+}
+
+.comment-author strong, .comment-date strong {
+    font-size: 1.5rem; /* Increase size for prominence */
+    font-weight: 700; /* Make it bold */
+    color: #000000; /* Make it pop against the background */
+    letter-spacing: 1px; /* Add a slight spacing effect */
+}
+
+.comment p, .post-content p {
+    font-size: 18px;
+    font-family: 'Roboto', sans-serif;
+}
+
 .metrics {
     font-size: 1.2rem;
     display: flex;

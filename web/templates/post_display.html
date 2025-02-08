@@ -65,9 +65,9 @@
             <!-- Displaying existing comments -->
             {{range $comment := .Comments}}
             <div class="comment">
-                <p><strong>{{$comment.Creator}}</strong> commented:</p>
+                <p class="comment-author"><strong>{{$comment.Creator}}</strong> commented:</p>
                 <p>{{$comment.Content}}</p>
-                <p><em>{{$comment.CreatedAt}}</em></p>
+                <p class="commedt-date"><em>{{$comment.CreatedAt}}</em></p>
             </div>
             <div class="actions">
                 <form action="/comments/like" method="post">
