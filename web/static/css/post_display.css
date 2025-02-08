@@ -99,6 +99,13 @@ header p {
     margin-top: 5px;
 }
 
+.metrics {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+    justify-content: flex-end; /* Aligns buttons to the right */
+}
+
 .like-btn, .dislike-btn {
     font-size: 1.2rem; /* Increase emoji size */
     background-color: #b8d8fa;

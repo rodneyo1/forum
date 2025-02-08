@@ -31,10 +31,16 @@
         <p class="author">Posted by:<strong> {{.Username}}</strong></p>
         <p class="date">Posted on:<strong> {{.CreatedAt}}</strong></p>
 
-        <p class="metrics">
-            <span class="like" onclick="toggleLike()">👍 <span id="likeCount">{{.LikesCount}}</span></span>
-            <span class="dislike" onclick="toggleDislike()">👎 <span id="dislikeCount">{{.DislikesCount}}</span></span>
-        </p>
+        <div class="metrics">
+            <form action="/posts/like" method="post">
+                <input type="hidden" name="post-id" value="{{.UUID}}">
+                <button type="submit" class="like-btn">👍 {{.LikesCount}}</button>
+            </form>
+            <form action="/posts/dislike" method="post">
+                <input type="hidden" name="post-id" value="{{.UUID}}">
+                <button type="submit" class="dislike-btn">👎 {{.DislikesCount}}</button>
+            </form>
+        </div>
         
     </header>
 
