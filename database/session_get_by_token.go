@@ -1,6 +1,9 @@
 package database
 
 import (
+	"net/http"
+	"time"
+
 	"forum/models"
 )
 
@@ -13,4 +16,24 @@ func GetSession(sessionID string) (models.Session, error) {
 		return models.Session{}, err
 	}
 	return session, nil
+}
+
+// Checks if a user is logged in
+func IsLoggedIn(r *http.Request) bool {
+	sessionCookie, err := r.Cookie("session_id")
+	if err != nil {
+		return false // no sessions found
+	}
+
+	// Fetch session from database
+	session, err := GetSession(sessionCookie.Value)
+	if err != nil {
+		return false // session not found or invalid
+	}
+
+	if session.Expiry.Before(time.Now()) {
+		return false // session expired
+	}
+
+	return true
 }
