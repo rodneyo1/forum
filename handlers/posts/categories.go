@@ -41,8 +41,10 @@ func CategoriesPage(w http.ResponseWriter, r *http.Request) {
 	// Execute the template with the posts data
 	data := struct {
 		Categories []models.Category
+		IsLoggedIn bool
 	}{
 		Categories: categories,
+		IsLoggedIn: database.IsLoggedIn(r),
 	}
 	tmpl.Execute(w, data)
 }
