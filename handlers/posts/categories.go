@@ -41,10 +41,8 @@ func CategoriesPage(w http.ResponseWriter, r *http.Request) {
 	// Execute the template with the posts data
 	data := struct {
 		Categories []models.Category
-		IsLoggedIn bool
 	}{
 		Categories: categories,
-		IsLoggedIn: database.IsLoggedIn(r),
 	}
 	tmpl.Execute(w, data)
 }
@@ -74,9 +72,11 @@ func SingeCategoryPosts(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("web/templates/category.html"))
 	// Execute the template with the posts
 	data := struct {
-		Posts []models.Post
+		Posts      []models.Post
+		IsLoggedIn bool
 	}{
-		Posts: posts,
+		Posts:      posts,
+		IsLoggedIn: database.IsLoggedIn(r),
 	}
 	err = tmpl.Execute(w, data)
 	if err != nil {
