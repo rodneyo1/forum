@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"forum/database"
+	"forum/models"
 )
 
 func PostDisplay(w http.ResponseWriter, r *http.Request) {
@@ -17,15 +18,24 @@ func PostDisplay(w http.ResponseWriter, r *http.Request) {
 	postID := r.URL.Query().Get("pid")
 	// fmt.Println("SINGLE PID: ", postID)
 
-	PostData, err := database.GetPostByUUID(postID)
+	postData, err := database.GetPostByUUID(postID)
 	if err != nil {
 		log.Println("Error getting post data: ", err)
 		return
 	}
 
+	// Infuse data to be executed with inquiry if user is logged in
+	data := struct {
+		PostData   models.PostWithCategories
+		IsLoggedIn bool
+	}{
+		PostData:   postData,
+		IsLoggedIn: database.IsLoggedIn(r),
+	}
+
 	// fmt.Println("POST: ", PostData)
 
-	if err := tmpl.Execute(w, PostData); err != nil {
+	if err := tmpl.Execute(w, data); err != nil {
 		log.Printf("Error executing template: %v", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	}
