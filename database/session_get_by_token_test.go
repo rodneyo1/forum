@@ -100,3 +100,21 @@ func TestIsLoggedIn_ExpiredSession(t *testing.T) {
 		t.Errorf("IsLoggedIn() = %v, want %v", result, false)
 	}
 }
+
+func TestIsLoggedIn_DatabaseError(t *testing.T) {
+	// Mock the request with a valid session cookie
+	req, _ := http.NewRequest("GET", "/", nil)
+	cookie := &http.Cookie{
+		Name:  "session_id",
+		Value: "test_session_id",
+	}
+	req.AddCookie(cookie)
+
+	// Call the function
+	result := IsLoggedIn(req)
+
+	// Check the result
+	if result {
+		t.Error("Expected IsLoggedIn to return false on database error, but got true")
+	}
+}
