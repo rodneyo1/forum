@@ -65,7 +65,7 @@ a {
     outline: none;
 }
 
-.navbar__button {
+.navbar__button, .navbar__form__button {
     padding: 8px 15px;
     background-color: #0172eb;
     color: white;

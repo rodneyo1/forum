@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Display Posts is a portal to view the whole story.">
-    <title>{{.Title}}</title>
+    <title>{{.PostData.Title}}</title>
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/post_display.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@700&display=swap" rel="stylesheet">
@@ -23,23 +23,34 @@
                 <button class="navbar__button" id="create-post-button">Create Post</button>
             </a>
             
+            {{ if .IsLoggedIn}}
+            <!-- Show Logout Button if Logged In -->
+             <form action="/logout" method="POST" style="display: inline;">
+                     <button class="navbar__form__button" id="logout-button">Log Out</button>
+                </form>
+            {{ else }}
+            <!-- Show Log In Button if Logged In -->
+            <a href="/login">
+                <button class="navbar__button" id="login-button">Login</button>
+            </a> 
+            {{ end }}
         </div>
     </div>
 
-    {{$post := .}}
+    {{$post := .PostData}}
     <header>
-        <h1>{{.Title}}</h1>
-        <p class="author">Posted by:<strong> {{.Username}}</strong></p>
-        <p class="date">Posted on:<strong> {{.CreatedAt}}</strong></p>
+        <h1>{{.PostData.Title}}</h1>
+        <p class="author">Posted by:<strong> {{.PostData.Username}}</strong></p>
+        <p class="date">Posted on:<strong> {{.PostData.CreatedAt}}</strong></p>
 
         <div class="metrics">
             <form action="/posts/like" method="post">
-                <input type="hidden" name="post-id" value="{{.UUID}}">
-                <button type="submit" class="like-btn">👍 {{.LikesCount}}</button>
+                <input type="hidden" name="post-id" value="{{.PostData.UUID}}">
+                <button type="submit" class="like-btn">👍 {{.PostData.LikesCount}}</button>
             </form>
             <form action="/posts/dislike" method="post">
-                <input type="hidden" name="post-id" value="{{.UUID}}">
-                <button type="submit" class="dislike-btn">👎 {{.DislikesCount}}</button>
+                <input type="hidden" name="post-id" value="{{.PostData.UUID}}">
+                <button type="submit" class="dislike-btn">👎 {{.PostData.DislikesCount}}</button>
             </form>
         </div>
         
@@ -47,11 +58,11 @@
 
     <article>
         <div class="post-content">
-            <p>{{.Content}}</p>
+            <p>{{.PostData.Content}}</p>
         </div>
         <div>
-            {{if .Media}}
-                <img src="/static/media/{{.Media}}" alt="Post Media" />
+            {{if .PostData.Media}}
+                <img src="/static/media/{{.PostData.Media}}" alt="Post Media" />
             {{else}}
                 <p>No media available for this post.</p>
             {{end}}
@@ -60,17 +71,17 @@
 
     <section class="category-section">
         <ul>
-            {{range .Categories}}
+            {{range .PostData.Categories}}
                 <li class="category-pill">{{.}}</li>
             {{end}}
         </ul>
     </section>    
 
     <section>
-        {{if .Comments}}
+        {{if .PostData.Comments}}
         <div class="comment-section">
             <!-- Displaying existing comments -->
-            {{range $comment := .Comments}}
+            {{range $comment := .PostData.Comments}}
             <div class="comment">
                 <p class="comment-author"><strong>{{$comment.Creator}}</strong> commented:</p>
                 <p>{{$comment.Content}}</p>
@@ -99,7 +110,7 @@
             <!-- Comment form -->
              <div class="form-container">
                  <form action="/comment" method="POST">
-                     <input type="hidden" name="postUUID" value="{{.UUID}}">
+                     <input type="hidden" name="postUUID" value="{{.PostData.UUID}}">
                      <input type="text" name="comment" placeholder="Write a comment..." required>
                      <button type="submit">Post</button>
                     </form>
