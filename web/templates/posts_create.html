@@ -19,6 +19,18 @@
             <a href="/posts/create">
                 <button class="navbar__button" id="create-post-button">Create Post</button>
             </a> -->
+
+            {{ if .IsLoggedIn}}
+            <!-- Show Logout Button if Logged In -->
+             <form action="/logout" method="POST" style="display: inline;">
+                     <button class="navbar__form__button" id="logout-button">Log Out</button>
+                </form>
+            {{ else }}
+            <!-- Show Log In Button if Logged In -->
+            <a href="/login">
+                <button class="navbar__button" id="login-button">Login</button>
+            </a> 
+            {{ end }}
             
         </div>
     </div>
@@ -40,10 +52,10 @@
 
             <div class="categories-container">
                 <label for="categories" class="select-categories">Select Categories</label>
-                {{range .}}
+                {{range .Categories}}
                     <div class="category-item">
-                        <input type="checkbox" id="category-{{.ID}}" name="categories" value="{{.ID}}">
-                        <label for="category-{{.ID}}">{{.Name}}</label>
+                        <input type="checkbox" id="category-{{.Categories.ID}}" name="categories" value="{{.Categories.ID}}">
+                        <label for="category-{{.Categories.ID}}">{{.Categories.Name}}</label>
                     </div>
                 {{end}}
             </div>

@@ -12,11 +12,11 @@
 }
 
 /* General Reset */
-* {
+/* * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
+} */
 
 body {
     font-family: 'Arial', sans-serif;
@@ -201,7 +201,7 @@ ul li {
     color: #666;
 }
 
-form {
+.comment form {
     margin-top: 20px;
 }
 

@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"forum/database"
+	"forum/models"
 	"forum/utils"
 )
 
@@ -20,8 +21,17 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Failed to fetch categories", http.StatusInternalServerError)
 			return
 		}
+
+		data := struct {
+			Categories []models.Category
+			IsLoggedIn bool
+		}{
+			Categories: categories,
+			IsLoggedIn: database.IsLoggedIn(r),
+		}
+
 		tmpl := template.Must(template.ParseFiles("./web/templates/posts_create.html"))
-		tmpl.Execute(w, categories)
+		tmpl.Execute(w, data)
 
 	case http.MethodPost:
 		if err := r.ParseMultipartForm(20 << 20); err != nil { // 20MB max

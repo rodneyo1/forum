@@ -72,9 +72,11 @@ func SingeCategoryPosts(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("web/templates/category.html"))
 	// Execute the template with the posts
 	data := struct {
-		Posts []models.Post
+		Posts      []models.Post
+		IsLoggedIn bool
 	}{
-		Posts: posts,
+		Posts:      posts,
+		IsLoggedIn: database.IsLoggedIn(r),
 	}
 	err = tmpl.Execute(w, data)
 	if err != nil {
