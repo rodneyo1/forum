@@ -5,40 +5,44 @@
     <title>User Profile</title>
 </head>
 <body>
-    <h1>{{.User.Username}}'s Profile</h1>
-    <p>Email: {{.User.Email}}</p>
-    {{if .User.Image}}
-        <img src="/static/images/{{.User.Image}}" alt="Profile Image" style="max-width: 200px; max-height: 200px;">
-    {{else}}
-        <p>No profile image</p>
-    {{end}}
-    {{if .User.Bio}}
-    <p>Bio: {{.User.Bio}}</p>
-    {{else}}
-    <p>No Bio</p>
-    {{end}}
-
+    <div>
+        <h1>{{.User.Username}}</h1>
+        <p>
+            <strong>Email</strong><br/>
+            <div>{{.User.Email}}</div>
+        </p>
+        {{if .User.Image}}
+            <img src="/static/images/{{.User.Image}}" alt="Profile Image" style="max-width: 200px; max-height: 200px;">
+        {{end}}
+        {{if .User.Bio}}
+            <p>
+                <strong>User bio</strong><br/>
+                <div>Bio: {{.User.Bio}}</div>
+            </p>
+        {{else}}
+        <p>No Bio</p>
+        {{end}}    
+    </div>
     <h2>Posts</h2>
     {{if .Posts}}
     <div>
-    {{range .Posts}}
+    {{range $post := .Posts}}
     <div class="post">
-        <a href="/posts/display?pid={{.UUID}}">
+        <a href="/posts/display?pid={{$post.UUID}}">
             <h3>{{.Title}}</h3>
         </a>
         <p>{{.Content}}</p>
         {{if .Media}}
-        <img src="/static/images/{{.Media}}" alt="Post Image" style="max-width: 200px; max-height: 200px;">
+        <img src="/static/media/{{$post.Media}}" alt="Post Image" style="max-width: 200px; max-height: 200px;">
         {{else}}
         <p>No media</p>
         {{end}}
-        <p>Posted on: {{.CreatedAt}}</p>
+        <p>Posted on: {{$post.CreatedAt}}</p>
     </div>
     {{end}}
     </div>
     {{else}}
     <p>No posts available</p>
     {{end}}
-    
 </body>
 </html>
