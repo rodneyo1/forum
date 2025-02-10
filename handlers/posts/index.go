@@ -9,6 +9,12 @@ import (
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
+	loggedIn := false
+	_, lIn := database.IsLoggedIn(r)
+	if lIn {
+		loggedIn = true
+	}
+
 	// Fetch posts from the database
 	posts, err := database.GetAllPosts()
 	if err != nil {
@@ -30,7 +36,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	}{
 		Posts:      posts,
 		Categories: categories,
-		IsLogged:   database.IsLoggedIn(r), // Capture login status
+		IsLogged:   loggedIn,
 	}
 
 	tmpl.Execute(w, data)

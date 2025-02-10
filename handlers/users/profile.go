@@ -7,32 +7,31 @@ import (
 	"net/http"
 
 	"forum/database"
-	"forum/handlers/auth"
+	"forum/models"
 	"forum/utils"
 )
 
 // ViewUserProfile handler
 func ViewProfile(w http.ResponseWriter, r *http.Request) {
-	cookieExists, cookie, err := auth.HasCookie(r)
-	if err != nil {
+	session, ok := database.SessionFromContext(r)
+	if !ok {
+		log.Printf("Error getting user: %v\n", session) // Add error logging
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
-		fmt.Println("Redirected to login")
 		return
+	}
+	// fmt.Printf("UserData retrieved: %+v\n", session) // Add debug logging
+
+	user, err := database.GetUserbyID(session.UserID)
+	if err != nil {
+		http.Error(w, "Error getting user profile", http.StatusInternalServerError)
 	}
 
-	if !cookieExists {
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
-		return
+	var posts []models.Post
+	posts, err = database.GetPostsByUserID(session.UserID)
+	if err != nil {
+		posts = nil
 	}
 
-	userData, err := database.GetUserbySessionID(cookie.Value)
-	// fmt.Printf("UserData retrieved: %+v\n", userData)  // Add debug logging
-	if err != nil {
-		log.Printf("Error getting user: %v\n", err) // Add error logging
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
-		fmt.Println("Redirected to login")
-		return
-	}
 	// Render the template with data
 	path, err := utils.GetTemplatePath("profile.html")
 	if err != nil {
@@ -45,7 +44,15 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := tmpl.Execute(w, userData); err != nil {
+	data := struct {
+		User  models.User
+		Posts []models.Post
+	}{
+		User:  user,
+		Posts: posts,
+	}
+
+	if err := tmpl.Execute(w, data); err != nil {
 		log.Printf("Error executing template: %v", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	}

@@ -28,20 +28,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	// If the method is GET, if serve blank login form
 	if r.Method == "GET" {
-		// Skip login for users who are already loged in
-		{
-			hasCookie, _, err := HasCookie(r)
-			if err != nil {
-				errors.InternalServerErrorHandler(w)
-				log.Println("Error checking session cookie: ", err)
-			}
-			if hasCookie {
-				http.Redirect(w, r, "/", http.StatusFound)
-				return
-			}
-		}
-
-		// Render login form
 		tmpl, err := template.ParseFiles(templatePath)
 		if err != nil {
 			http.Error(w, "Failed to load Login template", http.StatusInternalServerError)
@@ -150,17 +136,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	// Redirect the user to the home page or a protected route
 	http.Redirect(w, r, "/", http.StatusSeeOther)
-}
-
-func HasCookie(r *http.Request) (bool, *http.Cookie, error) {
-	cookie, err := r.Cookie("session_id")
-	if err != nil {
-		if err == http.ErrNoCookie {
-			return false, nil, nil // No session cookie, but no error
-		}
-		return false, nil, err // Actual error (e.g., internal failure)
-	}
-	return true, cookie, nil // Cookie exists
 }
 
 // ParseAlertMessage is used for displaying alert messages in templates.
