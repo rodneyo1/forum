@@ -11,9 +11,9 @@ body {
     padding-top: 60px; /* Prevent overlap with navbar */
 }
 
-/* .form-container {
-    position: fixed;
-} */
+.create-post-form {
+    margin-top: 60px;
+}
 
 .categories-container {
     background-color: #f8f8f8;
