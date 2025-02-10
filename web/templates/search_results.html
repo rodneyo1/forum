@@ -7,7 +7,20 @@
     <link rel="stylesheet" href="/static/css/index.css">
 </head>
 <body>
-    <h1 class="main-content__heading">Search Results</h1>
+    <div class="navbar">
+        <a href="/">
+            <h1 class="navbar__title">forum</h1>
+        </a>
+        
+        <div class="navbar__actions">
+            <form action="/search" method="get" class="navbar__search-form">
+                <input type="text" name="q" class="navbar__search" placeholder="Search...">
+                <button type="submit" class="navbar__button">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <h1 class="main-content__heading" >Search Results</h1>
     {{if .}}
     <div class="container main-content">
     {{range .}}
