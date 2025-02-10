@@ -10,6 +10,11 @@ import (
 )
 
 func PostDisplay(w http.ResponseWriter, r *http.Request) {
+	loggedIn := false
+	_, lIn := database.IsLoggedIn(r)
+	if lIn {
+		loggedIn = true
+	}
 	tmpl, err := template.ParseFiles("./web/templates/post_display.html")
 	if err != nil {
 		http.Error(w, "Failed to load post template", http.StatusInternalServerError)
@@ -30,7 +35,7 @@ func PostDisplay(w http.ResponseWriter, r *http.Request) {
 		IsLoggedIn bool
 	}{
 		PostData:   postData,
-		IsLoggedIn: database.IsLoggedIn(r),
+		IsLoggedIn: loggedIn,
 	}
 
 	// fmt.Println("POST: ", PostData)

@@ -27,7 +27,7 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 			IsLoggedIn bool
 		}{
 			Categories: categories,
-			IsLoggedIn: database.IsLoggedIn(r),
+			IsLoggedIn: false,
 		}
 
 		tmpl := template.Must(template.ParseFiles("./web/templates/posts_create.html"))

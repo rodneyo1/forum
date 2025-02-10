@@ -29,7 +29,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func LogOutSession(w http.ResponseWriter, r *http.Request) error {
-	hasCookie, cookie, err := HasCookie(r)
+	hasCookie, cookie, err := database.HasCookie(r)
 	if err != nil {
 		log.Println("ERROR: checking session cookie failed: ", err)
 		return err
