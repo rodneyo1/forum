@@ -52,10 +52,10 @@
 
             <div class="categories-container">
                 <label for="categories" class="select-categories">Select Categories</label>
-                {{range .Categories}}
+                {{range $category := .Categories}}
                     <div class="category-item">
-                        <input type="checkbox" id="category-{{.Categories.ID}}" name="categories" value="{{.Categories.ID}}">
-                        <label for="category-{{.Categories.ID}}">{{.Categories.Name}}</label>
+                        <input type="checkbox" id="category-{{$category.ID}}" name="categories" value="{{$category.ID}}">
+                        <label for="category-{{$category.ID}}">{{$category.Name}}</label>
                     </div>
                 {{end}}
             </div>
