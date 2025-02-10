@@ -107,16 +107,17 @@
             </div>
         {{end}}
 
-        {{if .IsLoggedIn}}
-        <!-- Comment form -->
-        <div class="form-container">
-             <form action="/comment" method="POST">
-                 <input type="hidden" name="postUUID" value="{{.PostData.UUID}}">
-                 <input type="text" name="comment" placeholder="Write a comment..." required>
-                 <button type="submit">Post</button>
-            </form>
-        </div>
-        {{end}}
+            <!-- Comment form -->
+            {{ if .IsLoggedIn}}
+             <div class="form-container">
+                 <form action="/comment" method="POST">
+                     <input type="hidden" name="postUUID" value="{{.PostData.UUID}}">
+                     <input type="text" name="comment" placeholder="Write a comment..." required>
+                     <button type="submit">Post</button>
+                    </form>
+                </div>
+                {{ end }}
+
     </section>
 
     <footer>

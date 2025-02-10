@@ -23,7 +23,7 @@ func Search(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println(posts)
+	// log.Println(posts) // debug log
 	tmpl, err := template.ParseFiles("web/templates/search_results.html")
 	if err != nil {
 		log.Println("Failed to load template", err)

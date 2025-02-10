@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Post</title>
+    <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/form.css">
     <link rel="stylesheet" href="/static/css/posts_create.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@700&display=swap" rel="stylesheet">
@@ -26,6 +27,7 @@
             </form>
         </div>
     </div>
+    <div class="create-post-form" >
     <div class="form-container">
         <h1>Create a New Post</h1>
         <form method="POST" action="/posts/create" enctype="multipart/form-data">
@@ -37,7 +39,7 @@
 
             <div class="custom-file-upload">
                 <label for="image" class="upload-btn">Upload Image (PNG or JPG, max 20MB)</label>
-                <input type="file" id="media" name="media" accept="image/*">
+                <input type="file" id="image" name="image" accept="image/*">
                 <p id="file-name">No file chosen</p>
                 <button id="remove-image" class="remove-btn" style="display: none;">Remove Image</button>
             </div>
@@ -53,6 +55,7 @@
             </div>
             <button type="submit">Create Post</button>
         </form>
+    </div>
     </div>
 
     <script src="/static/js/onboarding.js"></script>
