@@ -2,6 +2,7 @@ package posts
 
 import (
 	"html/template"
+	"log"
 	"net/http"
 
 	"forum/database"
@@ -10,9 +11,18 @@ import (
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	loggedIn := false
-	_, lIn := database.IsLoggedIn(r)
+	session, lIn := database.IsLoggedIn(r)
 	if lIn {
 		loggedIn = true
+	}
+
+	// Retrieve user data
+	userData, err := database.GetUserbySessionID(session.SessionID)
+
+	if err != nil {
+		log.Printf("Error getting user: %v\n", err) // Add error logging
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
 	}
 
 	// Fetch posts from the database
@@ -33,10 +43,12 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		Posts      []models.PostWithUsername
 		Categories []models.Category
 		IsLogged   bool
+		ProfPic    string
 	}{
 		Posts:      posts,
 		Categories: categories,
 		IsLogged:   loggedIn,
+		ProfPic:    userData.Image,
 	}
 
 	tmpl.Execute(w, data)
