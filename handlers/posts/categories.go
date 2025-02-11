@@ -52,15 +52,18 @@ func CategoriesPage(w http.ResponseWriter, r *http.Request) {
 
 // Sends all posts of a single category
 func SingeCategoryPosts(w http.ResponseWriter, r *http.Request) {
+	var userData models.User
+	var err error
 	session, loggedIn := database.IsLoggedIn(r)
 
 	// Retrieve user data
-	userData, err := database.GetUserbySessionID(session.SessionID)
-
-	if err != nil {
-		log.Printf("Error getting user: %v\n", err) // Add error logging
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
-		return
+	if loggedIn {
+		userData, err = database.GetUserbySessionID(session.SessionID)
+		if err != nil {
+			log.Printf("Error getting user: %v\n", err) // Add error logging
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
+		}
 	}
 
 	// Extract the category ID from the URL path
