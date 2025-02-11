@@ -52,7 +52,8 @@ func main() {
 	http.HandleFunc("/logout", auth.Logout)
 
 	// users
-	http.Handle("GET /profile", middleware.AuthMiddleware(http.HandlerFunc(users.ViewProfile)))
+	http.HandleFunc("GET /profile", users.ViewUserProfile)
+	// http.HandleFunc("GET /user/update", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateUserProfile))) // Protected
 
 	// posts
 	http.HandleFunc("/posts/display", posts.PostDisplay)
