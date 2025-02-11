@@ -19,7 +19,6 @@ func ViewUserProfile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userData, err := database.GetUserbySessionID(session.SessionID)
-	log.Printf("%q", userData)
 	// fmt.Printf("UserData retrieved: %+v\n", userData)  // Add debug logging
 	if err != nil {
 		log.Printf("Error getting user: %v\n", err) // Add error logging
