@@ -23,6 +23,10 @@
                 <button type="submit" class="navbar__button">Search</button>
             </form>
 
+            <a href="/posts/create">
+                <button class="navbar__button" id="create-post-button">Create Post</button>
+            </a>
+
             <!-- Show Logout Button and Profile Picture if Logged In -->
             {{ if .IsLogged}}
             <form action="/logout" method="POST" style="display: inline;">
