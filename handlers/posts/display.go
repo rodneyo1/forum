@@ -11,14 +11,19 @@ import (
 )
 
 func PostDisplay(w http.ResponseWriter, r *http.Request) {
-	loggedIn := false
-	session, lIn := database.IsLoggedIn(r)
-	if lIn {
-		loggedIn = true
-	}
+	var userData models.User
+	var err error
+	session, loggedIn := database.IsLoggedIn(r)
 
-	// Retrieve user data
-	userData, _ := database.GetUserbySessionID(session.SessionID)
+	// Retrieve user data if logged in
+	if loggedIn {
+		userData, err = database.GetUserbySessionID(session.SessionID)
+		if err != nil {
+			log.Printf("Error getting user: %v\n", err) // Add error logging
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
+		}
+	}
 
 	tmpl, err := template.ParseFiles("./web/templates/post_display.html")
 	if err != nil {
