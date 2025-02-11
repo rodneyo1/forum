@@ -60,6 +60,7 @@ func main() {
 	http.HandleFunc("/categories", posts.CategoriesPage)
 	http.HandleFunc("/categories/", posts.SingeCategoryPosts)
 	http.HandleFunc("/search", posts.Search)
+	http.HandleFunc("/liked-posts", posts.ShowLikedPosts)
 
 	http.Handle("/posts/create", middleware.AuthMiddleware(http.HandlerFunc(posts.PostCreate)))
 	http.Handle("/posts/like", middleware.AuthMiddleware(http.HandlerFunc(posts.LikePost)))

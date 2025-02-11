@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liked Posts</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <div class="header-buttons">
+                <!-- Button for All Posts -->
+                <a href="/posts" class="btn">Posts</a>
+
+                <h3 class="section-heading">Liked Posts</h3>
+
+            </div>
+
+            <!-- Posts Section -->
+            <div class="posts-container">
+                {{if .Posts}}
+                    {{range .Posts}}
+                    <div class="card">
+                        <p class="card__title">
+                            <a href="/posts/display?pid={{.UUID}}" style="color: #0172eb;">{{.Title}}</a>
+                        </p>
+                        {{if .Username}}
+                        <p class="card__subject">{{.Username}}</p>
+                        {{end}}
+                        {{if .Content}}
+                        <p class="card__description">{{.Content}}</p>
+                        {{end}}
+                        {{if .Media}}
+                        <img src="/static/media/{{.Media}}" alt="Post Image" style="width: 70px; aspect-ratio: 1/1;">
+                        {{end}}
+
+                        <div class="actions">
+                            <form action="/posts/like" method="post">
+                                <input type="hidden" name="post-id" value="{{.UUID}}">
+                                <button type="submit">{{.LikesCount}} Like</button>
+                            </form>
+                            <form action="/posts/dislike" method="post">
+                                <input type="hidden" name="post-id" value="{{.UUID}}">
+                                <button type="submit">{{.DislikesCount}} Dislike</button>
+                            </form>
+                        </div>
+                    </div>
+                    {{end}}
+                {{else}}
+                    <p>No liked posts available.</p>
+                {{end}}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
