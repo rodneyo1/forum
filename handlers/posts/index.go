@@ -11,19 +11,18 @@ import (
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	loggedIn := false
-	session, lIn := database.IsLoggedIn(r)
-	if lIn {
-		loggedIn = true
-	}
+	var userData models.User
+	var err error
+	session, loggedIn := database.IsLoggedIn(r)
 
-	// Retrieve user data
-	userData, err := database.GetUserbySessionID(session.SessionID)
-
-	if err != nil {
-		log.Printf("Error getting user: %v\n", err) // Add error logging
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
-		return
+	// Retrieve user data if logged in
+	if loggedIn {
+		userData, err = database.GetUserbySessionID(session.SessionID)
+		if err != nil {
+			log.Printf("Error getting user: %v\n", err) // Add error logging
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
+		}
 	}
 
 	// Fetch posts from the database
