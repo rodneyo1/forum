@@ -28,9 +28,15 @@
             
             {{ if .IsLogged}}
             <!-- Show Logout Button if Logged In -->
-             <a href="/profile">
-                <img src="/static/user-circle-svgrepo-com.svg"  alt="user" style="width: 30px; height: 30px; object-fit: cover; color: #0172eb;">
+            {{ if .ProfPic }}
+            <a href="/profile">
+                <img src="/static/images/{{.ProfPic}}"  alt="user" style="width: 30px; height: 30px; object-fit: cover; color: #0172eb;">
              </a>
+            {{ else }}
+            <a href="/profile">
+               <img src="/static/user-circle-svgrepo-com.svg"  alt="user" style="width: 30px; height: 30px; object-fit: cover; color: #0172eb;">
+            </a>
+             {{ end }}
              <form action="/logout" method="POST" style="display: inline;">
                      <button class="navbar__button" id="login-button">Log Out</button>
                 </form>
