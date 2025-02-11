@@ -27,16 +27,17 @@
             
         </div>
     </div>
-
+    <div class="image-container">
+        {{if .User.Image}}
+        <img src="/static/images/{{.User.Image}}" alt="Profile Image" style="max-width: 200px; max-height: 200px;">
+        {{end}}
+    </div>
     <div>
         <h1>{{.User.Username}}</h1>
         <p>
             <strong>Email</strong><br/>
             <div>{{.User.Email}}</div>
         </p>
-        {{if .User.Image}}
-            <img src="/static/images/{{.User.Image}}" alt="Profile Image" style="max-width: 200px; max-height: 200px;">
-        {{end}}
         {{if .User.Bio}}
             <p>
                 <strong>User bio</strong><br/>
