@@ -1,6 +1,7 @@
 package posts
 
 import (
+	errors "forum/handlers/errors"
 	"html/template"
 	"log"
 	"net/http"
@@ -28,12 +29,12 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	// Fetch posts from the database
 	posts, err := database.GetAllPosts()
 	if err != nil {
-		http.Error(w, "Failed to load posts", http.StatusInternalServerError)
+		errors.InternalServerErrorHandler(w)
 		return
 	}
 	categories, err := database.FetchCategories()
 	if err != nil {
-		http.Error(w, "Failed to fetch categories", http.StatusInternalServerError)
+		errors.InternalServerErrorHandler(w)
 		return
 	}
 	// Load the HTML template
