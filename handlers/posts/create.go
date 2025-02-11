@@ -34,11 +34,11 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 
 		data := struct {
 			Categories []models.Category
-			IsLoggedIn bool
+			IsLogged   bool
 			ProfPic    string
 		}{
 			Categories: categories,
-			IsLoggedIn: loggedIn,
+			IsLogged:   loggedIn,
 			ProfPic:    userData.Image,
 		}
 
