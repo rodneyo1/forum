@@ -6,14 +6,11 @@
     <title>Create Post</title>
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/form.css">
+    <link rel="stylesheet" href="/static/css/index.css">
     <link rel="stylesheet" href="/static/css/posts_create.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="navbar">
-        <a href="/">
-            <h1 class="navbar__title">forum</h1>
-        </a>
 
         <div class="navbar">
             <a href="/">
@@ -25,11 +22,7 @@
                     <input type="text" name="q" class="navbar__search" placeholder="Search...">
                     <button type="submit" class="navbar__button">Search</button>
                 </form>
-                <!-- <input type="text" class="navbar__search" placeholder="Search Forum"> -->
-                <a href="/posts/create">
-                    <button class="navbar__button" id="create-post-button">Create Post</button>
-                </a>
-                
+
                 <!-- Show Logout Button and Profile Picture if Logged In -->
                 {{ if .IsLogged}}
                 <form action="/logout" method="POST" style="display: inline;">
@@ -55,7 +48,6 @@
                 {{ end }}
             </div>
         </div>
-    </div>
     <div class="create-post-form" >
     <div class="form-container">
         <h1>Create a New Post</h1>

@@ -87,6 +87,16 @@ a {
     background-color: #0056b3;
 }
 
+/* .search__bar {
+    display: flex;
+    align-items: center;  /* Aligns items on the same line */
+/* } */
+.navbar__search-form {
+    display: flex;
+    align-items: center;  /* Ensures the input and button are on the same plane */
+    gap: 5px;             /* Adds some spacing between input and button */
+}
+
 /* Media queries */
 /* Small screens: Tablets and Mobile Devices */
 @media (max-width: 600px) {
