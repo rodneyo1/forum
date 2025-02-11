@@ -177,7 +177,7 @@ ul li {
     border-radius: 50px; /* Rounded edges for pill shape */
     display: inline-block; /* Ensure proper spacing */
     transition: background 0.3s ease-in-out;
-    cursor: pointer; /* Indicate interactivity */
+    cursor: default;
 }
 
 .comment-section {

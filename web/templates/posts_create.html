@@ -21,18 +21,10 @@
                 <button class="navbar__button" id="create-post-button">Create Post</button>
             </a> -->
 
-            {{ if .IsLoggedIn}}
             <!-- Show Logout Button if Logged In -->
              <form action="/logout" method="POST" style="display: inline;">
-                     <button class="navbar__form__button" id="logout-button">Log Out</button>
-                </form>
-            {{ else }}
-            <!-- Show Log In Button if Logged In -->
-            <a href="/login">
-                <button class="navbar__button" id="login-button">Login</button>
-            </a> 
-            {{ end }}
-            
+                <button class="navbar__form__button" id="logout-button">Log Out</button>
+            </form>
         </div>
     </div>
     <div class="create-post-form" >

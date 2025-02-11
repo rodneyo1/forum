@@ -76,7 +76,7 @@ func SingeCategoryPosts(w http.ResponseWriter, r *http.Request) {
 		IsLoggedIn bool
 	}{
 		Posts:      posts,
-		IsLoggedIn: database.IsLoggedIn(r),
+		IsLoggedIn: false,
 	}
 	err = tmpl.Execute(w, data)
 	if err != nil {

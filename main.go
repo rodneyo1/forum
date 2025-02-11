@@ -10,6 +10,7 @@ import (
 
 	auth "forum/handlers/auth"
 	comments "forum/handlers/comments"
+	"forum/handlers/middleware"
 	"forum/handlers/misc"
 	posts "forum/handlers/posts"
 	users "forum/handlers/users"
@@ -55,19 +56,19 @@ func main() {
 	// http.HandleFunc("GET /user/update", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateUserProfile))) // Protected
 
 	// posts
-	http.HandleFunc("/posts/create", posts.PostCreate)
 	http.HandleFunc("/posts/display", posts.PostDisplay)
-	http.HandleFunc("/posts/like", posts.LikePost)
-	http.HandleFunc("/posts/dislike", posts.DislikePost)
 	http.HandleFunc("/categories", posts.CategoriesPage)
 	http.HandleFunc("/categories/", posts.SingeCategoryPosts)
 	http.HandleFunc("/search", posts.Search)
-	// RESTORE // http.Handle("/posts/create", middleware.AuthMiddleware(http.HandlerFunc(postHandlers.PostCreate)))
+
+	http.Handle("/posts/create", middleware.AuthMiddleware(http.HandlerFunc(posts.PostCreate)))
+	http.Handle("/posts/like", middleware.AuthMiddleware(http.HandlerFunc(posts.LikePost)))
+	http.Handle("/posts/dislike", middleware.AuthMiddleware(http.HandlerFunc(posts.DislikePost)))
 
 	// comments
-	http.HandleFunc("/comments/like", comments.LikeCommentHandler)
-	http.HandleFunc("/comments/dislike", comments.DislikeCommentHandler)
-	http.HandleFunc("/comment", comments.Comment)
+	http.Handle("/comments/like", middleware.AuthMiddleware(http.HandlerFunc(comments.LikeCommentHandler)))
+	http.Handle("/comments/dislike", middleware.AuthMiddleware(http.HandlerFunc(comments.DislikeCommentHandler)))
+	http.Handle("/comment", middleware.AuthMiddleware(http.HandlerFunc(comments.Comment)))
 
 	// start the server, handle emerging errors
 	fmt.Printf("Server runing on http://localhost%s\n", port)
