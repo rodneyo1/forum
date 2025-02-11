@@ -6,27 +6,48 @@
     <title>Create Post</title>
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/form.css">
+    <link rel="stylesheet" href="/static/css/index.css">
     <link rel="stylesheet" href="/static/css/posts_create.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="navbar">
-        <a href="/">
-            <h1 class="navbar__title">forum</h1>
-        </a>
 
-        <div class="navbar__actions">
-            <!-- <input type="text" class="navbar__search" placeholder="Search Forum">
-            <a href="/posts/create">
-                <button class="navbar__button" id="create-post-button">Create Post</button>
-            </a> -->
+        <div class="navbar">
+            <a href="/">
+                <h1 class="navbar__title">forum</h1>
+            </a>
+            
+            <div class="navbar__actions">
+                <form action="/search" method="get" class="navbar__search-form">
+                    <input type="text" name="q" class="navbar__search" placeholder="Search...">
+                    <button type="submit" class="navbar__button">Search</button>
+                </form>
 
-            <!-- Show Logout Button if Logged In -->
-             <form action="/logout" method="POST" style="display: inline;">
-                <button class="navbar__form__button" id="logout-button">Log Out</button>
-            </form>
+                <!-- Show Logout Button and Profile Picture if Logged In -->
+                {{ if .IsLogged}}
+                <form action="/logout" method="POST" style="display: inline;">
+                    <button class="navbar__button" id="login-button">Log Out</button>
+                </form>
+                
+                <div class="navbar__Profile__Pic">
+                {{ if .ProfPic }}
+                <a href="/profile">
+                    <img src="/static/images/{{.ProfPic}}"  alt="user">
+                 </a>
+                {{ else }}
+                <a href="/profile">
+                   <img src="/static/user-circle-svgrepo-com.svg"  alt="user">
+                </a>
+                 {{ end }}
+                </div>
+                {{ else }}
+                <!-- Show Log In Button if Logged In -->
+                <a href="/login">
+                    <button class="navbar__button" id="login-button">Login</button>
+                </a> 
+                {{ end }}
+            </div>
         </div>
-    </div>
     <div class="create-post-form" >
     <div class="form-container">
         <h1>Create a New Post</h1>

@@ -50,6 +50,13 @@ a {
     gap: 10px;
 }
 
+.navbar__Profile__Pic img {
+    height: 40px;
+    width: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
 .navbar__search {
     flex-grow: 1;
     padding: 10px;
@@ -78,6 +85,16 @@ a {
 
 .navbar__button:hover {
     background-color: #0056b3;
+}
+
+/* .search__bar {
+    display: flex;
+    align-items: center;  /* Aligns items on the same line */
+/* } */
+.navbar__search-form {
+    display: flex;
+    align-items: center;  /* Ensures the input and button are on the same plane */
+    gap: 5px;             /* Adds some spacing between input and button */
 }
 
 /* Media queries */

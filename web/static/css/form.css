@@ -22,6 +22,8 @@ a {
     text-align: center;
     max-height: 80vh; /* Prevent it from exceeding the screen height */
     overflow-y: auto; /* Enable scrolling inside the form if it overflows */
+    display: flex;
+    flex-direction: column;
 }
 
 /* Style the bio textarea */
@@ -47,10 +49,10 @@ h1 {
 }
 
 /* Style form elements */
-form {
+/* form {
     display: flex;
     flex-direction: column;
-}
+} */
 
 /* Style the labels */
 form label {
@@ -131,7 +133,7 @@ button {
     border-radius: 5px;
     font-size: 20px;
     cursor: pointer;
-    margin-top: 10px;
+    /* margin-top: 10px; */
     margin-left: 12px;
     margin-right: 12px;
     letter-spacing: 2px;
