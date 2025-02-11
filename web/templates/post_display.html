@@ -120,7 +120,7 @@
         {{end}}
 
             <!-- Comment form -->
-            {{ if .IsLoggedIn}}
+            {{ if .IsLogged }}
              <div class="form-container">
                  <form action="/comment" method="POST">
                      <input type="hidden" name="postUUID" value="{{.PostData.UUID}}">
