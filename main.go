@@ -7,11 +7,21 @@ import (
 	"os"
 
 	"forum/database"
-	"forum/handlers"
-	postHandlers "forum/handlers/posts"
+
+	auth "forum/handlers/auth"
+	comments "forum/handlers/comments"
+	"forum/handlers/middleware"
+	"forum/handlers/misc"
+	posts "forum/handlers/posts"
+	users "forum/handlers/users"
+	"forum/utils"
 )
 
 func init() {
+	utils.CreatImagesFolder()
+	utils.CreatMediaFolder()
+	utils.CreatStorageFolder()
+
 	err := database.Init("storage/forum.db")
 	if err != nil {
 		log.Fatalln(err.Error())
@@ -19,9 +29,11 @@ func init() {
 }
 
 func main() {
-	defer database.Close()
+	portStr := utils.Port() // get the port to use to start the server
+	port := fmt.Sprintf(":%d", portStr)
 
-	database.CreateUser("toni", "toni@mail.com", "@antony222")
+	// will postpone the closure of the database handler created by init/0 function to when main/0 exits
+	defer database.Close()
 
 	// Restrict arguments parsed
 	if len(os.Args) != 1 {
@@ -30,91 +42,39 @@ func main() {
 		return
 	}
 
-	// Candle hundler functions
-	http.HandleFunc("/", handlers.IndexHandler)
-	http.HandleFunc("/static/", handlers.StaticHandler)
-	http.HandleFunc("/success", handlers.SuccessHandler)
-	http.HandleFunc("/login", handlers.LoginHandler)
-	http.HandleFunc("/forgot-password", handlers.ForgotPasswordHandler)
-	http.HandleFunc("/register", handlers.RegistrationHandler)
-	// RESTORE // http.Handle("/posts/create", middleware.AuthMiddleware(http.HandlerFunc(postHandlers.PostCreate)))
-	http.HandleFunc("/posts/create", postHandlers.PostCreate)
-	http.HandleFunc(" /posts/display", postHandlers.PostDisplay)
-	// User Profile routes
-	http.HandleFunc("GET /profile", handlers.ViewUserProfile)
+	// authentication
+	http.HandleFunc("/", posts.Index)
+	http.HandleFunc("/static/", misc.Static)
+	http.HandleFunc("/success", auth.Success)
+	http.HandleFunc("/login", auth.Login)
+	http.HandleFunc("/forgot-password", auth.ForgotPassword)
+	http.HandleFunc("/register", auth.Registration)
+	http.HandleFunc("/logout", auth.Logout)
+
+	// users
+	http.HandleFunc("GET /profile", users.ViewUserProfile)
 	// http.HandleFunc("GET /user/update", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateUserProfile))) // Protected
 
-	http.HandleFunc("/get", func(w http.ResponseWriter, r *http.Request) {
-		user, _ := database.GetUserByEmailOrUsername("toni", "toni")
-		fmt.Println("User: ", user)
-	})
+	// posts
+	http.HandleFunc("/posts/display", posts.PostDisplay)
+	http.HandleFunc("/categories", posts.CategoriesPage)
+	http.HandleFunc("/categories/", posts.SingeCategoryPosts)
+	http.HandleFunc("/search", posts.Search)
 
-	http.HandleFunc("/posts/like", handlers.LikePostHandler)
-	http.HandleFunc("/posts/dislike", handlers.DislikePostHandler)
-	http.HandleFunc("/comment", Comment)
+	http.Handle("/posts/create", middleware.AuthMiddleware(http.HandlerFunc(posts.PostCreate)))
+	http.Handle("/posts/like", middleware.AuthMiddleware(http.HandlerFunc(posts.LikePost)))
+	http.Handle("/posts/dislike", middleware.AuthMiddleware(http.HandlerFunc(posts.DislikePost)))
 
-	// Inform user initialization of server
-	log.Println("Server runing on http://localhost:8080")
+	// comments
+	http.Handle("/comments/like", middleware.AuthMiddleware(http.HandlerFunc(comments.LikeCommentHandler)))
+	http.Handle("/comments/dislike", middleware.AuthMiddleware(http.HandlerFunc(comments.DislikeCommentHandler)))
+	http.Handle("/comment", middleware.AuthMiddleware(http.HandlerFunc(comments.Comment)))
 
-	// Start the server, handle emerging errors
-	err := http.ListenAndServe(":8080", nil)
+	// start the server, handle emerging errors
+	fmt.Printf("Server runing on http://localhost%s\n", port)
+	err := http.ListenAndServe(port, nil)
 	if err != nil {
 		log.Println("Failed to start server: ", err)
 		return
 	}
-}
-
-func Comment(w http.ResponseWriter, r *http.Request) {
-	// take the contents from the form
-	// call the database function to insert a comment
-	// redirect to /posts/display?pid={{.UUID}}
-
-	// Only allow POST requests for submitting a comment
-	if r.Method != http.MethodPost {
-		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
-		return
-	}
-
-	// Parse form data (assuming the form contains a comment and post UUID)
-	err := r.ParseForm()
-	if err != nil {
-		http.Error(w, "Error parsing form data", http.StatusBadRequest)
-		return
-	}
-
-	// Retrieve the comment text and post UUID from the form
-	commentText := r.FormValue("comment")
-	postUUID := r.FormValue("postUUID")
-	// userID := r.FormValue("userID") // Assuming userID is passed in the form
-	userID := 1
-
-	// fmt.Println("TEXT: ", commentText)
-
-	// Ensure the comment is not empty
-	if commentText == "" {
-		http.Error(w, "Comment cannot be empty", http.StatusBadRequest)
-		return
-	}
-
-	// // Validate the UUID format (basic validation, adjust according to your needs)
-	// if !utils.IsValidUUID(postUUID) {
-	// 	http.Error(w, "Invalid post UUID", http.StatusBadRequest)
-	// 	return
-	// }
-
-	// Assuming you convert the userID from string to int
-	// userIDInt, err := strconv.Atoi(userID)
-	// if err != nil {
-	// 	http.Error(w, "Invalid user ID", http.StatusBadRequest)
-	// 	return
-	// }
-	// Call the CreateComment function to insert the comment into the database
-	_, err = database.CreateComment(userID, postUUID, commentText)
-	if err != nil {
-		http.Error(w, "Error inserting comment into database", http.StatusInternalServerError)
-		return
-	}
-
-	// Redirect to the post's display page with the post UUID
-	http.Redirect(w, r, fmt.Sprintf("/posts/display?pid=%s", postUUID), http.StatusSeeOther)
 }

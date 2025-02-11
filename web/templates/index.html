@@ -3,100 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forum UI</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-        body {
-            background-color: #f0f2f5;
-        }
-        .navbar {
-            background-color: #1877f2;
-            padding: 10px;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .container {
-            display: flex;
-            margin: 20px;
-        }
-        .left-section {
-            width: 30%;
-            background: white;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-        }
-        .right-section {
-            flex: 1;
-            margin-left: 15px;
-            background: white;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-        }
-        .post {
-            background: #fff;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-        }
-        .post img {
-            width: 100%;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-        .actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-        .comment-section {
-            margin-top: 10px;
-        }
-    </style>
+    <meta name="description" content="Index page for our forum website. Join the conversation; take part in conversation around all kinds of topics.">
+    <title>Welcome To Forum</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@700&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <div class="navbar">
-        <h1>Forum</h1>
-        <input type="text" placeholder="Search Forum" style="padding: 5px;">
-    </div>
-    <div class="container">
-        <div class="left-section">
-            <h3>Friend Suggestions</h3>
-            <p>Michael Brown</p>
-            <p>Emily White</p>
+        <a href="/">
+            <h1 class="navbar__title">forum</h1>
+        </a>
+        
+        <div class="navbar__actions">
+            <form action="/search" method="get" class="navbar__search-form">
+                <input type="text" name="q" class="navbar__search" placeholder="Search...">
+                <button type="submit" class="navbar__button">Search</button>
+            </form>
+            <!-- <input type="text" class="navbar__search" placeholder="Search Forum"> -->
+            <a href="/posts/create">
+                <button class="navbar__button" id="create-post-button">Create Post</button>
+            </a>
+            
+            {{ if .IsLogged}}
+            <!-- Show Logout Button if Logged In -->
+             <a href="/profile">
+                <img src="/static/user-circle-svgrepo-com.svg"  alt="user" style="width: 30px; height: 30px; object-fit: cover; color: #0172eb;">
+             </a>
+             <form action="/logout" method="POST" style="display: inline;">
+                     <button class="navbar__button" id="login-button">Log Out</button>
+                </form>
+            {{ else }}
+            <!-- Show Log In Button if Logged In -->
+            <a href="/login">
+                <button class="navbar__button" id="login-button">Login</button>
+            </a> 
+            {{ end }}
         </div>
-        <div class="right-section">
-            <h3>News Feed</h3>
+    </div>
+    
+    <div class="container">
+        <!-- For mobile devices -->
+        <button class="hamburger" onclick="toggleSidebar()">☰</button>
+
+        <div class="sidebar" id="sidebar">
+            <button class="sidebar__close" onclick="toggleSidebar()">✖</button>
+            <h3 class="sidebar__heading">Categories</h3>
+            {{range .Categories}}
+            <a href="/categories/{{.ID}}">
+                <p class="sidebar__list-item">{{.Name}}</p>
+            </a>
+            {{end}}
+        </div>
+
+        
+        <div class="main-content">
+            <h3 class="main-content__heading">Posts</h3>
             {{range .Posts}}
-            <div class="post">
-                <h4>User {{.Creator}}</h4>
-                <p><a href="/posts/display?pid={{.UUID}}">{{.Title}}</a></p>
-                <p>{{.Content}}</p>
+            <div class="card">
+                <p class="card__title"><a href="/posts/display?pid={{.UUID}}" style="color: #0172eb;">{{.Title}}</a></p>
+                <p class="card__subject" >{{.Creator}}</p>
+                <p class="card__description">{{.Content}}</p>
                 {{if .Media}}
                 <img src="/static/media/{{.Media}}" alt="Post Image" style="width: 70px; aspect-ratio: 1/1;">
                 {{end}}
                 <div class="actions">
                     <form action="/posts/like" method="post">
                         <input type="hidden" name="post-id" value="{{.UUID}}">
-                        <button type="submit">Like</button>
+                        <button type="submit">{{.LikesCount}} Like</button>
                     </form>
                     <form action="/posts/dislike" method="post">
                         <input type="hidden" name="post-id" value="{{.UUID}}">
-                        <button type="submit">Dislike</button>
+                        <button type="submit">{{.DislikesCount}} Dislike</button>
                     </form>
                 </div>
             </div>
             {{end}}
         </div>
     </div>
+    <script src="/static/js/index.js"></script>
 </body>
 </html>

@@ -3,34 +3,35 @@ package posts
 import (
 	"fmt"
 	"html/template"
-	"io"
 	"net/http"
-	"os"
-	"path/filepath"
 	"strconv"
 
 	"forum/database"
+	"forum/models"
 	"forum/utils"
 )
-
-// TODO - Fetch the user id from the logged in user, e.g from r.Context
-// Mock user ID for now
-var userID int = 1
 
 // Handler for serving the form and handling form submission
 func PostCreate(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		// Fetch categories from the database
+		// fetch categories from the database
 		categories, err := database.FetchCategories()
 		if err != nil {
 			http.Error(w, "Failed to fetch categories", http.StatusInternalServerError)
 			return
 		}
 
-		// Serve the form for creating a post
+		data := struct {
+			Categories []models.Category
+			IsLoggedIn bool
+		}{
+			Categories: categories,
+			IsLoggedIn: false,
+		}
+
 		tmpl := template.Must(template.ParseFiles("./web/templates/posts_create.html"))
-		tmpl.Execute(w, categories)
+		tmpl.Execute(w, data)
 
 	case http.MethodPost:
 		if err := r.ParseMultipartForm(20 << 20); err != nil { // 20MB max
@@ -38,68 +39,38 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// Extract the form values
 		title := r.FormValue("title")
 		content := r.FormValue("content")
 		categoryIDs := r.Form["categories"] // Get selected category IDs
 
-		// Handle the uploaded file
+		// if no categories are selected, default to category ID 1
+		if len(categoryIDs) == 0 {
+			categoryIDs = append(categoryIDs, "1")
+		}
+
+		// handle the uploaded file if present
+		var filename string
 		file, handler, err := r.FormFile("media")
-		if err != nil {
-			http.Error(w, "Failed to retrieve the file", http.StatusBadRequest)
-			return
-		}
-		defer file.Close()
+		if err == nil { // Only process the file if it's uploaded
+			defer file.Close()
 
-		// Validate the file extension type and size
-		allowedTypes := map[string]bool{
-			"image/png":  true,
-			"image/jpeg": true,
-		}
-		fileType := handler.Header.Get("Content-Type")
-		if !allowedTypes[fileType] {
-			http.Error(w, "Invalid file type. Only PNG and JPG images are allowed.", http.StatusBadRequest)
-			return
-		}
+			// Validate the file extension type and size
+			allowedTypes := map[string]bool{
+				"image/png":  true,
+				"image/jpeg": true,
+			}
+			fileType := handler.Header.Get("Content-Type")
+			if !allowedTypes[fileType] {
+				http.Error(w, "Invalid file type. Only PNG and JPG images are allowed.", http.StatusBadRequest)
+				return
+			}
 
-		// Generate a random filename
-		randomFileName, err := utils.GenerateRandomName()
-		if err != nil {
-			http.Error(w, "Failed to generate a unique filename", http.StatusInternalServerError)
-			return
-		}
-
-		// Determine the file extension based on the MIME type
-		var ext string
-		switch fileType {
-		case "image/png":
-			ext = ".png"
-		case "image/jpeg":
-			ext = ".jpg"
-		}
-
-		// Construct the full filename
-		filename := randomFileName + ext
-
-		// Save the file to the media folder
-		mediaFolder := "web/static/media"
-		if err := os.MkdirAll(mediaFolder, os.ModePerm); err != nil {
-			http.Error(w, "Failed to create media folder", http.StatusInternalServerError)
-			return
-		}
-
-		filePath := filepath.Join(mediaFolder, filename)
-		outFile, err := os.Create(filePath)
-		if err != nil {
-			http.Error(w, "Failed to save the file", http.StatusInternalServerError)
-			return
-		}
-		defer outFile.Close()
-
-		// Copy the file content to the new file
-		if _, err := io.Copy(outFile, file); err != nil {
-			http.Error(w, "Failed to save the file", http.StatusInternalServerError)
-			return
+			// Save the image to disk
+			filename, err = utils.SaveImage(fileType, file, utils.MEDIA)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
 		}
 
 		// Convert category IDs from strings to integers
@@ -116,6 +87,13 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 		// Validate that the selected categories exist in the database
 		if err := database.ValidateCategories(categoryIDsInt); err != nil {
 			http.Error(w, fmt.Sprintf("Invalid category: %v", err), http.StatusBadRequest)
+			return
+		}
+
+		// Get user data
+		userID, _, err := database.GetUserData(r)
+		if err != nil {
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
 

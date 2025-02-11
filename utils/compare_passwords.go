@@ -1,7 +1,18 @@
 package utils
 
-// Helper function to compare hashed passwords
-func ComparePasswords(hashedPassword, inputPassword string) bool {
-	// implement your password comparison logic here
-	return hashedPassword == inputPassword // Replace with secure password comparison
+import "golang.org/x/crypto/bcrypt"
+
+// import "golang.org/x/crypto/bcrypt"
+
+// Uses bcrypt to compare hashed and non-hashed passwords
+func MatchPasswords(hashedPassword, inputPassword string) (bool, error) {
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(inputPassword))
+	if err != nil {
+		// Confirm if error is due to mismatching passwords
+		if err == bcrypt.ErrMismatchedHashAndPassword {
+			return false, nil
+		}
+		return false, err
+	}
+	return true, nil
 }
