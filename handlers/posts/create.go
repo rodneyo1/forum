@@ -2,6 +2,7 @@ package posts
 
 import (
 	"fmt"
+	errors "forum/handlers/errors"
 	"html/template"
 	"net/http"
 	"strconv"
@@ -15,19 +16,30 @@ import (
 func PostCreate(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
+		var loggedIn bool
+		session, lIn := database.IsLoggedIn(r)
+		if lIn {
+			loggedIn = true
+		}
+
+		// Retrieve user data
+		userData, _ := database.GetUserbySessionID(session.SessionID)
+
 		// fetch categories from the database
 		categories, err := database.FetchCategories()
 		if err != nil {
-			http.Error(w, "Failed to fetch categories", http.StatusInternalServerError)
+			errors.InternalServerErrorHandler(w)
 			return
 		}
 
 		data := struct {
 			Categories []models.Category
 			IsLoggedIn bool
+			ProfPic    string
 		}{
 			Categories: categories,
-			IsLoggedIn: false,
+			IsLoggedIn: loggedIn,
+			ProfPic:    userData.Image,
 		}
 
 		tmpl := template.Must(template.ParseFiles("./web/templates/posts_create.html"))
