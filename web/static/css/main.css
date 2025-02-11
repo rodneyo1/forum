@@ -50,6 +50,13 @@ a {
     gap: 10px;
 }
 
+.navbar__Profile__Pic img {
+    height: 40px;
+    width: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
 .navbar__search {
     flex-grow: 1;
     padding: 10px;
