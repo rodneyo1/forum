@@ -25,7 +25,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// redirect client to home
-	http.Redirect(w, r, "/home", http.StatusFound)
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func LogOutSession(w http.ResponseWriter, r *http.Request) error {
