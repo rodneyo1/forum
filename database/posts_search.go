@@ -10,7 +10,7 @@ import (
 func SearchPosts(query string) ([]models.Post, error) {
 	query = "%" + query + "%"
 	sqlQuery := `
-        SELECT title, content 
+        SELECT uuid, title, content, media, user_id 
         FROM posts
         WHERE title LIKE ? OR content LIKE ?`
 
@@ -24,7 +24,7 @@ func SearchPosts(query string) ([]models.Post, error) {
 	var posts []models.Post
 	for rows.Next() {
 		var post models.Post
-		err := rows.Scan(&post.Title, &post.Content) // Scan only the selected columns
+		err := rows.Scan(&post.UUID, &post.Title, &post.Content, &post.Media, &post.UserID) // Scan only the selected columns
 		if err != nil {
 			log.Println("Error scanning post:", err)
 			return nil, err
