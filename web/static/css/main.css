@@ -87,10 +87,10 @@ a {
     background-color: #0056b3;
 }
 
-/* .search__bar {
-    display: flex;
-    align-items: center;  /* Aligns items on the same line */
-/* } */
+ .search__bar {
+font-size: 10px;
+ }
+
 .navbar__search-form {
     display: flex;
     align-items: center;  /* Ensures the input and button are on the same plane */

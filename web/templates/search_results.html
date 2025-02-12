@@ -17,6 +17,34 @@
                 <input type="text" name="q" class="navbar__search" placeholder="Search...">
                 <button type="submit" class="navbar__button">Search</button>
             </form>
+            <!-- <input type="text" class="navbar__search" placeholder="Search Forum"> -->
+            <a href="/posts/create">
+                <button class="navbar__button" id="create-post-button">Create Post</button>
+            </a>
+            
+            <!-- Show Logout Button and Profile Picture if Logged In -->
+            {{ if .IsLogged}}
+            <form action="/logout" method="POST" style="display: inline;">
+                <button class="navbar__button" id="login-button">Log Out</button>
+            </form>
+            
+            <div class="navbar__Profile__Pic">
+            {{ if .ProfPic }}
+            <a href="/profile">
+                <img src="/static/images/{{.ProfPic}}"  alt="user">
+             </a>
+            {{ else }}
+            <a href="/profile">
+               <img src="/static/user-circle-svgrepo-com.svg"  alt="user">
+            </a>
+             {{ end }}
+            </div>
+            {{ else }}
+            <!-- Show Log In Button if Logged In -->
+            <a href="/login">
+                <button class="navbar__button" id="login-button">Login</button>
+            </a> 
+            {{ end }}
         </div>
     </div>
 
