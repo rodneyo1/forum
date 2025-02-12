@@ -68,15 +68,25 @@
 
         
         <div class="main-content">
-            <h3 class="main-content__heading">Posts</h3>
+            <div class="header-buttons">
+                <!-- Button for All Posts (Default View) -->
+                <a href="/posts" class="btn">Posts</a>
+        
+                <!-- Button for Liked Posts -->
+                <a href="/liked-posts" class="btn">Liked Posts</a>
+            </div>
+        
             {{range .Posts}}
             <div class="card">
-                <p class="card__title"><a href="/posts/display?pid={{.UUID}}" style="color: #0172eb;">{{.Title}}</a></p>
-                <p class="card__subject" >{{.Creator}}</p>
+                <p class="card__title">
+                    <a href="/posts/display?pid={{.UUID}}" style="color: #0172eb;">{{.Title}}</a>
+                </p>
+                <p class="card__subject">{{.Creator}}</p>
                 <p class="card__description">{{.Content}}</p>
                 {{if .Media}}
                 <img src="/static/media/{{.Media}}" alt="Post Image" style="width: 70px; aspect-ratio: 1/1;">
                 {{end}}
+        
                 <div class="actions">
                     <form action="/posts/like" method="post">
                         <input type="hidden" name="post-id" value="{{.UUID}}">
@@ -90,6 +100,7 @@
             </div>
             {{end}}
         </div>
+        
     </div>
     <script src="/static/js/index.js"></script>
 </body>
