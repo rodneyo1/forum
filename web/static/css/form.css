@@ -278,6 +278,7 @@ button:hover {
     .form-container {
         width: 90%; /* Reduce container width */
         padding: 10px;
+        margin-top: 60px;
     }
 
     h1 {

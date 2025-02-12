@@ -12,11 +12,11 @@
 }
 
 /* General Reset */
-/* * {
+ /* * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-} */
+    box-sizing: border-box; 
+    } */
 
 body {
     font-family: 'Arial', sans-serif;
@@ -28,7 +28,7 @@ body {
     margin: 0 auto;
 }
 
-header {
+.post-head {
     background-color: var(--primary-color);
     color: white;
     padding: 20px;
@@ -37,7 +37,7 @@ header {
     margin-top: 80px; /* Push the header down to avoid overlap */
 }
 
-header h1 {
+.post-head h1 {
     font-family: 'Montserrat', sans-serif; /* New font */
     font-size: 2.5rem; /* Increase size */
     font-weight: 700; /* Make it bold */
@@ -52,7 +52,7 @@ header h1 {
     display: inline-block;
 }
 
-header p {
+.post-head p {
     font-size: 1rem;
     margin-bottom: 5px;
 }
@@ -205,7 +205,7 @@ ul li {
     margin-top: 20px;
 }
 
-form input[type="text"] {
+.form-container form input[type="text"] {
     padding: 10px;
     font-size: 1rem;
     width: 90%;
@@ -250,7 +250,7 @@ footer a:hover {
         padding: 15px;
     }
 
-    header h1 {
+    .post-head h1 {
         font-size: 1.5rem;
     }
 
@@ -263,9 +263,9 @@ footer a:hover {
     }
 
      /* Form styling */
-     form {
+    .form-container form {
         display: flex;
-        flex-direction: column; /* Stack input and button vertically */
+        flex-direction: row; /* Stack input and button vertically */
         align-items: center; /* Center elements along vertical axis */
         justify-content: center; /* Center elements along horizontal axis */
         gap: 10px; /* Adds spacing between input and button */
@@ -280,7 +280,7 @@ footer a:hover {
         text-align: center; /* Centers text inside input */
     }
 
-    form button {
+    .form-container form button {
         width: auto;
         padding: 10px 15px;
         background-color: #007bff;
