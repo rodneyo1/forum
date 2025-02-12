@@ -242,6 +242,7 @@ run the script to starts the container. The The forum will be available at `http
 - **David Jesse** ([github.com](https://github.com/DavJesse))
 - **Cynthia Oketch** ([github.com](https://github.com/CynthiaOketch))
 - **Rodney Ochieng** ([github.com](https://github.com/rodneyo1))
+- **Antony Oduor**([github.com](https://github.com/oduortoni))
 
 ---
 
