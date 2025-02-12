@@ -1,6 +1,7 @@
 package posts
 
 import (
+	errors "forum/handlers/errors"
 	"html/template"
 	"log"
 	"net/http"
@@ -10,14 +11,24 @@ import (
 )
 
 func PostDisplay(w http.ResponseWriter, r *http.Request) {
-	loggedIn := false
-	_, lIn := database.IsLoggedIn(r)
-	if lIn {
-		loggedIn = true
+	var userData models.User
+	var err error
+	session, loggedIn := database.IsLoggedIn(r)
+
+	// Retrieve user data if logged in
+	if loggedIn {
+		userData, err = database.GetUserbySessionID(session.SessionID)
+		if err != nil {
+			log.Printf("Error getting user: %v\n", err) // Add error logging
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
+		}
 	}
+
 	tmpl, err := template.ParseFiles("./web/templates/post_display.html")
 	if err != nil {
-		http.Error(w, "Failed to load post template", http.StatusInternalServerError)
+		log.Printf("ERROR: Could not parse template: %v", err)
+		errors.InternalServerErrorHandler(w)
 		return
 	}
 	postID := r.URL.Query().Get("pid")
@@ -31,17 +42,19 @@ func PostDisplay(w http.ResponseWriter, r *http.Request) {
 
 	// Infuse data to be executed with inquiry if user is logged in
 	data := struct {
-		PostData   models.PostWithCategories
-		IsLoggedIn bool
+		PostData models.PostWithCategories
+		IsLogged bool
+		ProfPic  string
 	}{
-		PostData:   postData,
-		IsLoggedIn: loggedIn,
+		PostData: postData,
+		IsLogged: loggedIn,
+		ProfPic:  userData.Image,
 	}
 
 	// fmt.Println("POST: ", PostData)
 
 	if err := tmpl.Execute(w, data); err != nil {
 		log.Printf("Error executing template: %v", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		errors.InternalServerErrorHandler(w)
 	}
 }
