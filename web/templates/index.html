@@ -82,7 +82,7 @@
                     <a href="/posts/display?pid={{.UUID}}" style="color: #0172eb;">{{.Title}}</a>
                 </p>
                 <p class="card__subject">{{.Creator}}</p>
-                <p class="card__description">{{.Content}}</p>
+                <p class="card__description">{{.Content | replaceNewlines}}</p>
                 {{if .Media}}
                 <img src="/static/media/{{.Media}}" alt="Post Image" style="width: 70px; aspect-ratio: 1/1;">
                 {{end}}

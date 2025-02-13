@@ -1,10 +1,13 @@
 package posts
 
 import (
-	errors "forum/handlers/errors"
 	"html/template"
 	"log"
 	"net/http"
+
+	utils "forum/utils"
+
+	errors "forum/handlers/errors"
 
 	"forum/database"
 	"forum/models"
@@ -25,14 +28,12 @@ func PostDisplay(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	tmpl, err := template.ParseFiles("./web/templates/post_display.html")
-	if err != nil {
-		log.Printf("ERROR: Could not parse template: %v", err)
-		errors.InternalServerErrorHandler(w)
-		return
-	}
+	// Parse template with function to replace '\n' with '<br>'
+	tmpl := template.Must(template.New("post_display.html").Funcs(template.FuncMap{
+		"replaceNewlines": utils.ReplaceNewlines,
+	}).ParseFiles("./web/templates/post_display.html"))
+
 	postID := r.URL.Query().Get("pid")
-	// fmt.Println("SINGLE PID: ", postID)
 
 	postData, err := database.GetPostByUUID(postID)
 	if err != nil {
