@@ -1,6 +1,7 @@
 package posts
 
 import (
+	utils "forum/utils"
 	"html/template"
 	"log"
 	"net/http"
@@ -45,11 +46,10 @@ func ShowLikedPosts(w http.ResponseWriter, r *http.Request) {
 		ProfPic:  user.Image,
 	}
 
-	tmpl, err := template.ParseFiles("web/templates/liked-posts.html")
-	if err != nil {
-		http.Error(w, "Failed to load template", http.StatusInternalServerError)
-		return
-	}
+	// Parse template with function to replace '\n' with '<br>'
+	tmpl := template.Must(template.New("liked_posts.html").Funcs(template.FuncMap{
+		"replaceNewlines": utils.ReplaceNewlines,
+	}).ParseFiles("./web/templates/liked_posts.html"))
 
 	// Render the liked posts page
 	err = tmpl.Execute(w, data)
