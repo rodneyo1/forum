@@ -2,6 +2,7 @@ package posts
 
 import (
 	errors "forum/handlers/errors"
+	utils "forum/utils"
 	"html/template"
 	"log"
 	"net/http"
@@ -37,7 +38,11 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Load the HTML template
-	tmpl := template.Must(template.ParseFiles("web/templates/index.html"))
+	// Parse template with function to replace '\n' with '<br>'
+	tmpl := template.Must(template.New("index.html").Funcs(template.FuncMap{
+		"replaceNewlines": utils.ReplaceNewlines,
+	}).ParseFiles("./web/templates/index.html"))
+
 	// Execute the template with the posts data
 	data := struct {
 		Posts      []models.PostWithUsername
