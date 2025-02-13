@@ -13,6 +13,7 @@ import (
 type TemplateData struct {
 	IsLogged bool
 	Posts    []models.PostWithCategories
+	ProfPic  string
 }
 
 func ShowLikedPosts(w http.ResponseWriter, r *http.Request) {
@@ -26,6 +27,10 @@ func ShowLikedPosts(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
+
+	// Retrieve user information
+	user, _ := database.GetUserbyID(userID)
+
 	userIDStr := strconv.Itoa(userID)
 
 	likedPosts, err := database.GetLikedPostsByUser(userIDStr)
@@ -37,6 +42,7 @@ func ShowLikedPosts(w http.ResponseWriter, r *http.Request) {
 	data := TemplateData{
 		IsLogged: true,
 		Posts:    likedPosts,
+		ProfPic:  user.Image,
 	}
 
 	tmpl, err := template.ParseFiles("web/templates/liked-posts.html")
