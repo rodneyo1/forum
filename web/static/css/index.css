@@ -133,6 +133,16 @@
     background-color: #0056b3;
 }
 
+.header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .navbar__button {
+        margin-top: -20px;
+    }
+}
+
 @media (max-width: 1080px) and (min-width: 769px) {
     .container {
         flex-wrap: nowrap; /* Prevent wrapping */
