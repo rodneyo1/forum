@@ -62,7 +62,7 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 
 		// handle the uploaded file if present
 		var filename string
-		file, handler, err := r.FormFile("media")
+		file, handler, err := r.FormFile("image")
 		if err == nil { // Only process the file if it's uploaded
 			defer file.Close()
 

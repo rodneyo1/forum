@@ -73,15 +73,15 @@
     </header>
 
     <article>
-        <div class="post-content">
-            <p>{{.PostData.Content | replaceNewlines}}</p>
-        </div>
         <div>
             {{if .PostData.Media}}
                 <img src="/static/media/{{.PostData.Media}}" alt="Post Media" />
             {{else}}
                 <p>No media available for this post.</p>
             {{end}}
+        </div>
+        <div class="post-content">
+            <p>{{.PostData.Content | replaceNewlines}}</p>
         </div>
     </article>
 
