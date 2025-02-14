@@ -2,10 +2,12 @@ package posts
 
 import (
 	"fmt"
-	errors "forum/handlers/errors"
+	"html"
 	"html/template"
 	"net/http"
 	"strconv"
+
+	errors "forum/handlers/errors"
 
 	"forum/database"
 	"forum/models"
@@ -52,7 +54,7 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 		}
 
 		title := r.FormValue("title")
-		content := r.FormValue("content")
+		content := html.EscapeString(r.FormValue("content"))
 		categoryIDs := r.Form["categories"] // Get selected category IDs
 
 		// if no categories are selected, default to category ID 1
