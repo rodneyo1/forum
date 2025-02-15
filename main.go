@@ -45,7 +45,6 @@ func main() {
 	// authentication
 	http.HandleFunc("/", posts.Index)
 	http.HandleFunc("/static/", misc.Static)
-	http.HandleFunc("/success", auth.Success)
 	http.HandleFunc("/login", auth.Login)
 	http.HandleFunc("/forgot-password", auth.ForgotPassword)
 	http.HandleFunc("/register", auth.Registration)
