@@ -35,11 +35,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	// If the method is GET, if serve blank login form
 	if r.Method == "GET" {
-		if err := tmpl.Execute(w, nil); err != nil {
-			log.Printf("TEMPLATE EXECUTION ERROR: %v", err)
-			errors.InternalServerErrorHandler(w)
-			return
-		}
+		ExecuteTemplate(w, tmpl)
 		return
 	}
 
@@ -106,5 +102,12 @@ func ParseAlertMessage(w http.ResponseWriter, tmpl *template.Template, message s
 		errors.InternalServerErrorHandler(w)
 		log.Printf("TEMPLATE EXECUTION ERROR: %v", err)
 		return
+	}
+}
+
+func ExecuteTemplate(w http.ResponseWriter, tmpl *template.Template) {
+	if err := tmpl.Execute(w, nil); err != nil {
+		log.Printf("TEMPLATE EXECUTION ERROR: %v", err)
+		errors.InternalServerErrorHandler(w)
 	}
 }
