@@ -1,6 +1,6 @@
 package database
 
-import "forum/utils"
+import utils "forum/utils"
 
 func CreateComment(userID int, postID string, content string) (int64, error) {
 	uuid, err := utils.GenerateUUID()

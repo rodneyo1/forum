@@ -14,7 +14,7 @@ import (
 	"forum/handlers/misc"
 	posts "forum/handlers/posts"
 	users "forum/handlers/users"
-	"forum/utils"
+	utils "forum/utils"
 )
 
 func init() {

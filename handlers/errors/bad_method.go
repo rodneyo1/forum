@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"forum/utils"
+	utils "forum/utils"
 )
 
 // Serves Bad Request error page

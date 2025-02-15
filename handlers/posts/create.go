@@ -11,7 +11,7 @@ import (
 
 	"forum/database"
 	"forum/models"
-	"forum/utils"
+	utils "forum/utils"
 )
 
 // Handler for serving the form and handling form submission

@@ -10,7 +10,7 @@ import (
 	"forum/database"
 	"forum/handlers/errors"
 	"forum/models"
-	"forum/utils"
+	utils "forum/utils"
 )
 
 // LoginHandler handles user login and session creation, as well as preventing login when already logged in.
