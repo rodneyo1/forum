@@ -2,8 +2,8 @@ package utils
 
 import (
 	"forum/models"
-	"testing"
 	"golang.org/x/crypto/bcrypt"
+	"testing"
 )
 
 /*
@@ -11,7 +11,7 @@ import (
 * It checks if the function correctly hashes a given user's password.
 * 1. Valid password: Ensure that a valid password is hashed and doesn't remain the same.
 * 2. Empty password: Ensure that the function can handle an empty password.
-*/
+ */
 func TestPasswordhash(t *testing.T) {
 	table := []struct {
 		name            string
