@@ -16,12 +16,12 @@ func TestGenerateRandomName(t *testing.T) {
 	table := []struct {
 		name           string
 		expectedLength int
-		expectedBool  bool
+		expectedBool   bool
 	}{
 		{
 			name:           "Generate valid random name",
 			expectedLength: 32, // 16 bytes = 32 hex characters
-			expectedBool:  false,
+			expectedBool:   false,
 		},
 	}
 

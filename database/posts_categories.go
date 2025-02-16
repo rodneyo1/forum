@@ -92,16 +92,16 @@ func ValidateCategories(categoryIDs []int) error {
 
 // FetchCategoryPostsWithID retrieves all posts associated with a given category ID
 func FetchCategoryPostsWithID(categoryID int) ([]models.PostWithCategories, error) {
-	    // Check if the category exists
-		var exists bool
-		err := db.QueryRow("SELECT EXISTS(SELECT 1 FROM categories WHERE id = ?)", categoryID).Scan(&exists)
-		if err != nil {
-			log.Println("Error checking if category exists:", err)
-			return nil, err
-		}
-		if !exists {
-			return nil, fmt.Errorf("category with ID %d does not exist", categoryID)
-		}
+	// Check if the category exists
+	var exists bool
+	err := db.QueryRow("SELECT EXISTS(SELECT 1 FROM categories WHERE id = ?)", categoryID).Scan(&exists)
+	if err != nil {
+		log.Println("Error checking if category exists:", err)
+		return nil, err
+	}
+	if !exists {
+		return nil, fmt.Errorf("category with ID %d does not exist", categoryID)
+	}
 
 	// Fetch posts for the category
 	query := `
@@ -123,7 +123,7 @@ func FetchCategoryPostsWithID(categoryID int) ([]models.PostWithCategories, erro
 	for rows.Next() {
 		var post models.PostWithCategories
 		var media sql.NullString
-		err := rows.Scan(&post.UUID, &post.Title, &post.Content, &media, &post.UserID, &post.CreatedAt,&post.LikesCount, &post.DislikesCount)
+		err := rows.Scan(&post.UUID, &post.Title, &post.Content, &media, &post.UserID, &post.CreatedAt, &post.LikesCount, &post.DislikesCount)
 		if err != nil {
 			log.Println("Error scanning post:", err)
 			return nil, err
