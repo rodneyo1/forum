@@ -41,8 +41,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	// Catch non-Get and non-POST requests
 	if r.Method != "POST" {
-		log.Println("METHOD ERROR: bad request")
-		errors.BadRequestHandler(w)
+		log.Println("METHOD ERROR: method not allowed")
+		errors.MethodNotAllowedHandler(w)
 		return
 	}
 

@@ -12,8 +12,8 @@ import (
 func Logout(w http.ResponseWriter, r *http.Request) {
 	// Restrict non-POST requests
 	if r.Method != "POST" {
-		log.Println("REQUEST ERROR: bad request")
-		errors.BadRequestHandler(w)
+		log.Println("METHOD ERROR: method not allowed")
+		errors.MethodNotAllowedHandler(w)
 		return
 	}
 
