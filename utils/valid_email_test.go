@@ -7,7 +7,7 @@ import "testing"
 * It checks the output of the function given various valid and invalid email forms:
 * 1. Valid emails: Include lowercase, uppercase, emails with digits, and special characters like +.
 * 2. Invalid emails: Include emails with missing @, multiple @, missing domain, spaces, and special characters in the domain.
-*/
+ */
 func TestValidEmail(t *testing.T) {
 	table := []struct {
 		name     string

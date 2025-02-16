@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"testing"
 	"github.com/gofrs/uuid"
+	"testing"
 )
 
 /*
@@ -10,7 +10,7 @@ import (
 * 1. Generation of a valid UUID
 * 2. Check if the session ID is a valid UUID
 * 3. Ensure that multiple calls generate different UUIDs
-*/
+ */
 func TestGenerateSessionID(t *testing.T) {
 	sessionID, err := GenerateSessionID()
 	if err != nil {
