@@ -13,13 +13,14 @@ func BadRequestHandler(w http.ResponseWriter) {
 	// Construct absolute path to error.html
 	tmplPath, err := utils.GetTemplatePath("error.html")
 	if err != nil {
-		log.Printf("Could not find template file: %v", err)
+		http.Error(w, "error page unavailable", http.StatusNotFound)
+		log.Printf("TEMPLATE AVAILABILITY ERROR: %v", err)
 		return
 	}
 
 	tmpl, err := template.ParseFiles(tmplPath)
 	if err != nil {
-		log.Println("Template parsing failed:", err)
+		log.Println("TEMPLATE PARSING ERROR:", err)
 		http.Error(w, "Could not load template, error page unavailable", http.StatusInternalServerError)
 		return
 	}
@@ -35,7 +36,7 @@ func BadRequestHandler(w http.ResponseWriter) {
 	// Execute bad request template, handle emerging errors
 	err = tmpl.Execute(w, hitch)
 	if err != nil {
-		http.Error(w, "Could not execute error template, error page unavailable", http.StatusInternalServerError)
-		log.Println("Error executing template: ", err)
+		http.Error(w, "Could not execute error template", http.StatusInternalServerError)
+		log.Println("Template EXECUTION ERROR: ", err)
 	}
 }

@@ -36,7 +36,7 @@ func MethodNotAllowedHandler(w http.ResponseWriter) {
 	// Execute bad request template, handle emerging errors
 	err = tmpl.Execute(w, hitch)
 	if err != nil {
-		http.Error(w, "Could not execute error template, error page unavailable", http.StatusInternalServerError)
-		log.Println("Error executing template: ", err)
+		http.Error(w, "Could not execute error template", http.StatusInternalServerError)
+		log.Println("Template EXECUTION ERROR: ", err)
 	}
 }
