@@ -20,8 +20,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	// Build path to login.html
 	templatePath, err := utils.GetTemplatePath("login.html")
 	if err != nil {
-		errors.InternalServerErrorHandler(w)
-		log.Printf("FILE AVAILABILITY ERROR: %v", err)
+		log.Printf("TEMPLATE AVAILABILITY ERROR: %v", err)
+		errors.NotFoundHandler(w)
 		return
 	}
 
@@ -29,7 +29,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles(templatePath)
 	if err != nil {
 		log.Printf("TEMPLATE PARSING ERROR: %v", err)
-		errors.NotFoundHandler(w)
+		errors.InternalServerErrorHandler(w)
 		return
 	}
 
