@@ -137,14 +137,14 @@ Ensure you have the following installed:
 
 ### **Cloning the Repository**
 ```sh
-$ git clone https://learn.zone01kisumu.ke/git/anoduor/forum.git
+git clone https://learn.zone01kisumu.ke/git/anoduor/forum.git
 
-$ cd forum
+cd forum
 ```
 ### **Running the Application**
 ```sh
-$ go mod tidy
-$ go run main.go
+go mod tidy
+go run main.go
 ```
 Visit `http://localhost:8080` in your browser.
 
@@ -173,7 +173,7 @@ go run .
 ## **Testing**
 Run unit tests using:
 ```bash
-$ go test ./...
+go test ./...
 ```
 
 ---
@@ -206,12 +206,12 @@ To run the project inside a Docker container:
 
 ### **Building the Docker Image**
 ```sh
-$ docker build -t forum-app .
+docker build -t forum-app .
 ```
 
 ### **Running the Container**
 ```sh
-$ docker run -p 8080:8080 forum-app
+docker run -p 8080:8080 forum-app
 ```
 
 or
