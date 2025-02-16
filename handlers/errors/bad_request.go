@@ -5,14 +5,11 @@ import (
 	"log"
 	"net/http"
 
-	"forum/models"
-	"forum/utils"
+	utils "forum/utils"
 )
 
-var hitch models.WebError
-
-// Serves Internal Server Error page
-func InternalServerErrorHandler(w http.ResponseWriter) {
+// Serves Bad Request error page
+func BadRequestHandler(w http.ResponseWriter) {
 	// Construct absolute path to error.html
 	tmplPath, err := utils.GetTemplatePath("error.html")
 	if err != nil {
@@ -29,14 +26,14 @@ func InternalServerErrorHandler(w http.ResponseWriter) {
 	}
 
 	// Set relevant headers
-	w.WriteHeader(http.StatusInternalServerError)
+	w.WriteHeader(http.StatusBadRequest)
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	// Set parameters of error
-	hitch.Code = http.StatusInternalServerError
-	hitch.Issue = "Internal Server Error!"
+	hitch.Code = http.StatusBadRequest
+	hitch.Issue = "Bad Request!"
 
-	// Execute internal server error template, handle emerging errors
+	// Execute bad request template, handle emerging errors
 	err = tmpl.Execute(w, hitch)
 	if err != nil {
 		http.Error(w, "Could not execute error template", http.StatusInternalServerError)

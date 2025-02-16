@@ -7,7 +7,7 @@ import (
 
 	"forum/database"
 	"forum/models"
-	"forum/utils"
+	utils "forum/utils"
 )
 
 // ViewUserProfile handler

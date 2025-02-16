@@ -12,14 +12,15 @@ import (
 func Logout(w http.ResponseWriter, r *http.Request) {
 	// Restrict non-POST requests
 	if r.Method != "POST" {
-		errors.BadRequestHandler(w)
-		log.Println("ERROR: LogoutHandler does not allow non-POST requests")
+		log.Println("METHOD ERROR: method not allowed")
+		errors.MethodNotAllowedHandler(w)
 		return
 	}
 
 	// Destroy cookies if any
 	err := LogOutSession(w, r)
 	if err != nil {
+		log.Printf("LOG OUT ERROR: %v", err)
 		errors.InternalServerErrorHandler(w)
 		return
 	}
@@ -31,7 +32,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 func LogOutSession(w http.ResponseWriter, r *http.Request) error {
 	hasCookie, cookie, err := database.HasCookie(r)
 	if err != nil {
-		log.Println("ERROR: checking session cookie failed: ", err)
+		log.Println("COOKIE ERROR: ", err)
 		return err
 	}
 
@@ -48,9 +49,7 @@ func LogOutSession(w http.ResponseWriter, r *http.Request) error {
 			SameSite: http.SameSiteStrictMode, // Restricts against CSRF requests
 		})
 
-		log.Println("INFO: session cookie has been invalidate")
 	} else {
-		log.Println("INFO: session cookie not found")
 		return nil
 	}
 
@@ -58,7 +57,7 @@ func LogOutSession(w http.ResponseWriter, r *http.Request) error {
 	sessionID := cookie.Value
 	err = database.DeleteSession(sessionID)
 	if err != nil {
-		log.Println("ERROR: deleting session from database failed: ", err)
+		log.Println("DATABASE ERROR: ", err)
 		return err
 	}
 

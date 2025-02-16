@@ -14,7 +14,7 @@ import (
 	"forum/handlers/misc"
 	posts "forum/handlers/posts"
 	users "forum/handlers/users"
-	"forum/utils"
+	utils "forum/utils"
 )
 
 func init() {
@@ -45,9 +45,8 @@ func main() {
 	// authentication
 	http.HandleFunc("/", posts.Index)
 	http.HandleFunc("/static/", misc.Static)
-	http.HandleFunc("/success", auth.Success)
 	http.HandleFunc("/login", auth.Login)
-	http.HandleFunc("/forgot-password", auth.ForgotPassword)
+	// http.HandleFunc("/forgot-password", auth.ForgotPassword) // Unmute when retrieval logic is implemented
 	http.HandleFunc("/register", auth.Registration)
 	http.HandleFunc("/logout", auth.Logout)
 
