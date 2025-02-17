@@ -86,15 +86,17 @@ func SingeCategoryPosts(w http.ResponseWriter, r *http.Request) {
 	categoryID := pathParts[2]
 	ID, err := strconv.Atoi(categoryID)
 	if err != nil {
-		log.Println(err)
-		w.WriteHeader(http.StatusInternalServerError)
+		//log.Println(err)
+		//w.WriteHeader(http.StatusInternalServerError)
+		errors.BadRequestHandler(w)
+		//http.Redirect(w,r,"/", http.StatusSeeOther)
 		return
 	}
 	// Fetch posts from the database
 	posts, err := database.FetchCategoryPostsWithID(ID)
 	if err != nil {
-		log.Println("Category doesn't exist")
-		errors.InternalServerErrorHandler(w)
+		log.Println(err)
+		errors.NotFoundHandler(w)
 		return
 	}
 	// Load the HTML template
@@ -106,7 +108,7 @@ func SingeCategoryPosts(w http.ResponseWriter, r *http.Request) {
 	}
 	// Execute the template with the posts
 	data := struct {
-		Posts    []models.Post
+		Posts    []models.PostWithCategories
 		IsLogged bool
 		ProfPic  string
 	}{
