@@ -86,10 +86,7 @@ func SingeCategoryPosts(w http.ResponseWriter, r *http.Request) {
 	categoryID := pathParts[2]
 	ID, err := strconv.Atoi(categoryID)
 	if err != nil {
-		//log.Println(err)
-		//w.WriteHeader(http.StatusInternalServerError)
 		errors.BadRequestHandler(w)
-		//http.Redirect(w,r,"/", http.StatusSeeOther)
 		return
 	}
 	// Fetch posts from the database
