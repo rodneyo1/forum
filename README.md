@@ -222,6 +222,17 @@ run the script to starts the container. The The forum will be available at `http
 ./run-docker.sh
 ```
 
+After the build, ensure you clean all unused objects to free up disk space and keep the Docker environment clean by running
+
+```bash
+./cleanup.sh
+```
+You can confirm reclaimed space by
+
+```bash
+docker system df
+```
+
 ---
 
 ## **Error Handling**
