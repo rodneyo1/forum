@@ -74,6 +74,7 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 				"image/png":  true,
 				"image/jpeg": true,
 				"image/gif": true,
+				"image/svg+xml": true,
 			}
 			fileType := handler.Header.Get("Content-Type")
 			if !allowedTypes[fileType] {
