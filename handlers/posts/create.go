@@ -78,7 +78,7 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 			}
 			fileType := handler.Header.Get("Content-Type")
 			if !allowedTypes[fileType] {
-				http.Error(w, "Invalid file type. Only PNG and JPG images are allowed.", http.StatusBadRequest)
+				http.Error(w, "Invalid file type. Only GIF, PNG and JPG images are allowed.", http.StatusBadRequest)
 				return
 			}
 
