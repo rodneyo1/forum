@@ -21,6 +21,8 @@ func SaveImage(fileType string, file multipart.File, path string) (string, error
 		ext = ".png"
 	case "image/jpeg":
 		ext = ".jpg"
+	case "image/gif":
+		ext = ".gif"
 	}
 
 	// Construct the full filename
